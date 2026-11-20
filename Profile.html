@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-theme="purple">
 
     <h1>👤 Player Profile</h1>
 
@@ -44,6 +44,10 @@
                 average.toFixed(1);
         }
     </script>
-
+<script>
+const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+document.body.setAttribute("data-theme", savedTheme);
+</script>
 </body>
+    
 </html>
