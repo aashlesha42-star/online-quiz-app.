@@ -6,10 +6,6 @@
 <title>QuizMaster - Achievements</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     padding: 25px 15px;
@@ -24,10 +20,6 @@ h1 {
     margin-top: 35px;
 }
 
-.subtitle {
-    color: #eee0ff;
-}
-
 .container {
     max-width: 850px;
     margin: 30px auto;
@@ -37,29 +29,14 @@ h1 {
 }
 
 .badge {
-    background: #ffffff18;
-    border: 1px solid #ffffff40;
+    background: #ffffff20;
+    border: 1px solid #ffffff50;
     border-radius: 18px;
     padding: 25px 15px;
-    transition: 0.3s;
-}
-
-.badge:hover {
-    transform: translateY(-6px);
 }
 
 .icon {
     font-size: 45px;
-    margin-bottom: 12px;
-}
-
-.badge h3 {
-    margin: 10px 0;
-}
-
-.badge p {
-    color: #eee0ff;
-    font-size: 14px;
 }
 
 .locked {
@@ -74,7 +51,6 @@ button {
     padding: 14px 25px;
     border-radius: 25px;
     font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
     margin: 20px;
 }
@@ -85,7 +61,7 @@ button {
 
 <h1>🎖️ Achievements & Rewards</h1>
 
-<p class="subtitle">Complete challenges and collect special badges!</p>
+<p>Complete challenges and collect special badges!</p>
 
 <h2>🏆 Your Achievements</h2>
 
@@ -103,4 +79,69 @@ let streak =
 
 let totalQuizzes = leaderboard.length;
 
-let highestScore = leaderboard.length
+let highestScore = leaderboard.length > 0
+    ? Math.max(...leaderboard.map(p => p.score))
+    : 0;
+
+let achievements = [
+    {
+        icon: "🥉",
+        name: "First Quiz",
+        description: "Complete your first quiz.",
+        unlocked: totalQuizzes >= 1
+    },
+    {
+        icon: "🥈",
+        name: "Quiz Explorer",
+        description: "Complete 5 quizzes.",
+        unlocked: totalQuizzes >= 5
+    },
+    {
+        icon: "🥇",
+        name: "Quiz Champion",
+        description: "Get a perfect score.",
+        unlocked: highestScore >= 3
+    },
+    {
+        icon: "🔥",
+        name: "Streak Starter",
+        description: "Reach a 3-day streak.",
+        unlocked: streak >= 3
+    },
+    {
+        icon: "👑",
+        name: "Quiz Legend",
+        description: "Complete 10 quizzes.",
+        unlocked: totalQuizzes >= 10
+    },
+    {
+        icon: "🌟",
+        name: "Daily Star",
+        description: "Complete a daily challenge.",
+        unlocked: streak >= 1
+    }
+];
+
+let display = document.getElementById("badges");
+
+achievements.forEach(item => {
+
+    let card = document.createElement("div");
+
+    card.className = item.unlocked ? "badge" : "badge locked";
+
+    card.innerHTML = `
+        <div class="icon">${item.icon}</div>
+        <h3>${item.name}</h3>
+        <p>${item.description}</p>
+        <strong>${item.unlocked ? "✅ Unlocked" : "🔒 Locked"}</strong>
+    `;
+
+    display.appendChild(card);
+
+});
+
+</script>
+
+</body>
+</html>
