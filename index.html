@@ -228,4 +228,8 @@
     </footer>
 
 </body>
+    <script>
+const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+document.body.setAttribute("data-theme", savedTheme);
+</script>
 </html>
