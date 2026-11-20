@@ -288,6 +288,7 @@ function goToNextQuestion() {
         if (!playerName || playerName.trim() === "") {
             playerName = "Player";
         }
+        localStorage.setItem("playerName", playerName.trim());
 
         let leaderboard =
             JSON.parse(localStorage.getItem("leaderboard")) || [];
