@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizMaster - Daily Challenge</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+}
+
+.container {
+    max-width: 550px;
+    margin: 35px auto;
+    padding: 25px;
+    background: #ffffff18;
+    border: 1px solid #ffffff40;
+    border-radius: 22px;
+}
+
+h1 {
+    color: #ffd166;
+}
+
+.info {
+    color: #eee0ff;
+    line-height: 1.6;
+}
+
+button {
+    padding: 13px 22px;
+    margin: 10px;
+    border: none;
+    border-radius: 12px;
+    background: #ffd166;
+    color: #32104f;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.answer {
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    background: white;
+    color: #481080;
+}
+
+.answer:disabled {
+    opacity: 1;
+}
+
+#questionArea, #result {
+    display: none;
+}
+
+#feedback {
+    min-height: 25px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌟 Daily Challenge</h1>
+
+<p class="info">
+Complete today's five questions and earn bonus points!
+</p>
+
+<h3>🔥 Daily Streak: <span id="streak">0</span> days</h3>
+
+<h3>🏆 Bonus Points: <span id="bonus">0</span></h3>
+
+<div id="startArea">
+    <p>Are you ready for today's challenge?</p>
+    <button onclick="startChallenge()">🚀 Start Challenge</button>
+</div>
+
+<div id="questionArea">
+    <h3 id="questionNumber"></h3>
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+    <p id="feedback"></p>
+</div>
+
+<div id="result">
+    <h2>🎉 Challenge Completed!</h2>
+    <h2 id="finalScore"></h2>
+    <h3 id="badge"></h3>
+</div>
+
+<button onclick="location.href='index.html'">🏠 Home</button>
+
+</div>
+
+<script>
+
+const questions = [
+    {
+        q: "What is the brain of a computer?",
+        a: ["Monitor", "CPU", "Mouse", "Keyboard"],
+        c: "CPU"
+    },
+    {
+        q: "Which language is used to structure web pages?",
+        a: ["HTML", "Python", "C", "Java"],
+        c: "HTML"
+    },
+    {
+        q: "How many days are there in a leap year?",
+        a: ["365", "366", "364", "360"],
+        c: "366"
+    },
+    {
+        q: "Which planet is known as the Red Planet?",
+        a: ["Earth", "Venus", "Mars", "Jupiter"],
+        c: "Mars"
+    },
+    {
+        q: "What does RAM stand for?",
+        a: [
+            "Random Access Memory",
+            "Read Access Machine",
+            "Run All Memory",
+            "Rapid Action Memory"
+        ],
+        c: "Random Access Memory"
+    }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const today = new Date().toLocaleDateString("en-CA");
+
+let streak = Number(localStorage.getItem("dailyStreak")) || 0;
+let lastDate = localStorage.getItem("lastChallengeDate");
+
+document.getElementById("streak").textContent = streak;
+document.getElementById("bonus").textContent =
+    Number(localStorage.getItem("dailyBonus")) || 0;
+
+if (lastDate === today) {
+    document.getElementById("startArea").innerHTML =
+        "<h3>✅ Today's challenge is already completed!</h3>";
+}
+
+function startChallenge() {
+
+    if (lastDate === today) {
+        return;
+    }
+
+    document.getElementById("startArea").style.display = "none";
+    document.getElementById("questionArea").style.display = "block";
+
+    showQuestion();
+}
+
+function showQuestion() {
+
+    answered = false;
+
+    document.getElementById("questionNumber").textContent =
+        "Question " + (current + 1) + " of " + questions.length;
+
+    document.getElementById("question").textContent =
+        questions[current].q;
+
+    document.getElementById("feedback").textContent = "";
+
+    const answers = document.getElementById("answers");
+    answers.innerHTML = "";
+
+    questions[current].a.forEach(option => {
+
+        const button = document.createElement("button");
+
+        button.textContent = option;
+        button.className = "answer";
+
+        button.onclick = () => checkAnswer(button, option);
+
+        answers.appendChild(button);
+
+    });
+}
+
+function checkAnswer(button, selected) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const correct = questions[current].c;
+
+    if (selected === correct) {
+        score++;
+        button.style.background = "#20c997";
+        document.getElementById("feedback").textContent = "✅ Correct!";
+    } else {
+        button.style.background = "#ff6b6b";
+        document.getElementById("feedback").textContent =
+            "❌ Correct answer: " + correct;
+    }
+
+    document.querySelectorAll(".answer").forEach(btn => {
+        btn.disabled = true;
+
+        if (btn.textContent === correct) {
+            btn.style.background = "#20c997";
+        }
+    });
+
+    const next = document.createElement("button");
+
+    next.textContent = current === questions.length - 1
+        ? "Finish Challenge"
+        : "Next Question";
+
+    next.onclick = nextQuestion;
+
+    document.getElementById("answers").appendChild(next);
+}
+
+function nextQuestion() {
+
+    current++;
+
+    if (current < questions.length) {
+        showQuestion();
+    } else {
+        finishChallenge();
+    }
+}
+
+function finishChallenge() {
+
+    document.getElementById("questionArea").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const yesterdayString = yesterday.toLocaleDateString("en-CA");
+
+    if (lastDate === yesterdayString) {
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    let bonus = score * 10;
+
+    localStorage.setItem("dailyStreak", streak);
+    localStorage.setItem("dailyBonus",
+        (Number(localStorage.getItem("dailyBonus")) || 0) + bonus);
+
+    localStorage.setItem("lastChallengeDate", today);
+
+    document.getElementById("finalScore").textContent =
+        "Your Score: " + score + "/5";
+
+    document.getElementById("streak").textContent = streak;
+
+    document.getElementById("bonus").textContent =
+        Number(localStorage.getItem("dailyBonus"));
+
+    let badge = "🌱 Beginner";
+
+    if (score === 5) {
+        badge = "🏆 Perfect Score Champion!";
+    } else if (score >= 3) {
+        badge = "⭐ Smart Player!";
+    }
+
+    document.getElementById("badge").textContent = badge;
+}
+
+</script>
+
+</body>
+</html>
