@@ -26,6 +26,7 @@ let score = 0;
 let answered = false;
 let timeLeft = 15;
 let timerInterval;
+let quizFinished = false;
 
 // SOUND SYSTEM
 let audioContext;
@@ -49,11 +50,8 @@ function playSound(type) {
         oscillator.connect(gain);
         gain.connect(audioContext.destination);
 
-        if (type === "correct") {
-            oscillator.frequency.value = 800;
-        } else {
-            oscillator.frequency.value = 200;
-        }
+        oscillator.frequency.value =
+            type === "correct" ? 800 : 200;
 
         oscillator.type = "sine";
 
@@ -113,9 +111,7 @@ function startCountdown() {
         } else {
 
             clearInterval(countdownTimer);
-
             countdown.remove();
-
             showQuestion();
 
         }
@@ -281,20 +277,43 @@ function goToNextQuestion() {
 
     } else {
 
+        if (quizFinished) return;
+
+        quizFinished = true;
+
         clearInterval(timerInterval);
 
+        // COIN REWARD SYSTEM
+        let earnedCoins = 10;
+
+        if (score === questions.length) {
+            earnedCoins += 5;
+        }
+
+        let totalCoins =
+            Number(localStorage.getItem("dailyBonus")) || 0;
+
+        totalCoins += earnedCoins;
+
+        localStorage.setItem("dailyBonus", totalCoins);
+
+        // PLAYER NAME
         let playerName = prompt("Enter your name:");
 
         if (!playerName || playerName.trim() === "") {
             playerName = "Player";
         }
-        localStorage.setItem("playerName", playerName.trim());
 
+        playerName = playerName.trim();
+
+        localStorage.setItem("playerName", playerName);
+
+        // LEADERBOARD
         let leaderboard =
             JSON.parse(localStorage.getItem("leaderboard")) || [];
 
         leaderboard.push({
-            name: playerName.trim(),
+            name: playerName,
             score: score
         });
 
@@ -305,11 +324,16 @@ function goToNextQuestion() {
             JSON.stringify(leaderboard)
         );
 
+        // RESULT PAGE
         document.body.innerHTML = `
 
             <h1>Quiz Completed! 🎉</h1>
 
             <h2>Your Score: ${score}/${questions.length}</h2>
+
+            <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
+
+            <h3>💰 Total Coins: ${totalCoins}</h3>
 
             <h2>🏆 Leaderboard</h2>
 
@@ -319,6 +343,10 @@ function goToNextQuestion() {
 
             <button onclick="location.href='Quiz.html'">
                 Play Again
+            </button>
+
+            <button onclick="location.href='Rewards.html'">
+                🎁 Rewards Store
             </button>
 
             <button onclick="location.href='index.html'">
@@ -331,5 +359,4 @@ function goToNextQuestion() {
 
 
 // START QUIZ
-
 startCountdown();
