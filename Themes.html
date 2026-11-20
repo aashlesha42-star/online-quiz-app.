@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizMaster - Themes</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 25px 15px;
+    color: white;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+}
+
+h1 {
+    color: #ffd166;
+    margin-top: 35px;
+}
+
+.container {
+    max-width: 750px;
+    margin: 35px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    padding: 25px;
+    border-radius: 20px;
+    background: #ffffff20;
+    border: 1px solid #ffffff40;
+}
+
+.preview {
+    height: 90px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 25px;
+    background: #ffd166;
+    color: #32104f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#message {
+    min-height: 25px;
+}
+
+.home {
+    margin: 25px;
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🎨 Customize Your Theme</h1>
+
+<p>Choose your favourite QuizMaster theme!</p>
+
+<div class="container">
+
+    <div class="card">
+        <div class="preview" style="background:linear-gradient(135deg,#481080,#7b2cbf)"></div>
+        <h3>💜 Purple Theme</h3>
+        <button onclick="selectTheme('purple')">Apply Theme</button>
+    </div>
+
+    <div class="card">
+        <div class="preview" style="background:linear-gradient(135deg,#003566,#00b4d8)"></div>
+        <h3>💙 Blue Theme</h3>
+        <button onclick="selectTheme('blue')">Apply Theme</button>
+    </div>
+
+    <div class="card">
+        <div class="preview" style="background:linear-gradient(135deg,#9d174d,#ff69b4)"></div>
+        <h3>🌸 Pink Theme</h3>
+        <button onclick="selectTheme('pink')">Apply Theme</button>
+    </div>
+
+</div>
+
+<p id="message"></p>
+
+<button class="home" onclick="location.href='index.html'">
+🏠 Home
+</button>
+
+<script>
+
+let unlocked =
+    JSON.parse(localStorage.getItem("unlockedRewards")) || [];
+
+function selectTheme(theme) {
+
+    if (theme !== "purple" && !unlocked.includes(theme)) {
+        document.getElementById("message").textContent =
+            "🔒 Unlock this theme from the Rewards Store first!";
+        return;
+    }
+
+    localStorage.setItem("selectedTheme", theme);
+
+    document.getElementById("message").textContent =
+        "🎉 Theme selected successfully!";
+
+}
+
+</script>
+
+</body>
+</html>
