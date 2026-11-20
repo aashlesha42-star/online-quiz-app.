@@ -283,11 +283,38 @@ function goToNextQuestion() {
 
         clearInterval(timerInterval);
 
+        let playerName = prompt("Enter your name:");
+
+        if (!playerName || playerName.trim() === "") {
+            playerName = "Player";
+        }
+
+        let leaderboard =
+            JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+        leaderboard.push({
+            name: playerName.trim(),
+            score: score
+        });
+
+        leaderboard.sort((a, b) => b.score - a.score);
+
+        localStorage.setItem(
+            "leaderboard",
+            JSON.stringify(leaderboard)
+        );
+
         document.body.innerHTML = `
 
             <h1>Quiz Completed! 🎉</h1>
 
             <h2>Your Score: ${score}/${questions.length}</h2>
+
+            <h2>🏆 Leaderboard</h2>
+
+            ${leaderboard.slice(0, 5).map((player, index) => `
+                <p>${index + 1}. ${player.name} - ${player.score}</p>
+            `).join("")}
 
             <button onclick="location.href='Quiz.html'">
                 Play Again
