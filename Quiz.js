@@ -1,4 +1,4 @@
-// QUIZ QUESTIONS
+// ALL QUIZ QUESTIONS
 
 const allQuestions = {
 
@@ -50,7 +50,7 @@ const allQuestions = {
             correct: "Delhi"
         },
         {
-            question: "Which is the national animal of India?",
+            question: "What is the national animal of India?",
             answers: ["Lion", "Elephant", "Tiger", "Leopard"],
             correct: "Tiger"
         },
@@ -138,7 +138,6 @@ let timeLeft = 15;
 let timerInterval;
 let quizFinished = false;
 let selectedCategory = "";
-
 let audioContext;
 
 
@@ -180,13 +179,9 @@ function playSound(type) {
 
         oscillator.start();
 
-        oscillator.stop(
-            audioContext.currentTime + 0.3
-        );
+        oscillator.stop(audioContext.currentTime + 0.3);
 
-    }).catch(error => {
-        console.log("Audio error:", error);
-    });
+    }).catch(error => console.log(error));
 }
 
 
@@ -194,8 +189,12 @@ function playSound(type) {
 
 function startQuiz(category) {
 
-    selectedCategory = category;
+    if (!allQuestions[category]) {
+        alert("Category not found!");
+        return;
+    }
 
+    selectedCategory = category;
     questions = allQuestions[category];
 
     currentQuestion = 0;
@@ -203,10 +202,9 @@ function startQuiz(category) {
     quizFinished = false;
 
     document.getElementById("categoryScreen").style.display = "none";
-
     document.getElementById("quizScreen").style.display = "block";
 
-    const categoryNames = {
+    const names = {
         computer: "💻 Computer Quiz",
         science: "🔬 Science Quiz",
         gk: "🌍 General Knowledge Quiz",
@@ -216,7 +214,7 @@ function startQuiz(category) {
     };
 
     document.getElementById("categoryName").textContent =
-        categoryNames[category];
+        names[category];
 
     startCountdown();
 }
@@ -228,24 +226,22 @@ function startCountdown() {
 
     const countdown = document.createElement("div");
 
-    countdown.style.position = "fixed";
-    countdown.style.top = "0";
-    countdown.style.left = "0";
-    countdown.style.width = "100%";
-    countdown.style.height = "100%";
-    countdown.style.background = "#6a0dad";
-    countdown.style.color = "white";
-    countdown.style.display = "flex";
-    countdown.style.justifyContent = "center";
-    countdown.style.alignItems = "center";
-    countdown.style.fontSize = "70px";
-    countdown.style.fontWeight = "bold";
-    countdown.style.zIndex = "9999";
+    countdown.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:#6a0dad;
+        color:white;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-size:70px;
+        font-weight:bold;
+        z-index:9999;
+    `;
 
     document.body.appendChild(countdown);
 
     let count = 3;
-
     countdown.textContent = count;
 
     const countdownTimer = setInterval(() => {
@@ -253,21 +249,13 @@ function startCountdown() {
         count--;
 
         if (count > 0) {
-
             countdown.textContent = count;
-
         } else if (count === 0) {
-
             countdown.textContent = "GO!";
-
         } else {
-
             clearInterval(countdownTimer);
-
             countdown.remove();
-
             showQuestion();
-
         }
 
     }, 1000);
@@ -289,11 +277,9 @@ function showQuestion() {
     document.getElementById("progressBar").style.width =
         `${((currentQuestion + 1) / questions.length) * 100}%`;
 
-    document.getElementById("question").textContent =
-        q.question;
+    document.getElementById("question").textContent = q.question;
 
-    document.getElementById("timer").textContent =
-        timeLeft;
+    document.getElementById("timer").textContent = timeLeft;
 
     document.getElementById("score").textContent = "";
 
@@ -312,13 +298,11 @@ function showQuestion() {
             if (answered) return;
 
             answered = true;
-
             clearInterval(timerInterval);
 
-            const allButtons =
-                box.querySelectorAll("button");
+            const buttons = box.querySelectorAll("button");
 
-            allButtons.forEach(btn => {
+            buttons.forEach(btn => {
 
                 btn.disabled = true;
 
@@ -331,7 +315,6 @@ function showQuestion() {
             if (answer === q.correct) {
 
                 score++;
-
                 playSound("correct");
 
                 document.getElementById("score").textContent =
@@ -340,12 +323,10 @@ function showQuestion() {
             } else {
 
                 button.classList.add("wrong-answer");
-
                 playSound("wrong");
 
                 document.getElementById("score").textContent =
                     "Wrong answer! ❌";
-
             }
 
         };
@@ -364,12 +345,11 @@ function startTimer() {
 
     clearInterval(timerInterval);
 
-    timerInterval = setInterval(function() {
+    timerInterval = setInterval(() => {
 
         timeLeft--;
 
-        document.getElementById("timer").textContent =
-            timeLeft;
+        document.getElementById("timer").textContent = timeLeft;
 
         if (timeLeft <= 0) {
 
@@ -379,10 +359,10 @@ function startTimer() {
 
                 answered = true;
 
-                const allButtons =
+                const buttons =
                     document.querySelectorAll("#answers button");
 
-                allButtons.forEach(btn => {
+                buttons.forEach(btn => {
 
                     btn.disabled = true;
 
@@ -399,7 +379,6 @@ function startTimer() {
                     "Time's up! ⏰";
 
                 setTimeout(goToNextQuestion, 1000);
-
             }
 
         }
@@ -413,14 +392,11 @@ function startTimer() {
 function nextQuestion() {
 
     if (!answered) {
-
         alert("Please select an answer first!");
-
         return;
     }
 
     clearInterval(timerInterval);
-
     goToNextQuestion();
 }
 
@@ -440,10 +416,9 @@ function goToNextQuestion() {
     } else {
 
         quizFinished = true;
-
         clearInterval(timerInterval);
 
-        // COIN REWARDS
+        // COINS
 
         let earnedCoins = 10;
 
@@ -458,19 +433,17 @@ function goToNextQuestion() {
 
         localStorage.setItem("dailyBonus", totalCoins);
 
-
         // PLAYER NAME
 
         let playerName = prompt("Enter your name:");
 
-        if (!playerName || playerName.trim() === "") {
+        if (!playerName || !playerName.trim()) {
             playerName = "Player";
         }
 
         playerName = playerName.trim();
 
         localStorage.setItem("playerName", playerName);
-
 
         // LEADERBOARD
 
@@ -488,7 +461,6 @@ function goToNextQuestion() {
             "leaderboard",
             JSON.stringify(leaderboard)
         );
-
 
         // RESULT PAGE
 
@@ -526,4 +498,4 @@ function goToNextQuestion() {
 
         `;
     }
-            }
+                                       }
