@@ -1,28 +1,219 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>QuizMaster</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+
+    <title>QuizMaster - Challenge Your Brain</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+            color: white;
+            min-height: 100vh;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: left;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .logo span {
+            color: #ffd166;
+        }
+
+        .hero {
+            margin: 85px auto 45px;
+            max-width: 700px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ffffff20;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 8vw, 65px);
+            margin-bottom: 18px;
+        }
+
+        h1 span {
+            color: #ffd166;
+        }
+
+        .subtitle {
+            color: #eee0ff;
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            background: #ffd166;
+            color: #32104f;
+            border: none;
+            padding: 17px 45px;
+            border-radius: 35px;
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.08);
+            background: white;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            max-width: 900px;
+            margin: 55px auto 35px;
+        }
+
+        .card {
+            background: #ffffff18;
+            border: 1px solid #ffffff35;
+            border-radius: 18px;
+            padding: 25px 20px;
+            width: 220px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: #ffffff30;
+        }
+
+        .card .icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #e5d4ff;
+            font-size: 14px;
+        }
+
+        .navigation {
+            margin: 35px auto;
+        }
+
+        .navigation button {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 12px 22px;
+            margin: 7px;
+            border-radius: 25px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .navigation button:hover {
+            background: white;
+            color: #481080;
+        }
+
+        footer {
+            margin-top: 55px;
+            color: #e5d4ff;
+            font-size: 13px;
+        }
+
+    </style>
 </head>
 
 <body>
 
-    <h1>QuizMaster 💜</h1>
+    <div class="logo">
+        💜 Quiz<span>Master</span>
+    </div>
 
-    <p>Test your knowledge with fun quizzes!</p>
+    <section class="hero">
 
-    <button onclick="window.location.href='Quiz.html'">
-    Start Quiz
-        <button onclick="window.location.href='Leaderboard.html'">
-    🏆 Leaderboard
-</button>
-        <button onclick="window.location.href='Profile.html'">
-    👤 My Profile
-</button>
-    </button>
+        <div class="badge">
+            ✨ Learn • Play • Win
+        </div>
 
-    <script src="script.js"></script>
+        <h1>
+            Challenge Your <span>Brain!</span>
+        </h1>
+
+        <p class="subtitle">
+            Ready to test your knowledge?
+            Answer exciting questions, beat the clock,
+            earn points and become a QuizMaster!
+        </p>
+
+        <button class="start-btn"
+            onclick="location.href='Quiz.html'">
+            🚀 Start Quiz
+        </button>
+
+    </section>
+
+    <section class="features">
+
+        <div class="card">
+            <div class="icon">🧠</div>
+            <h3>Test Your Brain</h3>
+            <p>Explore questions and improve your knowledge.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">⏱️</div>
+            <h3>Beat The Clock</h3>
+            <p>Answer before your time runs out!</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏆</div>
+            <h3>Get On Top</h3>
+            <p>Earn points and climb the leaderboard.</p>
+        </div>
+
+    </section>
+
+    <div class="navigation">
+
+        <button onclick="location.href='Leaderboard.html'">
+            🏆 Leaderboard
+        </button>
+
+        <button onclick="location.href='Profile.html'">
+            👤 My Profile
+        </button>
+
+    </div>
+
+    <footer>
+        Made with 💜 for curious minds | QuizMaster
+    </footer>
 
 </body>
 </html>
