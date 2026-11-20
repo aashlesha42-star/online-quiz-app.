@@ -1,236 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>QuizMaster - Challenge Your Brain</title>
+<title>QuizMaster - Challenge Your Brain</title>
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
-            color: white;
-            min-height: 100vh;
-            text-align: center;
-            padding: 25px 15px;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    color: white;
+    min-height: 100vh;
+    text-align: center;
+    padding: 25px 15px;
+}
 
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            text-align: left;
-            max-width: 900px;
-            margin: auto;
-        }
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: left;
+    max-width: 900px;
+    margin: auto;
+}
 
-        .logo span {
-            color: #ffd166;
-        }
+.logo span {
+    color: #ffd166;
+}
 
-        .hero {
-            margin: 85px auto 45px;
-            max-width: 700px;
-        }
+.hero {
+    margin: 75px auto 45px;
+    max-width: 700px;
+}
 
-        .badge {
-            display: inline-block;
-            background: #ffffff20;
-            padding: 10px 20px;
-            border-radius: 30px;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
+.badge {
+    display: inline-block;
+    background: #ffffff20;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
 
-        h1 {
-            font-size: clamp(38px, 8vw, 65px);
-            margin-bottom: 18px;
-        }
+h1 {
+    font-size: clamp(38px, 8vw, 65px);
+    margin-bottom: 18px;
+}
 
-        h1 span {
-            color: #ffd166;
-        }
+h1 span {
+    color: #ffd166;
+}
 
-        .subtitle {
-            color: #eee0ff;
-            font-size: 17px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
+.subtitle {
+    color: #eee0ff;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
 
-        .start-btn {
-            background: #ffd166;
-            color: #32104f;
-            border: none;
-            padding: 17px 45px;
-            border-radius: 35px;
-            font-size: 19px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+.start-btn {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 17px 45px;
+    border-radius: 35px;
+    font-size: 19px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-        .start-btn:hover {
-            transform: scale(1.08);
-            background: white;
-        }
+.start-btn:hover {
+    transform: scale(1.08);
+    background: white;
+}
 
-        .features {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 18px;
-            max-width: 900px;
-            margin: 55px auto 35px;
-        }
+.login-reward {
+    max-width: 420px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #ffffff20;
+    border: 1px solid #ffffff45;
+    border-radius: 20px;
+}
 
-        .card {
-            background: #ffffff18;
-            border: 1px solid #ffffff35;
-            border-radius: 18px;
-            padding: 25px 20px;
-            width: 220px;
-            transition: 0.3s;
-        }
+.login-reward h2 {
+    color: #ffd166;
+    margin-bottom: 12px;
+}
 
-        .card:hover {
-            transform: translateY(-8px);
-            background: #ffffff30;
-        }
+.login-reward p {
+    margin: 10px 0;
+    line-height: 1.5;
+}
 
-        .card .icon {
-            font-size: 38px;
-            margin-bottom: 12px;
-        }
+.reward-button {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    margin-top: 12px;
+}
 
-        .card h3 {
-            margin-bottom: 8px;
-        }
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    max-width: 900px;
+    margin: 55px auto 35px;
+}
 
-        .card p {
-            color: #e5d4ff;
-            font-size: 14px;
-        }
+.card {
+    background: #ffffff18;
+    border: 1px solid #ffffff35;
+    border-radius: 18px;
+    padding: 25px 20px;
+    width: 220px;
+    transition: 0.3s;
+}
 
-        .navigation {
-            margin: 35px auto;
-        }
+.card:hover {
+    transform: translateY(-8px);
+    background: #ffffff30;
+}
 
-        .navigation button {
-            background: transparent;
-            color: white;
-            border: 1px solid white;
-            padding: 12px 22px;
-            margin: 7px;
-            border-radius: 25px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+.card .icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
 
-        .navigation button:hover {
-            background: white;
-            color: #481080;
-        }
+.card h3 {
+    margin-bottom: 8px;
+}
 
-        footer {
-            margin-top: 55px;
-            color: #e5d4ff;
-            font-size: 13px;
-        }
+.card p {
+    color: #e5d4ff;
+    font-size: 14px;
+}
 
-    </style>
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body data-theme="purple">
-    <div class="logo">
-        💜 Quiz<span>Master</span>
-    </div>
-
-    <section class="hero">
-
-        <div class="badge">
-            ✨ Learn • Play • Win
-        </div>
-
-        <h1>
-            Challenge Your <span>Brain!</span>
-        </h1>
-
-        <p class="subtitle">
-            Ready to test your knowledge?
-            Answer exciting questions, beat the clock,
-            earn points and become a QuizMaster!
-        </p>
-
-        <button class="start-btn"
-            onclick="location.href='Quiz.html'">
-            🚀 Start Quiz
-        </button>
-
-    </section>
-
-    <section class="features">
-
-        <div class="card">
-            <div class="icon">🧠</div>
-            <h3>Test Your Brain</h3>
-            <p>Explore questions and improve your knowledge.</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">⏱️</div>
-            <h3>Beat The Clock</h3>
-            <p>Answer before your time runs out!</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">🏆</div>
-            <h3>Get On Top</h3>
-            <p>Earn points and climb the leaderboard.</p>
-        </div>
-
-    </section>
-
-    <div class="navigation">
-
-        <button onclick="location.href='Leaderboard.html'">
-            🏆 Leaderboard
-        </button>
-
-        <button onclick="location.href='Profile.html'">
-            👤 My Profile
-        </button>
-        
-        <button onclick="location.href='DailyChallenge.html'">
-            🌟 Daily Challenge
-        </button>
-
-        <button onclick="location.href='Achievements.html'">
-    🎖️ Achievements
-</button>
-        <button onclick="location.href='Rewards.html'">
-    🎁 Rewards Store
-</button>
-        <button onclick="location.href='Themes.html'">
-    🎨 Customize Theme
-</button>
-    </div>
-
-    <footer>
-        Made with 💜 for curious minds | QuizMaster
-    </footer>
- <script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
-document.body.setAttribute("data-theme", savedTheme);
-</script>
-</body>
+.navigation {
    
-</html>
