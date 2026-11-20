@@ -53,21 +53,34 @@ document.getElementById("progressBar").style.width =
         button.style.display = "block";
         button.style.margin = "10px auto";
 
-        button.onclick = function() {
-            if (answered) return;
+       button.onclick = function() {
+    if (answered) return;
 
-            answered = true;
-            clearInterval(timerInterval);
+    answered = true;
+    clearInterval(timerInterval);
 
-            if (answer === q.correct) {
-                score++;
-                document.getElementById("score").textContent =
-                    "Correct answer! 🎉";
-            } else {
-                document.getElementById("score").textContent =
-                    "Wrong answer!";
-            }
-        };
+    const allButtons = box.querySelectorAll("button");
+
+    allButtons.forEach(btn => {
+        btn.disabled = true;
+
+        if (btn.textContent === q.correct) {
+            btn.style.background = "green";
+        }
+    });
+
+    if (answer === q.correct) {
+        score++;
+
+        document.getElementById("score").textContent =
+            "Correct answer! 🎉";
+    } else {
+        button.style.background = "red";
+
+        document.getElementById("score").textContent =
+            "Wrong answer! ❌";
+    }
+};
 
         box.appendChild(button);
     });
