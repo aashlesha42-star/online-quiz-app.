@@ -1,181 +1,529 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// QUIZ QUESTIONS
 
-    <title>QuizMaster - Play Quiz</title>
+const allQuestions = {
 
-    <link rel="stylesheet" href="style.css">
+    computer: [
+        {
+            question: "Which language is used for web development?",
+            answers: ["HTML", "Python", "C", "Java"],
+            correct: "HTML"
+        },
+        {
+            question: "What does CPU stand for?",
+            answers: [
+                "Central Processing Unit",
+                "Computer Personal Unit",
+                "Central Program Utility",
+                "Control Processing User"
+            ],
+            correct: "Central Processing Unit"
+        },
+        {
+            question: "Which company developed Android?",
+            answers: ["Apple", "Google", "Microsoft", "IBM"],
+            correct: "Google"
+        }
+    ],
 
-    <style>
-        .category-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 18px;
-            max-width: 750px;
-            margin: 30px auto;
-            padding: 15px;
+    science: [
+        {
+            question: "Which planet is known as the Red Planet?",
+            answers: ["Earth", "Mars", "Jupiter", "Venus"],
+            correct: "Mars"
+        },
+        {
+            question: "What is the chemical formula of water?",
+            answers: ["CO2", "O2", "H2O", "NaCl"],
+            correct: "H2O"
+        },
+        {
+            question: "Which organ pumps blood?",
+            answers: ["Brain", "Lungs", "Heart", "Kidney"],
+            correct: "Heart"
+        }
+    ],
+
+    gk: [
+        {
+            question: "What is the capital of India?",
+            answers: ["Mumbai", "Delhi", "Pune", "Chennai"],
+            correct: "Delhi"
+        },
+        {
+            question: "Which is the national animal of India?",
+            answers: ["Lion", "Elephant", "Tiger", "Leopard"],
+            correct: "Tiger"
+        },
+        {
+            question: "How many days are there in a leap year?",
+            answers: ["364", "365", "366", "367"],
+            correct: "366"
+        }
+    ],
+
+    maths: [
+        {
+            question: "What is 12 × 5?",
+            answers: ["50", "55", "60", "65"],
+            correct: "60"
+        },
+        {
+            question: "What is the square of 9?",
+            answers: ["18", "72", "81", "99"],
+            correct: "81"
+        },
+        {
+            question: "What is 100 divided by 4?",
+            answers: ["20", "25", "30", "40"],
+            correct: "25"
+        }
+    ],
+
+    english: [
+        {
+            question: "What is the opposite of Happy?",
+            answers: ["Joyful", "Sad", "Excited", "Glad"],
+            correct: "Sad"
+        },
+        {
+            question: "Which word is a noun?",
+            answers: ["Run", "Beautiful", "School", "Quickly"],
+            correct: "School"
+        },
+        {
+            question: "Choose the correct spelling.",
+            answers: ["Beautifull", "Beautiful", "Beutiful", "Beautifal"],
+            correct: "Beautiful"
+        }
+    ],
+
+    history: [
+        {
+            question: "Who was the first Prime Minister of India?",
+            answers: [
+                "Mahatma Gandhi",
+                "Jawaharlal Nehru",
+                "Sardar Patel",
+                "Dr. Rajendra Prasad"
+            ],
+            correct: "Jawaharlal Nehru"
+        },
+        {
+            question: "In which year did India gain independence?",
+            answers: ["1945", "1946", "1947", "1950"],
+            correct: "1947"
+        },
+        {
+            question: "Who is known as the Father of the Nation in India?",
+            answers: [
+                "Subhas Chandra Bose",
+                "Mahatma Gandhi",
+                "Bhagat Singh",
+                "Jawaharlal Nehru"
+            ],
+            correct: "Mahatma Gandhi"
+        }
+    ]
+
+};
+
+
+// VARIABLES
+
+let questions = [];
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+let timeLeft = 15;
+let timerInterval;
+let quizFinished = false;
+let selectedCategory = "";
+
+let audioContext;
+
+
+// SOUND SYSTEM
+
+function playSound(type) {
+
+    const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    if (!audioContext) {
+        audioContext = new AudioContextClass();
+    }
+
+    audioContext.resume().then(() => {
+
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.frequency.value =
+            type === "correct" ? 800 : 200;
+
+        oscillator.type = "sine";
+
+        gain.gain.setValueAtTime(
+            0.2,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.3
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.3
+        );
+
+    }).catch(error => {
+        console.log("Audio error:", error);
+    });
+}
+
+
+// START QUIZ
+
+function startQuiz(category) {
+
+    selectedCategory = category;
+
+    questions = allQuestions[category];
+
+    currentQuestion = 0;
+    score = 0;
+    quizFinished = false;
+
+    document.getElementById("categoryScreen").style.display = "none";
+
+    document.getElementById("quizScreen").style.display = "block";
+
+    const categoryNames = {
+        computer: "💻 Computer Quiz",
+        science: "🔬 Science Quiz",
+        gk: "🌍 General Knowledge Quiz",
+        maths: "➗ Mathematics Quiz",
+        english: "📚 English Quiz",
+        history: "🏛️ History Quiz"
+    };
+
+    document.getElementById("categoryName").textContent =
+        categoryNames[category];
+
+    startCountdown();
+}
+
+
+// COUNTDOWN
+
+function startCountdown() {
+
+    const countdown = document.createElement("div");
+
+    countdown.style.position = "fixed";
+    countdown.style.top = "0";
+    countdown.style.left = "0";
+    countdown.style.width = "100%";
+    countdown.style.height = "100%";
+    countdown.style.background = "#6a0dad";
+    countdown.style.color = "white";
+    countdown.style.display = "flex";
+    countdown.style.justifyContent = "center";
+    countdown.style.alignItems = "center";
+    countdown.style.fontSize = "70px";
+    countdown.style.fontWeight = "bold";
+    countdown.style.zIndex = "9999";
+
+    document.body.appendChild(countdown);
+
+    let count = 3;
+
+    countdown.textContent = count;
+
+    const countdownTimer = setInterval(() => {
+
+        count--;
+
+        if (count > 0) {
+
+            countdown.textContent = count;
+
+        } else if (count === 0) {
+
+            countdown.textContent = "GO!";
+
+        } else {
+
+            clearInterval(countdownTimer);
+
+            countdown.remove();
+
+            showQuestion();
+
         }
 
-        .category-card {
-            padding: 25px 15px;
-            border-radius: 18px;
-            background: #ffffff;
-            color: #32104f;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: 0.3s;
+    }, 1000);
+}
+
+
+// SHOW QUESTION
+
+function showQuestion() {
+
+    answered = false;
+    timeLeft = 15;
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("questionNumber").textContent =
+        `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    document.getElementById("progressBar").style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    document.getElementById("timer").textContent =
+        timeLeft;
+
+    document.getElementById("score").textContent = "";
+
+    const box = document.getElementById("answers");
+
+    box.innerHTML = "";
+
+    q.answers.forEach(answer => {
+
+        const button = document.createElement("button");
+
+        button.textContent = answer;
+
+        button.onclick = function() {
+
+            if (answered) return;
+
+            answered = true;
+
+            clearInterval(timerInterval);
+
+            const allButtons =
+                box.querySelectorAll("button");
+
+            allButtons.forEach(btn => {
+
+                btn.disabled = true;
+
+                if (btn.textContent === q.correct) {
+                    btn.classList.add("correct-answer");
+                }
+
+            });
+
+            if (answer === q.correct) {
+
+                score++;
+
+                playSound("correct");
+
+                document.getElementById("score").textContent =
+                    "Correct answer! 🎉";
+
+            } else {
+
+                button.classList.add("wrong-answer");
+
+                playSound("wrong");
+
+                document.getElementById("score").textContent =
+                    "Wrong answer! ❌";
+
+            }
+
+        };
+
+        box.appendChild(button);
+
+    });
+
+    startTimer();
+}
+
+
+// TIMER
+
+function startTimer() {
+
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(function() {
+
+        timeLeft--;
+
+        document.getElementById("timer").textContent =
+            timeLeft;
+
+        if (timeLeft <= 0) {
+
+            clearInterval(timerInterval);
+
+            if (!answered) {
+
+                answered = true;
+
+                const allButtons =
+                    document.querySelectorAll("#answers button");
+
+                allButtons.forEach(btn => {
+
+                    btn.disabled = true;
+
+                    if (
+                        btn.textContent ===
+                        questions[currentQuestion].correct
+                    ) {
+                        btn.classList.add("correct-answer");
+                    }
+
+                });
+
+                document.getElementById("score").textContent =
+                    "Time's up! ⏰";
+
+                setTimeout(goToNextQuestion, 1000);
+
+            }
+
         }
 
-        .category-card:hover {
-            transform: translateY(-7px);
-            border-color: #ffd166;
+    }, 1000);
+}
+
+
+// NEXT QUESTION
+
+function nextQuestion() {
+
+    if (!answered) {
+
+        alert("Please select an answer first!");
+
+        return;
+    }
+
+    clearInterval(timerInterval);
+
+    goToNextQuestion();
+}
+
+
+// MOVE TO NEXT QUESTION
+
+function goToNextQuestion() {
+
+    if (quizFinished) return;
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+
+        showQuestion();
+
+    } else {
+
+        quizFinished = true;
+
+        clearInterval(timerInterval);
+
+        // COIN REWARDS
+
+        let earnedCoins = 10;
+
+        if (score === questions.length) {
+            earnedCoins += 5;
         }
 
-        .category-card .icon {
-            font-size: 40px;
+        let totalCoins =
+            Number(localStorage.getItem("dailyBonus")) || 0;
+
+        totalCoins += earnedCoins;
+
+        localStorage.setItem("dailyBonus", totalCoins);
+
+
+        // PLAYER NAME
+
+        let playerName = prompt("Enter your name:");
+
+        if (!playerName || playerName.trim() === "") {
+            playerName = "Player";
         }
 
-        .category-card h3 {
-            margin-top: 10px;
-        }
+        playerName = playerName.trim();
 
-        #quizScreen {
-            display: none;
-        }
-
-        #answers button {
-            display: block;
-            width: 90%;
-            max-width: 450px;
-            padding: 14px;
-            margin: 12px auto;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
-        #nextButton {
-            padding: 12px 30px;
-            margin: 20px;
-            border-radius: 25px;
-            cursor: pointer;
-        }
-
-        .progress-container {
-            max-width: 500px;
-            margin: 20px auto;
-            height: 12px;
-            background: #ffffff80;
-            border-radius: 20px;
-        }
-
-        #progressBar {
-            width: 0%;
-            height: 100%;
-            background: #ffd166;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-
-        .correct-answer {
-            background: #22c55e !important;
-            color: white !important;
-        }
-
-        .wrong-answer {
-            background: #ef4444 !important;
-            color: white !important;
-        }
-    </style>
-</head>
-
-<body data-theme="purple">
-
-    <h1>QuizMaster 💜</h1>
-
-    <!-- CATEGORY SCREEN -->
-
-    <div id="categoryScreen">
-
-        <h2>Choose Your Quiz Category 🎯</h2>
-
-        <p>Select a category and test your knowledge!</p>
-
-        <div class="category-container">
-
-            <div class="category-card" onclick="startQuiz('computer')">
-                <div class="icon">💻</div>
-                <h3>Computer</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('science')">
-                <div class="icon">🔬</div>
-                <h3>Science</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('gk')">
-                <div class="icon">🌍</div>
-                <h3>General Knowledge</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('maths')">
-                <div class="icon">➗</div>
-                <h3>Mathematics</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('english')">
-                <div class="icon">📚</div>
-                <h3>English</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('history')">
-                <div class="icon">🏛️</div>
-                <h3>History</h3>
-            </div>
-
-        </div>
-
-    </div>
+        localStorage.setItem("playerName", playerName);
 
 
-    <!-- QUIZ SCREEN -->
+        // LEADERBOARD
 
-    <div id="quizScreen">
+        let leaderboard =
+            JSON.parse(localStorage.getItem("leaderboard")) || [];
 
-        <h2 id="categoryName"></h2>
+        leaderboard.push({
+            name: playerName,
+            score: score
+        });
 
-        <h3 id="questionNumber">Question 1 of 3</h3>
+        leaderboard.sort((a, b) => b.score - a.score);
 
-        <div class="progress-container">
-            <div id="progressBar"></div>
-        </div>
-
-        <h2 id="question">Question appears here</h2>
-
-        <h3>
-            Time Left: <span id="timer">15</span> seconds
-        </h3>
-
-        <div id="answers"></div>
-
-        <p id="score"></p>
-
-        <button id="nextButton" onclick="nextQuestion()">
-            Next Question
-        </button>
-
-    </div>
+        localStorage.setItem(
+            "leaderboard",
+            JSON.stringify(leaderboard)
+        );
 
 
-    <script src="Quiz.js"></script>
+        // RESULT PAGE
 
-    <script>
-        const savedTheme =
-            localStorage.getItem("selectedTheme") || "purple";
+        document.body.innerHTML = `
 
-        document.body.setAttribute("data-theme", savedTheme);
-    </script>
+            <h1>Quiz Completed! 🎉</h1>
 
-</body>
-</html>
+            <h2>${selectedCategory.toUpperCase()} QUIZ</h2>
+
+            <h2>Your Score: ${score}/${questions.length}</h2>
+
+            <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
+
+            <h3>💰 Total Coins: ${totalCoins}</h3>
+
+            <h2>🏆 Leaderboard</h2>
+
+            ${leaderboard.slice(0, 5).map((player, index) => `
+                <p>${index + 1}. ${player.name} - ${player.score}</p>
+            `).join("")}
+
+            <br>
+
+            <button onclick="location.href='Quiz.html'">
+                Play Again
+            </button>
+
+            <button onclick="location.href='Rewards.html'">
+                🎁 Rewards Store
+            </button>
+
+            <button onclick="location.href='index.html'">
+                Home
+            </button>
+
+        `;
+    }
+            }
