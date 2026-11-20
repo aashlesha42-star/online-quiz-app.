@@ -34,61 +34,73 @@ function showQuestion() {
     const q = questions[currentQuestion];
 
     document.getElementById("questionNumber").textContent =
-    `Question ${currentQuestion + 1} of ${questions.length}`;
+        `Question ${currentQuestion + 1} of ${questions.length}`;
 
-document.getElementById("progressBar").style.width =
-    `${((currentQuestion + 1) / questions.length) * 100}%`;
+    document.getElementById("progressBar").style.width =
+        `${((currentQuestion + 1) / questions.length) * 100}%`;
 
     document.getElementById("question").textContent = q.question;
+
     document.getElementById("timer").textContent = timeLeft;
+
     document.getElementById("score").textContent = "";
 
     const box = document.getElementById("answers");
     box.innerHTML = "";
 
     q.answers.forEach(answer => {
+
         const button = document.createElement("button");
 
         button.textContent = answer;
         button.style.display = "block";
         button.style.margin = "10px auto";
 
-       button.onclick = function() {
-    if (answered) return;
+        button.onclick = function() {
 
-    answered = true;
-    clearInterval(timerInterval);
+            if (answered) return;
 
-    const allButtons = box.querySelectorAll("button");
+            answered = true;
+            clearInterval(timerInterval);
 
-    allButtons.forEach(btn => {
-        btn.disabled = true;
+            const allButtons = box.querySelectorAll("button");
 
-        if (btn.textContent === q.correct) {
-            btn.style.background = "green";
-        }
-    });
+            allButtons.forEach(btn => {
 
-    if (answer === q.correct) {
-        score++;
+                btn.disabled = true;
 
-        document.getElementById("score").textContent =
-            "Correct answer! 🎉";
-    } else {
-        button.style.background = "red";
+                if (btn.textContent === q.correct) {
+                    btn.classList.add("correct-answer");
+                }
 
-        document.getElementById("score").textContent =
-            "Wrong answer! ❌";
-    }
-};
+            });
+
+            if (answer === q.correct) {
+
+                score++;
+
+                document.getElementById("score").textContent =
+                    "Correct answer! 🎉";
+
+            } else {
+
+                button.classList.add("wrong-answer");
+
+                document.getElementById("score").textContent =
+                    "Wrong answer! ❌";
+
+            }
+        };
 
         box.appendChild(button);
+
     });
 
     startTimer();
 }
 
 function startTimer() {
+
     clearInterval(timerInterval);
 
     timerInterval = setInterval(function() {
@@ -98,40 +110,66 @@ function startTimer() {
         document.getElementById("timer").textContent = timeLeft;
 
         if (timeLeft <= 0) {
+
             clearInterval(timerInterval);
 
             if (!answered) {
+
                 answered = true;
+
+                const allButtons =
+                    document.querySelectorAll("#answers button");
+
+                allButtons.forEach(btn => {
+
+                    btn.disabled = true;
+
+                    if (btn.textContent === questions[currentQuestion].correct) {
+                        btn.classList.add("correct-answer");
+                    }
+
+                });
 
                 document.getElementById("score").textContent =
                     "Time's up! ⏰";
 
                 setTimeout(goToNextQuestion, 1000);
+
             }
+
         }
 
     }, 1000);
 }
 
 function nextQuestion() {
+
     if (!answered) {
+
         alert("Please select an answer first!");
+
         return;
     }
 
     clearInterval(timerInterval);
+
     goToNextQuestion();
 }
 
 function goToNextQuestion() {
+
     currentQuestion++;
 
     if (currentQuestion < questions.length) {
+
         showQuestion();
+
     } else {
+
         clearInterval(timerInterval);
 
         document.body.innerHTML = `
+
             <h1>Quiz Completed! 🎉</h1>
 
             <h2>Your Score: ${score}/${questions.length}</h2>
@@ -143,6 +181,7 @@ function goToNextQuestion() {
             <button onclick="location.href='index.html'">
                 Home
             </button>
+
         `;
     }
 }
