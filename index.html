@@ -149,4 +149,235 @@ h1 span {
 }
 
 .navigation {
-   
+    margin: 35px auto;
+}
+
+.navigation button {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 12px 22px;
+    margin: 7px;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.navigation button:hover {
+    background: white;
+    color: #481080;
+}
+
+footer {
+    margin-top: 55px;
+    color: #e5d4ff;
+    font-size: 13px;
+}
+
+@media(max-width: 480px) {
+    .hero {
+        margin-top: 45px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+</style>
+</head>
+
+<body data-theme="purple">
+
+<div class="logo">
+    💜 Quiz<span>Master</span>
+</div>
+
+<section class="hero">
+
+    <div class="badge">
+        ✨ Learn • Play • Win
+    </div>
+
+    <h1>
+        Challenge Your <span>Brain!</span>
+    </h1>
+
+    <p class="subtitle">
+        Ready to test your knowledge?
+        Answer exciting questions, beat the clock,
+        earn points and become a QuizMaster!
+    </p>
+
+    <button class="start-btn"
+        onclick="location.href='Quiz.html'">
+        🚀 Start Quiz
+    </button>
+
+</section>
+
+<!-- DAILY LOGIN REWARDS -->
+
+<section class="login-reward">
+
+    <h2>🎁 Daily Login Rewards</h2>
+
+    <p>Visit QuizMaster every day and collect coins!</p>
+
+    <h3>🔥 Login Streak: <span id="streak">0</span> Days</h3>
+
+    <p id="rewardMessage">Collect your daily reward!</p>
+
+    <button class="reward-button" id="claimButton"
+        onclick="claimReward()">
+        🪙 Claim 5 Coins
+    </button>
+
+</section>
+
+<section class="features">
+
+    <div class="card">
+        <div class="icon">🧠</div>
+        <h3>Test Your Brain</h3>
+        <p>Explore questions and improve your knowledge.</p>
+    </div>
+
+    <div class="card">
+        <div class="icon">⏱️</div>
+        <h3>Beat The Clock</h3>
+        <p>Answer before your time runs out!</p>
+    </div>
+
+    <div class="card">
+        <div class="icon">🏆</div>
+        <h3>Get On Top</h3>
+        <p>Earn points and climb the leaderboard.</p>
+    </div>
+
+</section>
+
+<div class="navigation">
+
+    <button onclick="location.href='Leaderboard.html'">
+        🏆 Leaderboard
+    </button>
+
+    <button onclick="location.href='Profile.html'">
+        👤 My Profile
+    </button>
+
+    <button onclick="location.href='DailyChallenge.html'">
+        🌟 Daily Challenge
+    </button>
+
+    <button onclick="location.href='Achievements.html'">
+        🎖️ Achievements
+    </button>
+
+    <button onclick="location.href='Rewards.html'">
+        🎁 Rewards Store
+    </button>
+
+    <button onclick="location.href='Themes.html'">
+        🎨 Customize Theme
+    </button>
+
+</div>
+
+<footer>
+    Made with 💜 for curious minds | QuizMaster
+</footer>
+
+<script>
+
+// DAILY LOGIN REWARD SYSTEM
+
+let today = new Date().toLocaleDateString("en-CA");
+
+let lastLogin = localStorage.getItem("lastLoginDate");
+
+let streak = Number(localStorage.getItem("loginStreak")) || 0;
+
+let rewardMessage = document.getElementById("rewardMessage");
+
+let claimButton = document.getElementById("claimButton");
+
+function claimReward() {
+
+    if (localStorage.getItem("lastLoginDate") === today) {
+
+        rewardMessage.textContent =
+            "✅ You have already collected today's reward!";
+
+        return;
+    }
+
+    let yesterday = new Date();
+
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    let yesterdayDate = yesterday.toLocaleDateString("en-CA");
+
+    if (lastLogin === yesterdayDate) {
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    let earnedCoins = 5;
+
+    let bonusMessage = "";
+
+    if (streak % 7 === 0) {
+        earnedCoins += 25;
+        bonusMessage = " 🏆 7-day streak bonus: +25 coins!";
+    }
+
+    let totalCoins =
+        Number(localStorage.getItem("dailyBonus")) || 0;
+
+    totalCoins += earnedCoins;
+
+    localStorage.setItem("dailyBonus", totalCoins);
+
+    localStorage.setItem("lastLoginDate", today);
+
+    localStorage.setItem("loginStreak", streak);
+
+    document.getElementById("streak").textContent = streak;
+
+    rewardMessage.textContent =
+        "🎉 You earned " + earnedCoins +
+        " coins!" + bonusMessage;
+
+    claimButton.textContent = "✅ Reward Collected";
+
+    claimButton.disabled = true;
+}
+
+document.getElementById("streak").textContent = streak;
+
+if (lastLogin === today) {
+
+    rewardMessage.textContent =
+        "🎉 Today's reward has already been collected!";
+
+    claimButton.textContent = "✅ Reward Collected";
+
+    claimButton.disabled = true;
+
+}
+
+// THEME SYSTEM
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.body.setAttribute("data-theme", savedTheme);
+
+</script>
+
+</body>
+</html>
