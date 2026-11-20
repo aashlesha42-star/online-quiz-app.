@@ -1,4 +1,3 @@
-```javascript
 const questions = [
     {
         question: "Which language is used for web development?",
@@ -36,10 +35,7 @@ function playSound(type) {
     const AudioContextClass =
         window.AudioContext || window.webkitAudioContext;
 
-    if (!AudioContextClass) {
-        console.log("Audio is not supported");
-        return;
-    }
+    if (!AudioContextClass) return;
 
     if (!audioContext) {
         audioContext = new AudioContextClass();
@@ -61,10 +57,7 @@ function playSound(type) {
 
         oscillator.type = "sine";
 
-        gain.gain.setValueAtTime(
-            0.2,
-            audioContext.currentTime
-        );
+        gain.gain.setValueAtTime(0.2, audioContext.currentTime);
 
         gain.gain.exponentialRampToValueAtTime(
             0.01,
@@ -72,12 +65,62 @@ function playSound(type) {
         );
 
         oscillator.start();
-
         oscillator.stop(audioContext.currentTime + 0.3);
 
     }).catch(error => {
         console.log("Audio error:", error);
     });
+}
+
+
+// START COUNTDOWN
+function startCountdown() {
+
+    const countdown = document.createElement("div");
+
+    countdown.style.position = "fixed";
+    countdown.style.top = "0";
+    countdown.style.left = "0";
+    countdown.style.width = "100%";
+    countdown.style.height = "100%";
+    countdown.style.background = "#6a0dad";
+    countdown.style.color = "white";
+    countdown.style.display = "flex";
+    countdown.style.justifyContent = "center";
+    countdown.style.alignItems = "center";
+    countdown.style.fontSize = "70px";
+    countdown.style.fontWeight = "bold";
+    countdown.style.zIndex = "9999";
+
+    document.body.appendChild(countdown);
+
+    let count = 3;
+
+    countdown.textContent = count;
+
+    const countdownTimer = setInterval(() => {
+
+        count--;
+
+        if (count > 0) {
+
+            countdown.textContent = count;
+
+        } else if (count === 0) {
+
+            countdown.textContent = "GO!";
+
+        } else {
+
+            clearInterval(countdownTimer);
+
+            countdown.remove();
+
+            showQuestion();
+
+        }
+
+    }, 1000);
 }
 
 
@@ -258,5 +301,6 @@ function goToNextQuestion() {
     }
 }
 
-showQuestion();
-```
+
+// START QUIZ
+startCountdown();
