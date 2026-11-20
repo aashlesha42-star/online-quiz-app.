@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuizMaster - Themes</title>
+
+<title>QuizMaster - Customize Themes</title>
 
 <style>
 * {
@@ -11,56 +12,90 @@
 }
 
 body {
+    margin: 0;
+    padding: 25px 15px;
     font-family: Arial, sans-serif;
     text-align: center;
-    padding: 25px 15px;
     color: white;
     background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    min-height: 100vh;
 }
 
 h1 {
     color: #ffd166;
-    margin-top: 35px;
+    margin-top: 30px;
+}
+
+.subtitle {
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.selected-box {
+    background: #ffffff20;
+    padding: 15px;
+    border-radius: 15px;
+    max-width: 350px;
+    margin: 20px auto;
 }
 
 .container {
-    max-width: 750px;
+    width: 100%;
+    max-width: 950px;
     margin: 35px auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+    gap: 22px;
 }
 
-.card {
-    padding: 25px;
+.theme-card {
+    padding: 22px 15px;
     border-radius: 20px;
     background: #ffffff20;
     border: 1px solid #ffffff40;
+    transition: transform 0.2s;
+}
+
+.theme-card:hover {
+    transform: translateY(-5px);
 }
 
 .preview {
-    height: 90px;
+    height: 110px;
     border-radius: 15px;
     margin-bottom: 15px;
 }
 
+.purple-preview {
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+}
+
+.blue-preview {
+    background: linear-gradient(135deg, #003566, #0077b6, #00b4d8);
+}
+
+.pink-preview {
+    background: linear-gradient(135deg, #831843, #db2777, #ff69b4);
+}
+
+.dark-preview {
+    background: linear-gradient(135deg, #000000, #27272a, #52525b);
+}
+
 button {
-    padding: 12px 22px;
+    padding: 12px 20px;
     border: none;
     border-radius: 25px;
     background: #ffd166;
     color: #32104f;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-#message {
-    min-height: 25px;
 }
 
 .home {
@@ -70,6 +105,20 @@ button:disabled {
     border: 1px solid white;
 }
 
+#message {
+    min-height: 25px;
+    font-weight: bold;
+}
+
+@media(max-width: 480px) {
+    h1 {
+        font-size: 25px;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
 </head>
 
@@ -77,26 +126,41 @@ button:disabled {
 
 <h1>🎨 Customize Your Theme</h1>
 
-<p>Choose your favourite QuizMaster theme!</p>
+<p class="subtitle">Choose your favourite QuizMaster theme!</p>
+
+<div class="selected-box">
+    ⭐ Current Theme:
+    <strong id="currentTheme">Purple</strong>
+</div>
 
 <div class="container">
 
-    <div class="card">
-        <div class="preview" style="background:linear-gradient(135deg,#481080,#7b2cbf)"></div>
+    <div class="theme-card">
+        <div class="preview purple-preview"></div>
         <h3>💜 Purple Theme</h3>
+        <p>Beautiful royal purple colours.</p>
         <button onclick="selectTheme('purple')">Apply Theme</button>
     </div>
 
-    <div class="card">
-        <div class="preview" style="background:linear-gradient(135deg,#003566,#00b4d8)"></div>
+    <div class="theme-card">
+        <div class="preview blue-preview"></div>
         <h3>💙 Blue Theme</h3>
+        <p>Cool and refreshing blue colours.</p>
         <button onclick="selectTheme('blue')">Apply Theme</button>
     </div>
 
-    <div class="card">
-        <div class="preview" style="background:linear-gradient(135deg,#9d174d,#ff69b4)"></div>
+    <div class="theme-card">
+        <div class="preview pink-preview"></div>
         <h3>🌸 Pink Theme</h3>
+        <p>Lovely pink and rose colours.</p>
         <button onclick="selectTheme('pink')">Apply Theme</button>
+    </div>
+
+    <div class="theme-card">
+        <div class="preview dark-preview"></div>
+        <h3>🖤 Dark Theme</h3>
+        <p>A cool dark gaming appearance.</p>
+        <button onclick="selectTheme('dark')">Apply Theme</button>
     </div>
 
 </div>
@@ -104,13 +168,19 @@ button:disabled {
 <p id="message"></p>
 
 <button class="home" onclick="location.href='index.html'">
-🏠 Home
+    🏠 Home
 </button>
 
 <script>
-
 let unlocked =
     JSON.parse(localStorage.getItem("unlockedRewards")) || [];
+
+const themeNames = {
+    purple: "Purple 💜",
+    blue: "Blue 💙",
+    pink: "Pink 🌸",
+    dark: "Dark 🖤"
+};
 
 function selectTheme(theme) {
 
@@ -122,10 +192,19 @@ function selectTheme(theme) {
 
     localStorage.setItem("selectedTheme", theme);
 
+    document.getElementById("currentTheme").textContent =
+        themeNames[theme];
+
     document.getElementById("message").textContent =
-        "🎉 Theme selected successfully!";
+        "🎉 " + themeNames[theme] + " theme selected successfully!";
 
 }
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.getElementById("currentTheme").textContent =
+    themeNames[savedTheme] || "Purple 💜";
 
 </script>
 
