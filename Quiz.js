@@ -26,6 +26,28 @@ let score = 0;
 let answered = false;
 let timeLeft = 15;
 let timerInterval;
+function playSound(type) {
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audio.createOscillator();
+    const gain = audio.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+
+    if (type === "correct") {
+        oscillator.frequency.value = 800;
+    } else {
+        oscillator.frequency.value = 200;
+    }
+
+    oscillator.type = "sine";
+    gain.gain.value = 0.1;
+
+    oscillator.start();
+    oscillator.stop(audio.currentTime + 0.2);
+
+    oscillator.onended = () => audio.close();
+}
 
 function showQuestion() {
     answered = false;
@@ -78,6 +100,7 @@ function showQuestion() {
             if (answer === q.correct) {
 
                 score++;
+                playSound("correct");
 
                 document.getElementById("score").textContent =
                     "Correct answer! 🎉";
@@ -85,6 +108,7 @@ function showQuestion() {
             } else {
 
                 button.classList.add("wrong-answer");
+                playSound("wrong");
 
                 document.getElementById("score").textContent =
                     "Wrong answer! ❌";
