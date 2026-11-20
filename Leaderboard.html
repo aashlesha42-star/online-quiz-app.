@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuizMaster - Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>🏆 QuizMaster Leaderboard</h1>
+
+    <div id="leaderboard"></div>
+
+    <button onclick="location.href='index.html'">Home</button>
+
+    <script>
+        let leaderboard =
+            JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+        let display = document.getElementById("leaderboard");
+
+        if (leaderboard.length === 0) {
+            display.innerHTML = "<h2>No scores yet!</h2>";
+        } else {
+            display.innerHTML = leaderboard.slice(0, 10).map((player, index) => `
+                <h3>${index + 1}. ${player.name} - ${player.score}</h3>
+            `).join("");
+        }
+    </script>
+
+</body>
+</html>
