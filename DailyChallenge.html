@@ -72,7 +72,7 @@ button {
 </style>
 </head>
 
-<body>
+<body data-theme="purple">
 
 <div class="container">
 
@@ -294,6 +294,9 @@ function finishChallenge() {
 }
 
 </script>
-
+<script>
+const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+document.body.setAttribute("data-theme", savedTheme);
+</script>
 </body>
 </html>
