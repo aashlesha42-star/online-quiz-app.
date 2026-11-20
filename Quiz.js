@@ -1,3 +1,4 @@
+```javascript
 const questions = [
     {
         question: "Which language is used for web development?",
@@ -26,30 +27,63 @@ let score = 0;
 let answered = false;
 let timeLeft = 15;
 let timerInterval;
+
+// SOUND SYSTEM
+let audioContext;
+
 function playSound(type) {
-    const audio = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audio.createOscillator();
-    const gain = audio.createGain();
 
-    oscillator.connect(gain);
-    gain.connect(audio.destination);
+    const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
 
-    if (type === "correct") {
-        oscillator.frequency.value = 800;
-    } else {
-        oscillator.frequency.value = 200;
+    if (!AudioContextClass) {
+        console.log("Audio is not supported");
+        return;
     }
 
-    oscillator.type = "sine";
-    gain.gain.value = 0.1;
+    if (!audioContext) {
+        audioContext = new AudioContextClass();
+    }
 
-    oscillator.start();
-    oscillator.stop(audio.currentTime + 0.2);
+    audioContext.resume().then(() => {
 
-    oscillator.onended = () => audio.close();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        if (type === "correct") {
+            oscillator.frequency.value = 800;
+        } else {
+            oscillator.frequency.value = 200;
+        }
+
+        oscillator.type = "sine";
+
+        gain.gain.setValueAtTime(
+            0.2,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.3
+        );
+
+        oscillator.start();
+
+        oscillator.stop(audioContext.currentTime + 0.3);
+
+    }).catch(error => {
+        console.log("Audio error:", error);
+    });
 }
 
+
+// SHOW QUESTION
 function showQuestion() {
+
     answered = false;
     timeLeft = 15;
 
@@ -68,6 +102,7 @@ function showQuestion() {
     document.getElementById("score").textContent = "";
 
     const box = document.getElementById("answers");
+
     box.innerHTML = "";
 
     q.answers.forEach(answer => {
@@ -83,6 +118,7 @@ function showQuestion() {
             if (answered) return;
 
             answered = true;
+
             clearInterval(timerInterval);
 
             const allButtons = box.querySelectorAll("button");
@@ -100,6 +136,7 @@ function showQuestion() {
             if (answer === q.correct) {
 
                 score++;
+
                 playSound("correct");
 
                 document.getElementById("score").textContent =
@@ -108,12 +145,14 @@ function showQuestion() {
             } else {
 
                 button.classList.add("wrong-answer");
+
                 playSound("wrong");
 
                 document.getElementById("score").textContent =
                     "Wrong answer! ❌";
 
             }
+
         };
 
         box.appendChild(button);
@@ -123,6 +162,8 @@ function showQuestion() {
     startTimer();
 }
 
+
+// TIMER
 function startTimer() {
 
     clearInterval(timerInterval);
@@ -148,7 +189,10 @@ function startTimer() {
 
                     btn.disabled = true;
 
-                    if (btn.textContent === questions[currentQuestion].correct) {
+                    if (
+                        btn.textContent ===
+                        questions[currentQuestion].correct
+                    ) {
                         btn.classList.add("correct-answer");
                     }
 
@@ -166,6 +210,8 @@ function startTimer() {
     }, 1000);
 }
 
+
+// NEXT QUESTION
 function nextQuestion() {
 
     if (!answered) {
@@ -180,6 +226,8 @@ function nextQuestion() {
     goToNextQuestion();
 }
 
+
+// MOVE TO NEXT QUESTION
 function goToNextQuestion() {
 
     currentQuestion++;
@@ -211,3 +259,4 @@ function goToNextQuestion() {
 }
 
 showQuestion();
+```
