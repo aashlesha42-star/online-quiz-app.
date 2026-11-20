@@ -85,3 +85,20 @@ button.wrong-answer:disabled {
     background: red !important;
     color: white !important;
 }
+/* BLUE THEME */
+body[data-theme="blue"] {
+    background: linear-gradient(135deg, #003566, #0077b6, #00b4d8);
+    color: white;
+}
+
+/* PINK THEME */
+body[data-theme="pink"] {
+    background: linear-gradient(135deg, #831843, #db2777, #ff69b4);
+    color: white;
+}
+
+/* PURPLE THEME */
+body[data-theme="purple"] {
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    color: white;
+}
