@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QuizMaster - Rewards Store</title>
+  <link rel="stylesheet" href="style.css">  
 
 <style>
 * {
@@ -84,7 +85,7 @@ button:disabled {
 </style>
 </head>
 
-<body>
+<body data-theme="purple">
 
 <h1>🎁 Rewards Store</h1>
 
@@ -200,6 +201,9 @@ function buyReward(name, price, button) {
 updateButtons();
 
 </script>
-
+<script>
+const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+document.body.setAttribute("data-theme", savedTheme);
+</script>
 </body>
 </html>
