@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QuizMaster - Rewards Store</title>
-  <link rel="stylesheet" href="style.css">  
+<link rel="stylesheet" href="style.css">
 
 <style>
 * {
@@ -35,26 +35,30 @@ h1 {
     font-size: 22px;
 }
 
-.container {
+.reward-grid {
+    width: 100%;
     max-width: 850px;
     margin: 30px auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
     gap: 20px;
+    padding: 10px;
 }
 
-.card {
+.reward-card {
     background: #ffffff20;
     border: 1px solid #ffffff40;
     border-radius: 18px;
     padding: 25px 15px;
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
-.icon {
+.reward-icon {
     font-size: 45px;
 }
 
-.card button {
+.reward-card button {
     background: #ffd166;
     color: #32104f;
     border: none;
@@ -64,7 +68,7 @@ h1 {
     cursor: pointer;
 }
 
-button:disabled {
+.reward-card button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
@@ -97,34 +101,34 @@ button:disabled {
 
 <h2>✨ Available Rewards</h2>
 
-<div class="container">
+<div class="reward-grid">
 
-    <div class="card">
-        <div class="icon">💜</div>
+    <div class="reward-card">
+        <div class="reward-icon">💜</div>
         <h3>Purple Theme</h3>
         <p>Unlock a beautiful purple reward theme.</p>
         <h3>🪙 50 Coins</h3>
-        <button onclick="buyReward('purple', 50, this)">
+        <button onclick="buyReward('purple', 50)">
             Unlock
         </button>
     </div>
 
-    <div class="card">
-        <div class="icon">💙</div>
+    <div class="reward-card">
+        <div class="reward-icon">💙</div>
         <h3>Blue Theme</h3>
         <p>Unlock a cool blue reward theme.</p>
         <h3>🪙 100 Coins</h3>
-        <button onclick="buyReward('blue', 100, this)">
+        <button onclick="buyReward('blue', 100)">
             Unlock
         </button>
     </div>
 
-    <div class="card">
-        <div class="icon">🌸</div>
+    <div class="reward-card">
+        <div class="reward-icon">🌸</div>
         <h3>Pink Theme</h3>
         <p>Unlock a lovely pink reward theme.</p>
         <h3>🪙 150 Coins</h3>
-        <button onclick="buyReward('pink', 150, this)">
+        <button onclick="buyReward('pink', 150)">
             Unlock
         </button>
     </div>
@@ -138,11 +142,8 @@ button:disabled {
 </button>
 
 <script>
-
 let coins = Number(localStorage.getItem("dailyBonus")) || 0;
-
 let spent = Number(localStorage.getItem("spentCoins")) || 0;
-
 let balance = coins - spent;
 
 let unlocked =
@@ -151,22 +152,17 @@ let unlocked =
 document.getElementById("coinBalance").textContent = balance;
 
 function updateButtons() {
+    document.querySelectorAll(".reward-card button").forEach(button => {
+        let name = button.getAttribute("onclick").match(/'([^']+)'/)[1];
 
-    document.querySelectorAll(".card button").forEach(button => {
-
-        let reward = button.getAttribute("onclick").match(/'([^']+)'/)[1];
-
-        if (unlocked.includes(reward)) {
+        if (unlocked.includes(name)) {
             button.textContent = "✅ Unlocked";
             button.disabled = true;
         }
-
     });
-
 }
 
-function buyReward(name, price, button) {
-
+function buyReward(name, price) {
     if (unlocked.includes(name)) {
         return;
     }
@@ -183,11 +179,7 @@ function buyReward(name, price, button) {
     unlocked.push(name);
 
     localStorage.setItem("spentCoins", spent);
-
-    localStorage.setItem(
-        "unlockedRewards",
-        JSON.stringify(unlocked)
-    );
+    localStorage.setItem("unlockedRewards", JSON.stringify(unlocked));
 
     document.getElementById("coinBalance").textContent = balance;
 
@@ -195,15 +187,15 @@ function buyReward(name, price, button) {
         "🎉 Congratulations! Reward unlocked!";
 
     updateButtons();
-
 }
 
 updateButtons();
-
 </script>
+
 <script>
 const savedTheme = localStorage.getItem("selectedTheme") || "purple";
 document.body.setAttribute("data-theme", savedTheme);
 </script>
+
 </body>
 </html>
