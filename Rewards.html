@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizMaster - Rewards Store</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+}
+
+h1 {
+    color: #ffd166;
+    margin-top: 30px;
+}
+
+.coins {
+    background: #ffffff20;
+    padding: 20px;
+    border-radius: 18px;
+    max-width: 350px;
+    margin: 25px auto;
+    font-size: 22px;
+}
+
+.container {
+    max-width: 850px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #ffffff20;
+    border: 1px solid #ffffff40;
+    border-radius: 18px;
+    padding: 25px 15px;
+}
+
+.icon {
+    font-size: 45px;
+}
+
+.card button {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.home {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 25px;
+}
+
+#message {
+    min-height: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎁 Rewards Store</h1>
+
+<p>Collect coins and unlock exciting rewards!</p>
+
+<div class="coins">
+    🪙 Your Coins: <span id="coinBalance">0</span>
+</div>
+
+<h2>✨ Available Rewards</h2>
+
+<div class="container">
+
+    <div class="card">
+        <div class="icon">💜</div>
+        <h3>Purple Theme</h3>
+        <p>Unlock a beautiful purple reward theme.</p>
+        <h3>🪙 50 Coins</h3>
+        <button onclick="buyReward('purple', 50, this)">
+            Unlock
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="icon">💙</div>
+        <h3>Blue Theme</h3>
+        <p>Unlock a cool blue reward theme.</p>
+        <h3>🪙 100 Coins</h3>
+        <button onclick="buyReward('blue', 100, this)">
+            Unlock
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="icon">🌸</div>
+        <h3>Pink Theme</h3>
+        <p>Unlock a lovely pink reward theme.</p>
+        <h3>🪙 150 Coins</h3>
+        <button onclick="buyReward('pink', 150, this)">
+            Unlock
+        </button>
+    </div>
+
+</div>
+
+<h3 id="message"></h3>
+
+<button class="home" onclick="location.href='index.html'">
+    🏠 Home
+</button>
+
+<script>
+
+let coins = Number(localStorage.getItem("dailyBonus")) || 0;
+
+let spent = Number(localStorage.getItem("spentCoins")) || 0;
+
+let balance = coins - spent;
+
+let unlocked =
+    JSON.parse(localStorage.getItem("unlockedRewards")) || [];
+
+document.getElementById("coinBalance").textContent = balance;
+
+function updateButtons() {
+
+    document.querySelectorAll(".card button").forEach(button => {
+
+        let reward = button.getAttribute("onclick").match(/'([^']+)'/)[1];
+
+        if (unlocked.includes(reward)) {
+            button.textContent = "✅ Unlocked";
+            button.disabled = true;
+        }
+
+    });
+
+}
+
+function buyReward(name, price, button) {
+
+    if (unlocked.includes(name)) {
+        return;
+    }
+
+    if (balance < price) {
+        document.getElementById("message").textContent =
+            "❌ Not enough coins! Complete more Daily Challenges.";
+        return;
+    }
+
+    balance -= price;
+    spent += price;
+
+    unlocked.push(name);
+
+    localStorage.setItem("spentCoins", spent);
+
+    localStorage.setItem(
+        "unlockedRewards",
+        JSON.stringify(unlocked)
+    );
+
+    document.getElementById("coinBalance").textContent = balance;
+
+    document.getElementById("message").textContent =
+        "🎉 Congratulations! Reward unlocked!";
+
+    updateButtons();
+
+}
+
+updateButtons();
+
+</script>
+
+</body>
+</html>
