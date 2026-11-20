@@ -1,31 +1,181 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>QuizMaster - Play Quiz</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizMaster - Play Quiz</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 18px;
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .category-card {
+            padding: 25px 15px;
+            border-radius: 18px;
+            background: #ffffff;
+            color: #32104f;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-7px);
+            border-color: #ffd166;
+        }
+
+        .category-card .icon {
+            font-size: 40px;
+        }
+
+        .category-card h3 {
+            margin-top: 10px;
+        }
+
+        #quizScreen {
+            display: none;
+        }
+
+        #answers button {
+            display: block;
+            width: 90%;
+            max-width: 450px;
+            padding: 14px;
+            margin: 12px auto;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        #nextButton {
+            padding: 12px 30px;
+            margin: 20px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .progress-container {
+            max-width: 500px;
+            margin: 20px auto;
+            height: 12px;
+            background: #ffffff80;
+            border-radius: 20px;
+        }
+
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background: #ffd166;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .correct-answer {
+            background: #22c55e !important;
+            color: white !important;
+        }
+
+        .wrong-answer {
+            background: #ef4444 !important;
+            color: white !important;
+        }
+    </style>
 </head>
-<body data-theme="purple"><h1>QuizMaster 💜</h1>
-    <h3 id="questionNumber">Question 1 of 3</h3>
 
-<div class="progress-container">
-    <div id="progressBar"></div>
-</div>
+<body data-theme="purple">
 
-<h2 id="question">Question appears here</h2>
+    <h1>QuizMaster 💜</h1>
 
-  <h3>Time Left: <span id="timer">15</span> seconds</h3>  
+    <!-- CATEGORY SCREEN -->
 
-<div id="answers"></div>
+    <div id="categoryScreen">
 
-<p id="score"></p>
+        <h2>Choose Your Quiz Category 🎯</h2>
 
-<button onclick="nextQuestion()">Next Question</button>
+        <p>Select a category and test your knowledge!</p>
 
-<script src="Quiz.js"></script>
-  <script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
-document.body.setAttribute("data-theme", savedTheme);
-</script>
+        <div class="category-container">
+
+            <div class="category-card" onclick="startQuiz('computer')">
+                <div class="icon">💻</div>
+                <h3>Computer</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('science')">
+                <div class="icon">🔬</div>
+                <h3>Science</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('gk')">
+                <div class="icon">🌍</div>
+                <h3>General Knowledge</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('maths')">
+                <div class="icon">➗</div>
+                <h3>Mathematics</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('english')">
+                <div class="icon">📚</div>
+                <h3>English</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('history')">
+                <div class="icon">🏛️</div>
+                <h3>History</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUIZ SCREEN -->
+
+    <div id="quizScreen">
+
+        <h2 id="categoryName"></h2>
+
+        <h3 id="questionNumber">Question 1 of 3</h3>
+
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
+
+        <h2 id="question">Question appears here</h2>
+
+        <h3>
+            Time Left: <span id="timer">15</span> seconds
+        </h3>
+
+        <div id="answers"></div>
+
+        <p id="score"></p>
+
+        <button id="nextButton" onclick="nextQuestion()">
+            Next Question
+        </button>
+
+    </div>
+
+
+    <script src="Quiz.js"></script>
+
+    <script>
+        const savedTheme =
+            localStorage.getItem("selectedTheme") || "purple";
+
+        document.body.setAttribute("data-theme", savedTheme);
+    </script>
+
 </body>
-  
 </html>
