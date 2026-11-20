@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizMaster - Achievements</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+}
+
+h1 {
+    color: #ffd166;
+    margin-top: 35px;
+}
+
+.subtitle {
+    color: #eee0ff;
+}
+
+.container {
+    max-width: 850px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.badge {
+    background: #ffffff18;
+    border: 1px solid #ffffff40;
+    border-radius: 18px;
+    padding: 25px 15px;
+    transition: 0.3s;
+}
+
+.badge:hover {
+    transform: translateY(-6px);
+}
+
+.icon {
+    font-size: 45px;
+    margin-bottom: 12px;
+}
+
+.badge h3 {
+    margin: 10px 0;
+}
+
+.badge p {
+    color: #eee0ff;
+    font-size: 14px;
+}
+
+.locked {
+    opacity: 0.45;
+    filter: grayscale(1);
+}
+
+button {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎖️ Achievements & Rewards</h1>
+
+<p class="subtitle">Complete challenges and collect special badges!</p>
+
+<h2>🏆 Your Achievements</h2>
+
+<div class="container" id="badges"></div>
+
+<button onclick="location.href='index.html'">🏠 Home</button>
+
+<script>
+
+let leaderboard =
+    JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+let streak =
+    Number(localStorage.getItem("dailyStreak")) || 0;
+
+let totalQuizzes = leaderboard.length;
+
+let highestScore = leaderboard.length
