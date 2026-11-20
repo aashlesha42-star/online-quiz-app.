@@ -57,7 +57,7 @@ button {
 </style>
 </head>
 
-<body>
+<body data-theme="purple">
 
 <h1>🎖️ Achievements & Rewards</h1>
 
@@ -142,6 +142,9 @@ achievements.forEach(item => {
 });
 
 </script>
-
+<script>
+const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+document.body.setAttribute("data-theme", savedTheme);
+</script>
 </body>
 </html>
