@@ -33,6 +33,12 @@ function showQuestion() {
 
     const q = questions[currentQuestion];
 
+    document.getElementById("questionNumber").textContent =
+    `Question ${currentQuestion + 1} of ${questions.length}`;
+
+document.getElementById("progressBar").style.width =
+    `${((currentQuestion + 1) / questions.length) * 100}%`;
+
     document.getElementById("question").textContent = q.question;
     document.getElementById("timer").textContent = timeLeft;
     document.getElementById("score").textContent = "";
