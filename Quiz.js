@@ -303,5 +303,5 @@ function goToNextQuestion() {
 
 
 // START QUIZ
-alert("Countdown code is loading!");
+
 startCountdown();
