@@ -102,3 +102,8 @@ body[data-theme="purple"] {
     background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
     color: white;
 }
+/* DARK THEME */
+body[data-theme="dark"] {
+    background: linear-gradient(135deg, #000000, #27272a, #52525b);
+    color: white;
+}
