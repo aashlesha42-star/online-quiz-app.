@@ -1,362 +1,181 @@
-const questions = [
-    {
-        question: "Which language is used for web development?",
-        answers: ["HTML", "Python", "C", "Java"],
-        correct: "HTML"
-    },
-    {
-        question: "What does CPU stand for?",
-        answers: [
-            "Central Processing Unit",
-            "Computer Personal Unit",
-            "Central Program Utility",
-            "Control Processing User"
-        ],
-        correct: "Central Processing Unit"
-    },
-    {
-        question: "Which company developed Android?",
-        answers: ["Apple", "Google", "Microsoft", "IBM"],
-        correct: "Google"
-    }
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-let currentQuestion = 0;
-let score = 0;
-let answered = false;
-let timeLeft = 15;
-let timerInterval;
-let quizFinished = false;
+    <title>QuizMaster - Play Quiz</title>
 
-// SOUND SYSTEM
-let audioContext;
+    <link rel="stylesheet" href="style.css">
 
-function playSound(type) {
-
-    const AudioContextClass =
-        window.AudioContext || window.webkitAudioContext;
-
-    if (!AudioContextClass) return;
-
-    if (!audioContext) {
-        audioContext = new AudioContextClass();
-    }
-
-    audioContext.resume().then(() => {
-
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-
-        oscillator.frequency.value =
-            type === "correct" ? 800 : 200;
-
-        oscillator.type = "sine";
-
-        gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.01,
-            audioContext.currentTime + 0.3
-        );
-
-        oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.3);
-
-    }).catch(error => {
-        console.log("Audio error:", error);
-    });
-}
-
-
-// START COUNTDOWN
-function startCountdown() {
-
-    const countdown = document.createElement("div");
-
-    countdown.style.position = "fixed";
-    countdown.style.top = "0";
-    countdown.style.left = "0";
-    countdown.style.width = "100%";
-    countdown.style.height = "100%";
-    countdown.style.background = "#6a0dad";
-    countdown.style.color = "white";
-    countdown.style.display = "flex";
-    countdown.style.justifyContent = "center";
-    countdown.style.alignItems = "center";
-    countdown.style.fontSize = "70px";
-    countdown.style.fontWeight = "bold";
-    countdown.style.zIndex = "9999";
-
-    document.body.appendChild(countdown);
-
-    let count = 3;
-
-    countdown.textContent = count;
-
-    const countdownTimer = setInterval(() => {
-
-        count--;
-
-        if (count > 0) {
-
-            countdown.textContent = count;
-
-        } else if (count === 0) {
-
-            countdown.textContent = "GO!";
-
-        } else {
-
-            clearInterval(countdownTimer);
-            countdown.remove();
-            showQuestion();
-
+    <style>
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 18px;
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 15px;
         }
 
-    }, 1000);
-}
-
-
-// SHOW QUESTION
-function showQuestion() {
-
-    answered = false;
-    timeLeft = 15;
-
-    const q = questions[currentQuestion];
-
-    document.getElementById("questionNumber").textContent =
-        `Question ${currentQuestion + 1} of ${questions.length}`;
-
-    document.getElementById("progressBar").style.width =
-        `${((currentQuestion + 1) / questions.length) * 100}%`;
-
-    document.getElementById("question").textContent = q.question;
-
-    document.getElementById("timer").textContent = timeLeft;
-
-    document.getElementById("score").textContent = "";
-
-    const box = document.getElementById("answers");
-
-    box.innerHTML = "";
-
-    q.answers.forEach(answer => {
-
-        const button = document.createElement("button");
-
-        button.textContent = answer;
-        button.style.display = "block";
-        button.style.margin = "10px auto";
-
-        button.onclick = function() {
-
-            if (answered) return;
-
-            answered = true;
-
-            clearInterval(timerInterval);
-
-            const allButtons = box.querySelectorAll("button");
-
-            allButtons.forEach(btn => {
-
-                btn.disabled = true;
-
-                if (btn.textContent === q.correct) {
-                    btn.classList.add("correct-answer");
-                }
-
-            });
-
-            if (answer === q.correct) {
-
-                score++;
-
-                playSound("correct");
-
-                document.getElementById("score").textContent =
-                    "Correct answer! 🎉";
-
-            } else {
-
-                button.classList.add("wrong-answer");
-
-                playSound("wrong");
-
-                document.getElementById("score").textContent =
-                    "Wrong answer! ❌";
-
-            }
-
-        };
-
-        box.appendChild(button);
-
-    });
-
-    startTimer();
-}
-
-
-// TIMER
-function startTimer() {
-
-    clearInterval(timerInterval);
-
-    timerInterval = setInterval(function() {
-
-        timeLeft--;
-
-        document.getElementById("timer").textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-
-            clearInterval(timerInterval);
-
-            if (!answered) {
-
-                answered = true;
-
-                const allButtons =
-                    document.querySelectorAll("#answers button");
-
-                allButtons.forEach(btn => {
-
-                    btn.disabled = true;
-
-                    if (
-                        btn.textContent ===
-                        questions[currentQuestion].correct
-                    ) {
-                        btn.classList.add("correct-answer");
-                    }
-
-                });
-
-                document.getElementById("score").textContent =
-                    "Time's up! ⏰";
-
-                setTimeout(goToNextQuestion, 1000);
-
-            }
-
+        .category-card {
+            padding: 25px 15px;
+            border-radius: 18px;
+            background: #ffffff;
+            color: #32104f;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: 0.3s;
         }
 
-    }, 1000);
-}
-
-
-// NEXT QUESTION
-function nextQuestion() {
-
-    if (!answered) {
-
-        alert("Please select an answer first!");
-
-        return;
-    }
-
-    clearInterval(timerInterval);
-
-    goToNextQuestion();
-}
-
-
-// MOVE TO NEXT QUESTION
-function goToNextQuestion() {
-
-    currentQuestion++;
-
-    if (currentQuestion < questions.length) {
-
-        showQuestion();
-
-    } else {
-
-        if (quizFinished) return;
-
-        quizFinished = true;
-
-        clearInterval(timerInterval);
-
-        // COIN REWARD SYSTEM
-        let earnedCoins = 10;
-
-        if (score === questions.length) {
-            earnedCoins += 5;
+        .category-card:hover {
+            transform: translateY(-7px);
+            border-color: #ffd166;
         }
 
-        let totalCoins =
-            Number(localStorage.getItem("dailyBonus")) || 0;
-
-        totalCoins += earnedCoins;
-
-        localStorage.setItem("dailyBonus", totalCoins);
-
-        // PLAYER NAME
-        let playerName = prompt("Enter your name:");
-
-        if (!playerName || playerName.trim() === "") {
-            playerName = "Player";
+        .category-card .icon {
+            font-size: 40px;
         }
 
-        playerName = playerName.trim();
+        .category-card h3 {
+            margin-top: 10px;
+        }
 
-        localStorage.setItem("playerName", playerName);
+        #quizScreen {
+            display: none;
+        }
 
-        // LEADERBOARD
-        let leaderboard =
-            JSON.parse(localStorage.getItem("leaderboard")) || [];
+        #answers button {
+            display: block;
+            width: 90%;
+            max-width: 450px;
+            padding: 14px;
+            margin: 12px auto;
+            border-radius: 12px;
+            cursor: pointer;
+        }
 
-        leaderboard.push({
-            name: playerName,
-            score: score
-        });
+        #nextButton {
+            padding: 12px 30px;
+            margin: 20px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
 
-        leaderboard.sort((a, b) => b.score - a.score);
+        .progress-container {
+            max-width: 500px;
+            margin: 20px auto;
+            height: 12px;
+            background: #ffffff80;
+            border-radius: 20px;
+        }
 
-        localStorage.setItem(
-            "leaderboard",
-            JSON.stringify(leaderboard)
-        );
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background: #ffd166;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
 
-        // RESULT PAGE
-        document.body.innerHTML = `
+        .correct-answer {
+            background: #22c55e !important;
+            color: white !important;
+        }
 
-            <h1>Quiz Completed! 🎉</h1>
+        .wrong-answer {
+            background: #ef4444 !important;
+            color: white !important;
+        }
+    </style>
+</head>
 
-            <h2>Your Score: ${score}/${questions.length}</h2>
+<body data-theme="purple">
 
-            <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
+    <h1>QuizMaster 💜</h1>
 
-            <h3>💰 Total Coins: ${totalCoins}</h3>
+    <!-- CATEGORY SCREEN -->
 
-            <h2>🏆 Leaderboard</h2>
+    <div id="categoryScreen">
 
-            ${leaderboard.slice(0, 5).map((player, index) => `
-                <p>${index + 1}. ${player.name} - ${player.score}</p>
-            `).join("")}
+        <h2>Choose Your Quiz Category 🎯</h2>
 
-            <button onclick="location.href='Quiz.html'">
-                Play Again
-            </button>
+        <p>Select a category and test your knowledge!</p>
 
-            <button onclick="location.href='Rewards.html'">
-                🎁 Rewards Store
-            </button>
+        <div class="category-container">
 
-            <button onclick="location.href='index.html'">
-                Home
-            </button>
+            <div class="category-card" onclick="startQuiz('computer')">
+                <div class="icon">💻</div>
+                <h3>Computer</h3>
+            </div>
 
-        `;
-    }
-}
+            <div class="category-card" onclick="startQuiz('science')">
+                <div class="icon">🔬</div>
+                <h3>Science</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('gk')">
+                <div class="icon">🌍</div>
+                <h3>General Knowledge</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('maths')">
+                <div class="icon">➗</div>
+                <h3>Mathematics</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('english')">
+                <div class="icon">📚</div>
+                <h3>English</h3>
+            </div>
+
+            <div class="category-card" onclick="startQuiz('history')">
+                <div class="icon">🏛️</div>
+                <h3>History</h3>
+            </div>
+
+        </div>
+
+    </div>
 
 
-// START QUIZ
-startCountdown();
+    <!-- QUIZ SCREEN -->
+
+    <div id="quizScreen">
+
+        <h2 id="categoryName"></h2>
+
+        <h3 id="questionNumber">Question 1 of 3</h3>
+
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
+
+        <h2 id="question">Question appears here</h2>
+
+        <h3>
+            Time Left: <span id="timer">15</span> seconds
+        </h3>
+
+        <div id="answers"></div>
+
+        <p id="score"></p>
+
+        <button id="nextButton" onclick="nextQuestion()">
+            Next Question
+        </button>
+
+    </div>
+
+
+    <script src="Quiz.js"></script>
+
+    <script>
+        const savedTheme =
+            localStorage.getItem("selectedTheme") || "purple";
+
+        document.body.setAttribute("data-theme", savedTheme);
+    </script>
+
+</body>
+</html>
