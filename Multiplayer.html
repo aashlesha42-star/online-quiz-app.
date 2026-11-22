@@ -1,19 +1,27 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>QuizMaster - Multiplayer</title>
+
     <link rel="stylesheet" href="style.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         .multiplayer-container {
             max-width: 500px;
-            margin: 50px auto;
+            margin: 40px auto;
             padding: 25px;
             text-align: center;
             background: white;
-            color: #32105c;
+            color: #32104f;
             border-radius: 20px;
         }
 
@@ -21,14 +29,14 @@
             width: 90%;
             padding: 13px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 2px solid #ddd;
             border-radius: 10px;
             font-size: 16px;
         }
 
         .multiplayer-container button {
             padding: 12px 22px;
-            margin: 8px;
+            margin: 10px;
             border: none;
             border-radius: 10px;
             background: #7027b8;
@@ -37,24 +45,66 @@
             cursor: pointer;
         }
 
-        #roomCode {
-            font-size: 28px;
+        .multiplayer-container button:hover {
+            background: #481080;
+        }
+
+        .room-code {
+            font-size: 32px;
             font-weight: bold;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
+            color: #7027b8;
+        }
+
+        #roomSection {
+            display: none;
+            margin-top: 25px;
+            padding: 15px;
+            background: #f3e8ff;
+            border-radius: 15px;
+        }
+
+        #playerList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #playerList li {
+            background: white;
+            padding: 10px;
+            margin: 8px;
+            border-radius: 8px;
         }
 
         #message {
             margin-top: 15px;
             font-weight: bold;
         }
+
+        .back-button {
+            background: #555 !important;
+        }
+
+        @media(max-width: 500px) {
+            .multiplayer-container {
+                margin: 20px 12px;
+            }
+        }
     </style>
+
 </head>
 
 <body data-theme="purple">
 
     <div class="multiplayer-container">
+
         <h1>🎮 Multiplayer Quiz</h1>
-        <p>Play quizzes together with your friends!</p>
+
+        <p>Play and compete with your friends!</p>
+
+        <hr>
+
+        <h3>Enter Your Name</h3>
 
         <input
             type="text"
@@ -65,7 +115,9 @@
 
         <br>
 
-        <button onclick="createRoom()">Create Room</button>
+        <button onclick="createRoom()">
+            ➕ Create Room
+        </button>
 
         <hr>
 
@@ -76,26 +128,62 @@
             id="joinCode"
             placeholder="Enter 6-digit room code"
             maxlength="6"
+            inputmode="numeric"
         >
 
         <br>
 
-        <button onclick="joinRoom()">Join Room</button>
+        <button onclick="joinRoom()">
+            🚀 Join Room
+        </button>
 
-        <div id="roomSection" style="display:none;">
-            <h3>Your Room Code</h3>
-            <p id="roomCode"></p>
 
-            <h3>Players</h3>
+        <!-- ROOM SECTION -->
+
+        <div id="roomSection">
+
+            <h2>Room Created! 🎉</h2>
+
+            <p>Share this code with your friends:</p>
+
+            <p id="roomCode" class="room-code"></p>
+
+            <h3>👥 Players in Room</h3>
+
             <ul id="playerList"></ul>
 
             <button id="startButton" style="display:none;">
-                Start Quiz
+                ▶ Start Quiz
             </button>
+
         </div>
 
+
         <p id="message"></p>
+
+        <br>
+
+        <button
+            class="back-button"
+            onclick="window.location.href='index.html'">
+
+            ⬅ Back to Home
+
+        </button>
+
     </div>
+
+
+    <!-- FIREBASE -->
+
+    <script type="module" src="firebase.js"></script>
+
+    <!-- MULTIPLAYER JAVASCRIPT -->
+
+    <script type="module" src="Multiplayer.js"></script>
+
+
+    <!-- THEME -->
 
     <script>
         const savedTheme =
@@ -104,8 +192,7 @@
         document.body.setAttribute("data-theme", savedTheme);
     </script>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="Multiplayer.js"></script>
-
 </body>
+
 </html>
+```
