@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>QuizMaster - Achievements</title>
+<link rel="stylesheet" href="style.css">
 
 <style>
 body {
@@ -20,8 +22,28 @@ h1 {
     margin-top: 35px;
 }
 
+.stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 25px auto;
+}
+
+.stat-card {
+    background: #ffffff25;
+    padding: 18px 25px;
+    border-radius: 15px;
+    min-width: 120px;
+}
+
+.stat-card h2 {
+    color: #ffd166;
+    margin: 5px;
+}
+
 .container {
-    max-width: 850px;
+    max-width: 1000px;
     margin: 30px auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -29,10 +51,15 @@ h1 {
 }
 
 .badge {
-    background: #ffffff20;
+    background: #ffffff25;
     border: 1px solid #ffffff50;
     border-radius: 18px;
     padding: 25px 15px;
+    transition: 0.3s;
+}
+
+.badge:hover {
+    transform: translateY(-6px);
 }
 
 .icon {
@@ -53,6 +80,7 @@ button {
     font-size: 16px;
     cursor: pointer;
     margin: 20px;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -63,88 +91,187 @@ button {
 
 <p>Complete challenges and collect special badges!</p>
 
+<div class="stats">
+
+    <div class="stat-card">
+        <h2 id="unlockedCount">0</h2>
+        <p>Badges Unlocked</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>12</h2>
+        <p>Total Badges</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="coinCount">0</h2>
+        <p>Coins Earned Balance</p>
+    </div>
+
+</div>
+
 <h2>🏆 Your Achievements</h2>
 
 <div class="container" id="badges"></div>
 
-<button onclick="location.href='index.html'">🏠 Home</button>
+<button onclick="location.href='index.html'">
+    🏠 Home
+</button>
 
 <script>
 
-let leaderboard =
+const leaderboard =
     JSON.parse(localStorage.getItem("leaderboard")) || [];
 
-let streak =
+const streak =
+    Number(localStorage.getItem("loginStreak")) ||
     Number(localStorage.getItem("dailyStreak")) || 0;
 
-let totalQuizzes = leaderboard.length;
+const weeklyChallenges =
+    JSON.parse(localStorage.getItem("weeklyChallenges")) || [];
 
-let highestScore = leaderboard.length > 0
-    ? Math.max(...leaderboard.map(p => p.score))
+const coins =
+    Number(localStorage.getItem("dailyBonus")) || 0;
+
+const totalQuizzes = leaderboard.length;
+
+const highestScore = totalQuizzes > 0
+    ? Math.max(...leaderboard.map(p => Number(p.score) || 0))
     : 0;
 
-let achievements = [
+const totalScore = leaderboard.reduce(
+    (sum, p) => sum + (Number(p.score) || 0), 0
+);
+
+const achievements = [
+
     {
         icon: "🥉",
         name: "First Quiz",
         description: "Complete your first quiz.",
         unlocked: totalQuizzes >= 1
     },
+
     {
         icon: "🥈",
         name: "Quiz Explorer",
         description: "Complete 5 quizzes.",
         unlocked: totalQuizzes >= 5
     },
+
     {
         icon: "🥇",
         name: "Quiz Champion",
-        description: "Get a perfect score.",
+        description: "Get a score of 3 or more.",
         unlocked: highestScore >= 3
     },
+
     {
         icon: "🔥",
         name: "Streak Starter",
-        description: "Reach a 3-day streak.",
+        description: "Reach a 3-day login streak.",
         unlocked: streak >= 3
     },
+
     {
         icon: "👑",
         name: "Quiz Legend",
         description: "Complete 10 quizzes.",
         unlocked: totalQuizzes >= 10
     },
+
     {
         icon: "🌟",
         name: "Daily Star",
         description: "Complete a daily challenge.",
         unlocked: streak >= 1
+    },
+
+    {
+        icon: "💎",
+        name: "Quiz Master",
+        description: "Complete 20 quizzes.",
+        unlocked: totalQuizzes >= 20
+    },
+
+    {
+        icon: "🚀",
+        name: "Rising Star",
+        description: "Complete 3 quizzes.",
+        unlocked: totalQuizzes >= 3
+    },
+
+    {
+        icon: "🎯",
+        name: "High Scorer",
+        description: "Get a score of 5 or more.",
+        unlocked: highestScore >= 5
+    },
+
+    {
+        icon: "🪙",
+        name: "Coin Collector",
+        description: "Have at least 100 coins.",
+        unlocked: coins >= 100
+    },
+
+    {
+        icon: "🏆",
+        name: "Weekly Winner",
+        description: "Complete all 3 weekly challenges.",
+        unlocked: weeklyChallenges.length >= 3
+    },
+
+    {
+        icon: "⚡",
+        name: "Dedicated Player",
+        description: "Complete 15 quizzes.",
+        unlocked: totalQuizzes >= 15
     }
+
 ];
 
-let display = document.getElementById("badges");
+const display = document.getElementById("badges");
+
+let unlocked = 0;
 
 achievements.forEach(item => {
 
-    let card = document.createElement("div");
+    if (item.unlocked) {
+        unlocked++;
+    }
 
-    card.className = item.unlocked ? "badge" : "badge locked";
+    const card = document.createElement("div");
+
+    card.className = item.unlocked
+        ? "badge"
+        : "badge locked";
 
     card.innerHTML = `
         <div class="icon">${item.icon}</div>
         <h3>${item.name}</h3>
         <p>${item.description}</p>
-        <strong>${item.unlocked ? "✅ Unlocked" : "🔒 Locked"}</strong>
+        <strong>
+            ${item.unlocked ? "✅ Unlocked" : "🔒 Locked"}
+        </strong>
     `;
 
     display.appendChild(card);
 
 });
 
+document.getElementById("unlockedCount").textContent = unlocked;
+
+document.getElementById("coinCount").textContent = coins;
+
 </script>
+
 <script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
 document.body.setAttribute("data-theme", savedTheme);
 </script>
+
 </body>
 </html>
