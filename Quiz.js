@@ -504,7 +504,13 @@ function goToNextQuestion() {
             "leaderboard",
             JSON.stringify(leaderboard)
         );
-
+// UPLOAD SCORE TO GLOBAL LEADERBOARD
+saveGlobalScore(
+    playerName,
+    score,
+    selectedCategory,
+    questions.length
+);
 
         // QUIZ COMPLETION NOTIFICATIONS
 
