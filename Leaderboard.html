@@ -16,8 +16,8 @@
         }
 
         .player-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 14px;
             padding: 16px;
             margin: 12px 0;
@@ -42,17 +42,42 @@
 
         .player-score {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 17px;
             white-space: nowrap;
         }
 
         .rank {
-            font-size: 24px;
-            margin-right: 10px;
+            font-size: 23px;
+            margin-right: 8px;
+        }
+
+        .my-rank {
+            border: 2px solid #ffd166;
+            background: rgba(255,209,102,0.15);
+        }
+
+        #searchPlayer {
+            width: 90%;
+            max-width: 400px;
+            padding: 14px;
+            margin: 15px auto;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
         }
 
         #status {
             margin: 20px;
+        }
+
+        @media(max-width:480px) {
+            .player-card {
+                padding: 12px;
+            }
+
+            .player-score {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -60,32 +85,30 @@
 <body data-theme="purple">
 
     <h1>🌍 Global Leaderboard</h1>
+
     <p>Compete with QuizMaster players around the world!</p>
 
     <div class="leaderboard-container">
-        <h2>🏆 Top 10 Players</h2>
-<input
-    type="text"
-    id="searchPlayer"
-    placeholder="🔍 Search players..."
-    style="
-        width:90%;
-        max-width:400px;
-        padding:14px;
-        margin:15px auto;
-        border-radius:12px;
-        border:none;
-        font-size:16px;
-    "
->
 
-<h3 id="totalPlayers">🌍 Total Players: 0</h3>
+        <h2>🏆 Top 10 Players</h2>
+
+        <input
+            type="text"
+            id="searchPlayer"
+            placeholder="🔍 Search players..."
+        >
+
+        <h3 id="totalPlayers">🌍 Total Players: 0</h3>
+
         <p id="status">Loading global leaderboard...</p>
 
         <div id="leaderboard"></div>
+
     </div>
 
-    <button onclick="location.href='index.html'">🏠 Home</button>
+    <button onclick="location.href='index.html'">
+        🏠 Home
+    </button>
 
     <script>
         const savedTheme =
@@ -93,7 +116,9 @@
 
         document.body.setAttribute("data-theme", savedTheme);
     </script>
-<script type="module" src="firebase.js"></script>
+
+    <script type="module" src="firebase.js"></script>
+
     <script type="module">
 
         import {
@@ -105,67 +130,133 @@
 
         const database = window.firebaseDB;
 
-        const leaderboardRef = ref(database, "globalLeaderboard");
+        const leaderboardRef =
+            ref(database, "globalLeaderboard");
 
-        const display = document.getElementById("leaderboard");
-        const status = document.getElementById("status");
-let allPlayers = [];
+        const display =
+            document.getElementById("leaderboard");
+
+        const status =
+            document.getElementById("status");
+
+        const searchInput =
+            document.getElementById("searchPlayer");
+
+        const totalPlayers =
+            document.getElementById("totalPlayers");
+
+        let allPlayers = [];
+
+        // DISPLAY PLAYERS
         function displayPlayers(playerList) {
 
-    display.innerHTML = "";
+            display.innerHTML = "";
 
-    const topPlayers = playerList.slice(0, 10);
+            const topPlayers = playerList.slice(0, 10);
 
-    if (topPlayers.length === 0) {
-        display.innerHTML = "<h3>No players found!</h3>";
-        return;
-    }
+            if (topPlayers.length === 0) {
+                display.innerHTML = "<h3>No players found!</h3>";
+                return;
+            }
 
-    topPlayers.forEach((player, index) => {
+            topPlayers.forEach((player, index) => {
 
-        const card = document.createElement("div");
-        card.className = "player-card";
+                const card = document.createElement("div");
+                card.className = "player-card";
 
-        const info = document.createElement("div");
-        info.className = "player-info";
+                // Medal rankings
+                if (index === 0) {
+                    card.classList.add("first-place");
+                }
 
-        const name = document.createElement("h3");
-        name.textContent =
-            `${index + 1}. ${player.playerName || "Player"}`;
+                const medals = ["🥇", "🥈", "🥉"];
 
-        const category = document.createElement("p");
-        category.textContent =
-            `📚 ${player.category || "Quiz"}`;
+                const rank = document.createElement("span");
+                rank.className = "rank";
 
-        const score = document.createElement("div");
-        score.className = "player-score";
-        score.textContent =
-            `${player.percentage}% (${player.score}/${player.total})`;
+                rank.textContent =
+                    medals[index] || `#${index + 1}`;
 
-        info.appendChild(name);
-        info.appendChild(category);
+                const info = document.createElement("div");
+                info.className = "player-info";
 
-        card.appendChild(info);
-        card.appendChild(score);
+                const name = document.createElement("h3");
 
-        display.appendChild(card);
+                name.textContent =
+                    `${player.playerName || "Player"}`;
 
-    });
-}
+                const category = document.createElement("p");
+
+                category.textContent =
+                    `📚 ${player.category || "Quiz"}`;
+
+                const score = document.createElement("div");
+                score.className = "player-score";
+
+                score.textContent =
+                    `${player.percentage}% (${player.score}/${player.total})`;
+
+                // Highlight current player
+                if (
+                    player.playerId ===
+                    window.firebaseAuth.currentUser.uid
+                ) {
+                    card.classList.add("my-rank");
+                    name.textContent += " 👑 (You)";
+                }
+
+                info.appendChild(name);
+                info.appendChild(category);
+
+                card.appendChild(rank);
+                card.appendChild(info);
+                card.appendChild(score);
+
+                display.appendChild(card);
+
+            });
+
+        }
+
+        // SEARCH PLAYERS
+        searchInput.addEventListener("input", function () {
+
+            const searchText =
+                this.value.toLowerCase().trim();
+
+            const filteredPlayers = allPlayers.filter(player =>
+                (player.playerName || "Player")
+                    .toLowerCase()
+                    .includes(searchText)
+            );
+
+            displayPlayers(filteredPlayers);
+
+        });
+
+        // FIREBASE LIVE DATA
         onValue(leaderboardRef, (snapshot) => {
 
             display.innerHTML = "";
 
             if (!snapshot.exists()) {
-                status.textContent = "No global scores yet. Be the first!";
+
+                allPlayers = [];
+
+                totalPlayers.textContent =
+                    "🌍 Total Players: 0";
+
+                status.textContent =
+                    "No global scores yet. Be the first!";
+
                 return;
             }
 
             const data = snapshot.val();
 
-            // Keep each player's best percentage
             const players = {};
 
+            // Keep each player's best score
             Object.values(data).forEach(record => {
 
                 if (!record.playerId) return;
@@ -184,60 +275,34 @@ let allPlayers = [];
                 }
 
             });
-allPlayers = Object.values(players);
 
-document.getElementById("totalPlayers").textContent =
-    "🌍 Total Players: " + allPlayers.length;
-            
-          const sortedPlayers = allPlayers
-                .sort((a, b) =>
-                    b.percentage - a.percentage ||
-                    b.score - a.score ||
-                    a.timestamp - b.timestamp
+            allPlayers = Object.values(players);
+
+            totalPlayers.textContent =
+                "🌍 Total Players: " + allPlayers.length;
+
+            allPlayers.sort((a, b) =>
+                b.percentage - a.percentage ||
+                b.score - a.score ||
+                a.timestamp - b.timestamp
+            );
+
+            status.textContent =
+                "Live global rankings 🌍";
+
+            displayPlayers(
+                allPlayers.filter(player =>
+                    (player.playerName || "Player")
+                        .toLowerCase()
+                        .includes(searchInput.value.toLowerCase().trim())
                 )
-                .slice(0, 10);
-
-            if (sortedPlayers.length === 0) {
-                status.textContent = "No global scores yet.";
-                return;
-            }
-
-            status.textContent = "Live global rankings 🌍";
-
-            sortedPlayers.forEach((player, index) => {
-
-                const card = document.createElement("div");
-                card.className = "player-card";
-
-                const info = document.createElement("div");
-                info.className = "player-info";
-
-                const name = document.createElement("h3");
-                name.textContent =
-                    `${index + 1}. ${player.playerName || "Player"}`;
-
-                const category = document.createElement("p");
-                category.textContent =
-                    `📚 ${player.category || "Quiz"}`;
-
-                const score = document.createElement("div");
-                score.className = "player-score";
-                score.textContent =
-                    `${player.percentage}% (${player.score}/${player.total})`;
-
-                info.appendChild(name);
-                info.appendChild(category);
-
-                card.appendChild(info);
-                card.appendChild(score);
-
-                display.appendChild(card);
-
-            });
+            );
 
         }, (error) => {
 
-            status.textContent = "Unable to load leaderboard.";
+            status.textContent =
+                "Unable to load leaderboard.";
+
             console.error("Leaderboard error:", error);
 
         });
