@@ -731,4 +731,9 @@ function showFinalResults(players) {
             : "🏆 Winner: " + winners[0].name + "!";
 
 }
-```
+
+console.log("Multiplayer.js loaded successfully!");
+
+window.addEventListener("error", function(event) {
+    console.error("JavaScript error:", event.message);
+});
