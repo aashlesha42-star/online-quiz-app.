@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizMaster - Notifications</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    color: white;
+}
+
+h1 {
+    color: #ffd166;
+    margin-top: 30px;
+}
+
+.notification-container {
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 15px;
+    background: #ffffff25;
+    border: 1px solid #ffffff50;
+    border-radius: 15px;
+    padding: 18px;
+    margin: 15px 0;
+}
+
+.notification-icon {
+    font-size: 32px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h3 {
+    margin: 0 0 7px;
+    color: #ffd166;
+}
+
+.notification-content p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.empty-message {
+    margin: 40px 0;
+    color: #ffd166;
+}
+
+button {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 25px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.clear-btn {
+    background: #ffffff;
+}
+
+@media(max-width: 480px) {
+    .notification {
+        padding: 14px;
+    }
+}
+</style>
+</head>
+
+<body data-theme="purple">
+
+<h1>🔔 Notifications</h1>
+
+<p>Stay updated with your QuizMaster activities!</p>
+
+<div class="notification-container" id="notificationList"></div>
+
+<p class="empty-message" id="emptyMessage" style="display:none;">
+    🎉 You're all caught up!
+</p>
+
+<button onclick="markAllRead()">
+    ✅ Mark All as Read
+</button>
+
+<button class="clear-btn" onclick="clearNotifications()">
+    🗑️ Clear All
+</button>
+
+<br>
+
+<button onclick="location.href='index.html'">
+    🏠 Back to Home
+</button>
+
+<script>
+
+const notificationList =
+    document.getElementById("notificationList");
+
+let notifications = JSON.parse(
+    localStorage.getItem("quizNotifications")
+) || [];
+
+// ADD A NOTIFICATION
+
+function addNotification(icon, title, message) {
+
+    notifications.unshift({
+        icon: icon,
+        title: title,
+        message: message,
+        time: new Date().toLocaleString(),
+        read: false
+    });
+
+    localStorage.setItem(
+        "quizNotifications",
+        JSON.stringify(notifications)
+    );
+
+}
+
+// DISPLAY NOTIFICATIONS
+
+function displayNotifications() {
+
+    notificationList.innerHTML = "";
+
+    document.getElementById("emptyMessage").style.display =
+        notifications.length === 0 ? "block" : "none";
+
+    notifications.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "notification";
+
+        const icon = document.createElement("div");
+        icon.className = "notification-icon";
+        icon.textContent = item.icon;
+
+        const content = document.createElement("div");
+        content.className = "notification-content";
+
+        const heading = document.createElement("h3");
+        heading.textContent = item.title;
+
+        const message = document.createElement("p");
+        message.textContent = item.message;
+
+        const time = document.createElement("small");
+        time.textContent = item.time;
+
+        const status = document.createElement("p");
+        status.textContent = item.read ? "✓ Read" : "🔵 New";
+
+        content.append(heading, message, time, status);
+
+        card.append(icon, content);
+
+        notificationList.appendChild(card);
+
+    });
+
+}
+
+// MARK ALL READ
+
+function markAllRead() {
+
+    notifications = notifications.map(item => ({
+        ...item,
+        read: true
+    }));
+
+    localStorage.setItem(
+        "quizNotifications",
+        JSON.stringify(notifications)
+    );
+
+    displayNotifications();
+
+}
+
+// CLEAR ALL
+
+function clearNotifications() {
+
+    if (!confirm("Are you sure you want to clear all notifications?")) {
+        return;
+    }
+
+    notifications = [];
+
+    localStorage.setItem(
+        "quizNotifications",
+        JSON.stringify(notifications)
+    );
+
+    displayNotifications();
+
+}
+
+// DEMO NOTIFICATIONS (ONLY WHEN EMPTY)
+
+if (notifications.length === 0) {
+
+    addNotification(
+        "🎁",
+        "Welcome to QuizMaster!",
+        "Your notification centre is ready."
+    );
+
+    addNotification(
+        "🏆",
+        "Weekly Challenges",
+        "Complete weekly challenges and earn bonus coins!"
+    );
+
+    addNotification(
+        "🧠",
+        "Keep Learning!",
+        "Play quizzes and improve your knowledge."
+    );
+
+}
+
+displayNotifications();
+
+// THEME
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.body.setAttribute("data-theme", savedTheme);
+
+</script>
+
+</body>
+</html>
