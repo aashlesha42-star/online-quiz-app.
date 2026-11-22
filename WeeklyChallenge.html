@@ -30,18 +30,17 @@
             margin-bottom: 10px;
         }
 
-        .challenge-card button {
-            background: #6a0dad;
-            color: white;
-            border: none;
-            padding: 12px 22px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
+        .challenge-card p {
+            margin: 8px 0;
         }
 
-        .challenge-card button:hover {
-            background: #481080;
+        .progress-text {
+            font-weight: bold;
+            color: #6a0dad;
+        }
+
+        .status {
+            font-weight: bold;
         }
 
         .back-btn {
@@ -77,27 +76,36 @@
             <h3>🧠 Challenge 1</h3>
             <p>Answer 10 quiz questions.</p>
             <p>Reward: 20 Coins</p>
-            <button onclick="completeChallenge(1)">
-                Complete Challenge
-            </button>
+            <p class="progress-text" id="questionsProgress">
+                Progress: 0 / 10
+            </p>
+            <p class="status" id="questionsStatus">
+                ⏳ In Progress
+            </p>
         </div>
 
         <div class="challenge-card">
             <h3>🔥 Challenge 2</h3>
-            <p>Score at least 5 correct answers.</p>
+            <p>Get 5 correct answers across quizzes.</p>
             <p>Reward: 30 Coins</p>
-            <button onclick="completeChallenge(2)">
-                Complete Challenge
-            </button>
+            <p class="progress-text" id="correctProgress">
+                Progress: 0 / 5
+            </p>
+            <p class="status" id="correctStatus">
+                ⏳ In Progress
+            </p>
         </div>
 
         <div class="challenge-card">
             <h3>👑 Challenge 3</h3>
-            <p>Play 3 quizzes.</p>
+            <p>Complete 3 quizzes.</p>
             <p>Reward: 50 Coins</p>
-            <button onclick="completeChallenge(3)">
-                Complete Challenge
-            </button>
+            <p class="progress-text" id="quizzesProgress">
+                Progress: 0 / 3
+            </p>
+            <p class="status" id="quizzesStatus">
+                ⏳ In Progress
+            </p>
         </div>
 
         <p id="challengeMessage"></p>
@@ -110,61 +118,66 @@
     </div>
 
     <script>
+
+        // APPLY SAVED THEME
+
         const savedTheme =
             localStorage.getItem("selectedTheme") || "purple";
 
         document.body.setAttribute("data-theme", savedTheme);
 
-        let completedChallenges =
-            JSON.parse(localStorage.getItem("weeklyChallenges")) || [];
 
-        function updateProgress() {
-            document.getElementById("completedCount").innerText =
-                "Completed: " + completedChallenges.length + " / 3";
+        // WEEKLY CHALLENGE PROGRESS
 
-            document.querySelectorAll(".challenge-card button")
-                .forEach((button, index) => {
-                    if (completedChallenges.includes(index + 1)) {
-                        button.innerText = "✅ Completed";
-                        button.disabled = true;
-                    }
-                });
-        }
-
-        function completeChallenge(id) {
-
-            if (completedChallenges.includes(id)) {
-                return;
-            }
-
-            let rewards = {
-                1: 20,
-                2: 30,
-                3: 50
+        let weeklyProgress =
+            JSON.parse(localStorage.getItem("weeklyProgress")) || {
+                questions: 0,
+                correct: 0,
+                quizzes: 0,
+                completed: []
             };
 
-            let coins =
-                Number(localStorage.getItem("dailyBonus")) || 0;
 
-            coins += rewards[id];
+        // UPDATE PROGRESS DISPLAY
 
-            localStorage.setItem("dailyBonus", coins);
+        function updateProgress() {
 
-            completedChallenges.push(id);
+            document.getElementById("questionsProgress").innerText =
+                "Progress: " + Math.min(weeklyProgress.questions, 10) + " / 10";
 
-            localStorage.setItem(
-                "weeklyChallenges",
-                JSON.stringify(completedChallenges)
-            );
+            document.getElementById("correctProgress").innerText =
+                "Progress: " + Math.min(weeklyProgress.correct, 5) + " / 5";
 
-            document.getElementById("challengeMessage").innerText =
-                "🎉 Challenge completed! You earned " +
-                rewards[id] + " coins!";
+            document.getElementById("quizzesProgress").innerText =
+                "Progress: " + Math.min(weeklyProgress.quizzes, 3) + " / 3";
 
-            updateProgress();
+
+            // CHALLENGE STATUS
+
+            document.getElementById("questionsStatus").innerText =
+                weeklyProgress.completed.includes(1)
+                    ? "✅ Completed"
+                    : "⏳ In Progress";
+
+            document.getElementById("correctStatus").innerText =
+                weeklyProgress.completed.includes(2)
+                    ? "✅ Completed"
+                    : "⏳ In Progress";
+
+            document.getElementById("quizzesStatus").innerText =
+                weeklyProgress.completed.includes(3)
+                    ? "✅ Completed"
+                    : "⏳ In Progress";
+
+
+            document.getElementById("completedCount").innerText =
+                "Completed: " + weeklyProgress.completed.length + " / 3";
+
         }
 
+
         updateProgress();
+
     </script>
 
 </body>
