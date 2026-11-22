@@ -310,4 +310,97 @@ body .multiplayer-btn {
 
 <div class="navigation">
 
-    <button onclick="location.href='Leaderboard
+    <button onclick="location.href='Leaderboard.html'">🏆 Leaderboard</button>
+    <button onclick="location.href='Profile.html'">👤 My Profile</button>
+    <button onclick="location.href='DailyChallenge.html'">🌟 Daily Challenge</button>
+    <button onclick="location.href='Achievements.html'">🎖️ Achievements</button>
+    <button onclick="location.href='Rewards.html'">🎁 Rewards Store</button>
+    <button onclick="location.href='Themes.html'">🎨 Customize Theme</button>
+
+</div>
+
+<footer>
+    Made with 💜 for curious minds | QuizMaster
+</footer>
+
+<script>
+
+// DAILY LOGIN REWARDS
+
+let today = new Date().toLocaleDateString("en-CA");
+
+let lastLogin = localStorage.getItem("lastLoginDate");
+
+let streak = Number(localStorage.getItem("loginStreak")) || 0;
+
+let rewardMessage = document.getElementById("rewardMessage");
+
+let claimButton = document.getElementById("claimButton");
+
+function claimReward() {
+
+    if (localStorage.getItem("lastLoginDate") === today) {
+        rewardMessage.textContent =
+            "✅ You have already collected today's reward!";
+        return;
+    }
+
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    let yesterdayDate = yesterday.toLocaleDateString("en-CA");
+
+    if (lastLogin === yesterdayDate) {
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    let earnedCoins = 5;
+    let bonusMessage = "";
+
+    if (streak % 7 === 0) {
+        earnedCoins += 25;
+        bonusMessage = " 🏆 7-day streak bonus: +25 coins!";
+    }
+
+    let totalCoins =
+        Number(localStorage.getItem("dailyBonus")) || 0;
+
+    totalCoins += earnedCoins;
+
+    localStorage.setItem("dailyBonus", totalCoins);
+    localStorage.setItem("lastLoginDate", today);
+    localStorage.setItem("loginStreak", streak);
+
+    document.getElementById("streak").textContent = streak;
+
+    rewardMessage.textContent =
+        "🎉 You earned " + earnedCoins +
+        " coins!" + bonusMessage;
+
+    claimButton.textContent = "✅ Reward Collected";
+    claimButton.disabled = true;
+}
+
+document.getElementById("streak").textContent = streak;
+
+if (lastLogin === today) {
+    rewardMessage.textContent =
+        "🎉 Today's reward has already been collected!";
+
+    claimButton.textContent = "✅ Reward Collected";
+    claimButton.disabled = true;
+}
+
+// THEME SYSTEM
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.body.setAttribute("data-theme", savedTheme);
+
+</script>
+
+</body>
+</html>
