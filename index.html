@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QuizMaster - Challenge Your Brain</title>
+
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -16,68 +18,102 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
-    color: #24113b;
     min-height: 100vh;
+    padding: 20px;
     text-align: center;
-    padding: 25px 15px;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    color: white;
+}
+
+body[data-theme="blue"] {
+    background: linear-gradient(135deg, #003566, #0077b6, #00b4d8);
+}
+
+body[data-theme="pink"] {
+    background: linear-gradient(135deg, #831843, #db2777, #ff69b4);
+}
+
+body[data-theme="dark"] {
+    background: linear-gradient(135deg, #000000, #27272a, #52525b);
+}
+
+/* HEADER */
+
+.header {
+    max-width: 1050px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
-    font-size: 25px;
+    font-size: 27px;
     font-weight: bold;
-    text-align: left;
-    max-width: 900px;
-    margin: auto;
-    color: #24113b;
+    color: white;
 }
 
 .logo span {
     color: #ffd166;
 }
 
+.header-tag {
+    color: #ffffffcc;
+    font-size: 13px;
+}
+
+/* HERO */
+
 .hero {
+    max-width: 850px;
     margin: 75px auto 45px;
-    max-width: 700px;
 }
 
 .badge {
     display: inline-block;
-    background: #ffffff55;
-    color: #24113b;
-    padding: 10px 20px;
+    background: #ffffff25;
+    border: 1px solid #ffffff45;
+    padding: 10px 22px;
     border-radius: 30px;
-    margin-bottom: 25px;
     font-size: 14px;
+    margin-bottom: 25px;
+    color: white;
 }
 
-h1 {
-    font-size: clamp(38px, 8vw, 65px);
-    margin-bottom: 18px;
-    color: #24113b;
+.hero h1 {
+    font-size: clamp(38px, 7vw, 65px);
+    color: white;
+    margin-bottom: 20px;
 }
 
-h1 span {
+.hero h1 span {
     color: #ffd166;
 }
 
 .subtitle {
-    color: #24113b;
+    max-width: 650px;
+    margin: auto;
+    color: #eee0ff;
     font-size: 17px;
-    line-height: 1.6;
-    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+/* MAIN BUTTONS */
+
+.main-buttons {
+    margin-top: 30px;
 }
 
 .start-btn,
 .multiplayer-btn {
-    border: none;
-    padding: 17px 35px;
+    padding: 16px 35px;
     border-radius: 35px;
-    font-size: 18px;
+    border: none;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
     margin: 8px;
+    transition: 0.3s;
 }
 
 .start-btn {
@@ -87,162 +123,295 @@ h1 span {
 
 .multiplayer-btn {
     background: #32104f;
-    color: white !important;
+    color: white;
     border: 2px solid #ffd166;
 }
 
 .start-btn:hover,
 .multiplayer-btn:hover {
-    transform: scale(1.08);
+    transform: translateY(-4px);
 }
 
+/* DAILY REWARD */
+
 .login-reward {
-    max-width: 420px;
-    margin: 30px auto;
-    padding: 25px;
-    background: #ffffff65;
-    color: #24113b;
-    border: 1px solid #ffffff90;
-    border-radius: 20px;
+    max-width: 550px;
+    margin: 45px auto;
+    padding: 28px;
+    background: #ffffff20;
+    border: 1px solid #ffffff55;
+    border-radius: 22px;
+    backdrop-filter: blur(10px);
+    color: white;
 }
 
 .login-reward h2 {
-    color: #32104f;
-    margin-bottom: 12px;
+    color: #ffd166;
+    margin-bottom: 15px;
 }
 
 .login-reward p {
-    margin: 10px 0;
+    color: white;
+    margin: 12px 0;
     line-height: 1.5;
 }
 
 .login-reward h3 {
-    color: #32104f;
+    color: white;
+    margin: 15px 0;
 }
 
 .reward-button {
     background: #ffd166;
     color: #32104f;
     border: none;
-    padding: 12px 25px;
+    padding: 13px 28px;
     border-radius: 25px;
     font-weight: bold;
+    font-size: 15px;
     margin-top: 12px;
     cursor: pointer;
 }
 
+.reward-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* SECTION TITLE */
+
+.section-title {
+    margin: 55px auto 25px;
+    color: white;
+    font-size: 27px;
+}
+
+/* FEATURE CARDS */
+
 .features {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 18px;
-    max-width: 900px;
-    margin: 55px auto 35px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 25px auto;
 }
 
 .card {
-    background: #ffffff65;
-    color: #24113b;
-    border: 1px solid #ffffff90;
-    border-radius: 18px;
-    padding: 25px 20px;
-    width: 220px;
+    padding: 30px 20px;
+    background: #ffffff20;
+    border: 1px solid #ffffff50;
+    border-radius: 20px;
     transition: 0.3s;
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
-    transform: translateY(-8px);
-    background: #ffffff90;
+    transform: translateY(-7px);
+    background: #ffffff35;
 }
 
 .card .icon {
-    font-size: 38px;
-    margin-bottom: 12px;
+    font-size: 42px;
+    margin-bottom: 15px;
 }
 
 .card h3 {
-    margin-bottom: 8px;
-    color: #32104f;
+    color: #ffd166;
+    margin-bottom: 12px;
 }
 
 .card p {
-    color: #24113b;
+    color: #f1e6ff;
     font-size: 14px;
+    line-height: 1.6;
 }
 
+/* NAVIGATION DASHBOARD */
+
 .navigation {
-    margin: 35px auto;
+    max-width: 1000px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 }
 
 .navigation button {
-    background: #ffffff65;
-    color: #32104f;
-    border: 1px solid #ffffff90;
-    padding: 12px 22px;
-    margin: 7px;
-    border-radius: 25px;
+    width: 100%;
+    padding: 17px 10px;
+    border-radius: 15px;
+    border: 1px solid #ffffff55;
+    background: #ffffff20;
+    color: white !important;
     font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .navigation button:hover {
     background: #ffd166;
+    color: #32104f !important;
+    transform: translateY(-4px);
 }
 
+/* NOTIFICATION BADGE */
+
+.notification-button {
+    position: relative;
+}
+
+.notification-badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 50px;
+    background: #ff4757;
+    color: white !important;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notification-badge:empty {
+    display: none;
+}
+
+/* FOOTER */
+
 footer {
-    margin-top: 55px;
-    color: #24113b;
+    margin-top: 65px;
+    padding: 20px;
+    color: #ffffffbb;
     font-size: 13px;
 }
 
+/* TABLET */
+
+@media(max-width: 768px) {
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .navigation {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        margin-top: 55px;
+    }
+
+}
+
+/* MOBILE */
+
 @media(max-width: 480px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .header {
+        padding: 8px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .header-tag {
+        font-size: 11px;
+    }
+
     .hero {
         margin-top: 45px;
     }
 
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+    }
+
+    .main-buttons button {
+        width: 95%;
+        max-width: 350px;
+        margin: 8px auto;
+    }
+
+    .login-reward {
+        padding: 22px 15px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
     .card {
         width: 100%;
-        max-width: 320px;
     }
+
+    .navigation {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .navigation button {
+        padding: 15px;
+    }
+
+    .section-title {
+        font-size: 23px;
+    }
+
 }
 
-body h1,
-body h2,
-body h3,
-body p,
-body .logo,
-body .subtitle,
-body .card,
-body footer {
-    color: #24113b !important;
-}
+/* SMALL PHONES */
 
-body h1 span,
-body .logo span {
-    color: #ffd166 !important;
-}
+@media(max-width: 350px) {
 
-body button {
-    color: #32104f !important;
-}
+    .hero h1 {
+        font-size: 29px;
+    }
 
-body .multiplayer-btn {
-    color: white !important;
+    .logo {
+        font-size: 20px;
+    }
+
 }
 </style>
+
 </head>
 
 <body data-theme="purple">
 
-<div class="logo">
-    💜 Quiz<span>Master</span>
-</div>
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="logo">
+        💜 Quiz<span>Master</span>
+    </div>
+
+    <div class="header-tag">
+        ✨ Your Brain Training Zone
+    </div>
+
+</header>
+
+
+<!-- HERO SECTION -->
 
 <section class="hero">
 
     <div class="badge">
-        ✨ Learn • Play • Win
+        ✨ LEARN • PLAY • WIN
     </div>
 
     <h1>
@@ -255,19 +424,24 @@ body .multiplayer-btn {
         earn points and become a QuizMaster!
     </p>
 
-    <button class="start-btn"
-        onclick="location.href='Quiz.html'">
-        🚀 Start Quiz
-    </button>
+    <div class="main-buttons">
 
-    <br>
+        <button class="start-btn"
+            onclick="location.href='Quiz.html'">
+            🚀 Start Quiz
+        </button>
 
-    <button class="multiplayer-btn"
-        onclick="location.href='Multiplayer.html'">
-        🎮 Multiplayer Quiz
-    </button>
+        <button class="multiplayer-btn"
+            onclick="location.href='Multiplayer.html'">
+            🎮 Multiplayer Quiz
+        </button>
+
+    </div>
 
 </section>
+
+
+<!-- DAILY REWARDS -->
 
 <section class="login-reward">
 
@@ -275,57 +449,138 @@ body .multiplayer-btn {
 
     <p>Visit QuizMaster every day and collect coins!</p>
 
-    <h3>🔥 Login Streak: <span id="streak">0</span> Days</h3>
+    <h3>
+        🔥 Login Streak:
+        <span id="streak">0</span> Days
+    </h3>
 
-    <p id="rewardMessage">Collect your daily reward!</p>
+    <p id="rewardMessage">
+        Collect your daily reward!
+    </p>
 
-    <button class="reward-button" id="claimButton"
+    <button class="reward-button"
+        id="claimButton"
         onclick="claimReward()">
+
         🪙 Claim 5 Coins
+
     </button>
 
 </section>
 
+
+<!-- FEATURES -->
+
+<h2 class="section-title">
+    ✨ Why Play QuizMaster?
+</h2>
+
 <section class="features">
 
     <div class="card">
+
         <div class="icon">🧠</div>
+
         <h3>Test Your Brain</h3>
-        <p>Explore questions and improve your knowledge.</p>
+
+        <p>
+            Explore interesting questions
+            and improve your knowledge.
+        </p>
+
     </div>
 
     <div class="card">
+
         <div class="icon">⏱️</div>
+
         <h3>Beat The Clock</h3>
-        <p>Answer before your time runs out!</p>
+
+        <p>
+            Answer before your time runs out
+            and challenge yourself!
+        </p>
+
     </div>
 
     <div class="card">
+
         <div class="icon">🏆</div>
+
         <h3>Get On Top</h3>
-        <p>Earn points and climb the leaderboard.</p>
+
+        <p>
+            Earn points, collect rewards
+            and climb the leaderboard.
+        </p>
+
     </div>
 
 </section>
 
-<div class="navigation">
 
-    <button onclick="location.href='Leaderboard.html'">🏆 Leaderboard</button>
-    <button onclick="location.href='Profile.html'">👤 My Profile</button>
-    <button onclick="location.href='DailyChallenge.html'">🌟 Daily Challenge</button>
-    <button onclick="location.href='WeeklyChallenge.html'">🏆 Weekly Challenges</button>
-    <button onclick="location.href='Achievements.html'">🎖️ Achievements</button>
-    <button onclick="location.href='Rewards.html'">🎁 Rewards Store</button>
-    <button onclick="location.href='Themes.html'">🎨 Customize Theme</button>
-<button onclick="location.href='Notifications.html'" class="notification-button">
-    🔔 Notifications
-    <span id="notificationCount" class="notification-badge">0</span>
-</button>
-</div>
+<!-- DASHBOARD -->
+
+<h2 class="section-title">
+    🎯 Explore Your Dashboard
+</h2>
+
+<section class="navigation">
+
+    <button onclick="location.href='Leaderboard.html'">
+        🏆 Leaderboard
+    </button>
+
+    <button onclick="location.href='Profile.html'">
+        👤 My Profile
+    </button>
+
+    <button onclick="location.href='DailyChallenge.html'">
+        🌟 Daily Challenge
+    </button>
+
+    <button onclick="location.href='WeeklyChallenge.html'">
+        🏆 Weekly Challenges
+    </button>
+
+    <button onclick="location.href='Achievements.html'">
+        🎖️ Achievements
+    </button>
+
+    <button onclick="location.href='Rewards.html'">
+        🎁 Rewards Store
+    </button>
+
+    <button onclick="location.href='Themes.html'">
+        🎨 Customize Theme
+    </button>
+
+    <button
+        onclick="location.href='Notifications.html'"
+        class="notification-button">
+
+        🔔 Notifications
+
+        <span id="notificationCount"
+            class="notification-badge">0</span>
+
+    </button>
+
+</section>
+
+
+<!-- FOOTER -->
 
 <footer>
+
     Made with 💜 for curious minds | QuizMaster
+
+    <br><br>
+
+    Keep Learning. Keep Growing. Keep Winning! 🚀
+
 </footer>
+
 
 <script>
 
@@ -335,37 +590,54 @@ let today = new Date().toLocaleDateString("en-CA");
 
 let lastLogin = localStorage.getItem("lastLoginDate");
 
-let streak = Number(localStorage.getItem("loginStreak")) || 0;
+let streak =
+    Number(localStorage.getItem("loginStreak")) || 0;
 
-let rewardMessage = document.getElementById("rewardMessage");
+let rewardMessage =
+    document.getElementById("rewardMessage");
 
-let claimButton = document.getElementById("claimButton");
+let claimButton =
+    document.getElementById("claimButton");
+
 
 function claimReward() {
 
     if (localStorage.getItem("lastLoginDate") === today) {
+
         rewardMessage.textContent =
             "✅ You have already collected today's reward!";
+
         return;
     }
 
     let yesterday = new Date();
+
     yesterday.setDate(yesterday.getDate() - 1);
 
-    let yesterdayDate = yesterday.toLocaleDateString("en-CA");
+    let yesterdayDate =
+        yesterday.toLocaleDateString("en-CA");
 
     if (lastLogin === yesterdayDate) {
+
         streak++;
+
     } else {
+
         streak = 1;
+
     }
 
     let earnedCoins = 5;
+
     let bonusMessage = "";
 
     if (streak % 7 === 0) {
+
         earnedCoins += 25;
-        bonusMessage = " 🏆 7-day streak bonus: +25 coins!";
+
+        bonusMessage =
+            " 🏆 7-day streak bonus: +25 coins!";
+
     }
 
     let totalCoins =
@@ -374,28 +646,42 @@ function claimReward() {
     totalCoins += earnedCoins;
 
     localStorage.setItem("dailyBonus", totalCoins);
+
     localStorage.setItem("lastLoginDate", today);
+
     localStorage.setItem("loginStreak", streak);
 
-    document.getElementById("streak").textContent = streak;
+    document.getElementById("streak").textContent =
+        streak;
 
     rewardMessage.textContent =
         "🎉 You earned " + earnedCoins +
         " coins!" + bonusMessage;
 
-    claimButton.textContent = "✅ Reward Collected";
+    claimButton.textContent =
+        "✅ Reward Collected";
+
     claimButton.disabled = true;
+
 }
 
-document.getElementById("streak").textContent = streak;
+
+document.getElementById("streak").textContent =
+    streak;
+
 
 if (lastLogin === today) {
+
     rewardMessage.textContent =
         "🎉 Today's reward has already been collected!";
 
-    claimButton.textContent = "✅ Reward Collected";
+    claimButton.textContent =
+        "✅ Reward Collected";
+
     claimButton.disabled = true;
+
 }
+
 
 // THEME SYSTEM
 
@@ -404,8 +690,9 @@ const savedTheme =
 
 document.body.setAttribute("data-theme", savedTheme);
 
-</script>
-<script>
+
+// NOTIFICATION COUNTER
+
 function updateNotificationCount() {
 
     const notifications = JSON.parse(
@@ -416,20 +703,29 @@ function updateNotificationCount() {
         notification => !notification.read
     ).length;
 
-    const badge = document.getElementById("notificationCount");
+    const badge =
+        document.getElementById("notificationCount");
 
     if (badge) {
+
         badge.textContent =
             unreadCount > 9 ? "9+" : unreadCount;
 
         badge.style.display =
             unreadCount > 0 ? "inline-flex" : "none";
+
     }
+
 }
 
 updateNotificationCount();
 
-window.addEventListener("storage", updateNotificationCount);
+window.addEventListener(
+    "storage",
+    updateNotificationCount
+);
+
 </script>
+
 </body>
 </html>
