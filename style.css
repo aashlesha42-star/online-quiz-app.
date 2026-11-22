@@ -107,3 +107,28 @@ body[data-theme="dark"] {
     background: linear-gradient(135deg, #000000, #27272a, #52525b);
     color: white;
 }
+
+/* NOTIFICATION BADGE */
+
+.notification-button {
+    position: relative;
+}
+
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    margin-left: 5px;
+    border-radius: 50px;
+    background: #ff4757;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notification-badge:empty {
+    display: none;
+}
