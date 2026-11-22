@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -186,6 +187,46 @@ body[data-theme="dark"] {
     font-size: 27px;
 }
 
+/* ANALYTICS DASHBOARD */
+
+.analytics {
+    max-width: 1000px;
+    margin: 25px auto 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.analytics-card {
+    padding: 28px 15px;
+    background: #ffffff20;
+    border: 1px solid #ffffff55;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+
+.analytics-card:hover {
+    transform: translateY(-6px);
+    background: #ffffff35;
+}
+
+.analytics-icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.analytics-card h3 {
+    color: #ffd166;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.analytics-card p {
+    color: white;
+    font-size: 14px;
+}
+
 /* FEATURE CARDS */
 
 .features {
@@ -293,6 +334,10 @@ footer {
 
 @media(max-width: 768px) {
 
+    .analytics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .features {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -304,7 +349,6 @@ footer {
     .hero {
         margin-top: 55px;
     }
-
 }
 
 /* MOBILE */
@@ -349,6 +393,27 @@ footer {
         padding: 22px 15px;
     }
 
+    .analytics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .analytics-card {
+        padding: 22px 8px;
+    }
+
+    .analytics-icon {
+        font-size: 30px;
+    }
+
+    .analytics-card h3 {
+        font-size: 23px;
+    }
+
+    .analytics-card p {
+        font-size: 12px;
+    }
+
     .features {
         grid-template-columns: 1fr;
     }
@@ -369,7 +434,6 @@ footer {
     .section-title {
         font-size: 23px;
     }
-
 }
 
 /* SMALL PHONES */
@@ -383,7 +447,6 @@ footer {
     .logo {
         font-size: 20px;
     }
-
 }
 </style>
 
@@ -465,6 +528,57 @@ footer {
         🪙 Claim 5 Coins
 
     </button>
+
+</section>
+
+
+<!-- QUIZ ANALYTICS -->
+
+<h2 class="section-title">
+    📊 Your Quiz Analytics
+</h2>
+
+<section class="analytics">
+
+    <div class="analytics-card">
+
+        <div class="analytics-icon">📝</div>
+
+        <h3 id="totalQuizzes">0</h3>
+
+        <p>Total Quizzes Played</p>
+
+    </div>
+
+    <div class="analytics-card">
+
+        <div class="analytics-icon">🎯</div>
+
+        <h3 id="correctAnswers">0</h3>
+
+        <p>Correct Answers</p>
+
+    </div>
+
+    <div class="analytics-card">
+
+        <div class="analytics-icon">🏆</div>
+
+        <h3 id="highestScore">0/3</h3>
+
+        <p>Highest Score</p>
+
+    </div>
+
+    <div class="analytics-card">
+
+        <div class="analytics-icon">🪙</div>
+
+        <h3 id="totalCoinsEarned">0</h3>
+
+        <p>Coins Earned From Quizzes</p>
+
+    </div>
 
 </section>
 
@@ -691,6 +805,33 @@ const savedTheme =
 document.body.setAttribute("data-theme", savedTheme);
 
 
+// QUIZ ANALYTICS SYSTEM
+
+function updateAnalytics() {
+
+    const analytics = JSON.parse(
+        localStorage.getItem("quizAnalytics") || "{}"
+    );
+
+    document.getElementById("totalQuizzes").textContent =
+        analytics.totalQuizzes || 0;
+
+    document.getElementById("correctAnswers").textContent =
+        analytics.correctAnswers || 0;
+
+    document.getElementById("highestScore").textContent =
+        (analytics.highestScore || 0) + "/3";
+
+    document.getElementById("totalCoinsEarned").textContent =
+        analytics.totalCoinsEarned || 0;
+
+}
+
+updateAnalytics();
+
+window.addEventListener("storage", updateAnalytics);
+
+
 // NOTIFICATION COUNTER
 
 function updateNotificationCount() {
@@ -729,3 +870,4 @@ window.addEventListener(
 
 </body>
 </html>
+```
