@@ -1,53 +1,324 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>QuizMaster - Profile</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizMaster - My Profile</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .profile-container {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            font-size: 75px;
+            margin: 10px;
+        }
+
+        .avatar-options button {
+            width: auto;
+            margin: 5px;
+            font-size: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .stat-card h2 {
+            color: #ffd166;
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            max-width: 90%;
+            font-size: 16px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 12px;
+            margin: 7px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        @media(max-width:480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body data-theme="purple">
 
-    <h1>👤 Player Profile</h1>
+    <h1>👤 My QuizMaster Profile</h1>
 
-    <h2 id="playerName">Player</h2>
+    <div class="profile-container">
 
-    <h3>Total Quizzes Played: <span id="total">0</span></h3>
+        <div class="profile-card">
 
-    <h3>Highest Score: <span id="highest">0</span></h3>
+            <div class="avatar" id="avatar">😀</div>
 
-    <h3>Average Score: <span id="average">0</span></h3>
+            <h2 id="playerName">Quiz Player</h2>
 
-    <button onclick="location.href='index.html'">Home</button>
+            <p id="playerId">Player ID: Loading...</p>
 
-    <script>
-        let leaderboard =
-            JSON.parse(localStorage.getItem("leaderboard")) || [];
+            <div class="avatar-options">
+                <button onclick="changeAvatar('😀')">😀</button>
+                <button onclick="changeAvatar('😎')">😎</button>
+                <button onclick="changeAvatar('🥳')">🥳</button>
+                <button onclick="changeAvatar('🦊')">🦊</button>
+                <button onclick="changeAvatar('🐼')">🐼</button>
+                <button onclick="changeAvatar('🐱')">🐱</button>
+            </div>
 
-        let name = localStorage.getItem("playerName") || "Player";
+            <br>
 
-        document.getElementById("playerName").textContent = name;
+            <input
+                type="text"
+                id="newName"
+                placeholder="Enter new player name"
+                maxlength="20"
+            >
 
-        document.getElementById("total").textContent =
-            leaderboard.length;
+            <br><br>
 
-        if (leaderboard.length > 0) {
-            let scores = leaderboard.map(player => player.score);
+            <button onclick="saveName()">✏️ Update Name</button>
 
-            let highest = Math.max(...scores);
+        </div>
 
-            let average =
-                scores.reduce((a, b) => a + b, 0) / scores.length;
+        <div class="profile-card">
 
-            document.getElementById("highest").textContent = highest;
+            <h2>📊 My Statistics</h2>
 
-            document.getElementById("average").textContent =
-                average.toFixed(1);
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <h3>Total Quizzes</h3>
+                    <h2 id="totalQuizzes">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Correct Answers</h3>
+                    <h2 id="correctAnswers">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Highest Score</h3>
+                    <h2 id="highestScore">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Coins Earned</h3>
+                    <h2 id="coinsEarned">0</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>🏆 My Achievements</h2>
+
+            <div id="badges">
+                Loading badges...
+            </div>
+
+        </div>
+
+        <div class="profile-card">
+
+            <h2>🥇 My Global Ranking</h2>
+
+            <h1 id="globalRank">Not ranked yet</h1>
+
+        </div>
+
+    </div>
+
+    <button onclick="location.href='index.html'">
+        🏠 Home
+    </button>
+
+    <script type="module" src="firebase.js"></script>
+
+    <script type="module">
+
+        await window.firebaseReady;
+
+        const user = window.firebaseAuth.currentUser;
+
+        // PLAYER INFORMATION
+
+        document.getElementById("playerId").textContent =
+            "Player ID: " + user.uid;
+
+        let playerName =
+            localStorage.getItem("playerName") || "Quiz Player";
+
+        document.getElementById("playerName").textContent =
+            playerName;
+
+        // AVATAR
+
+        let savedAvatar =
+            localStorage.getItem("playerAvatar") || "😀";
+
+        document.getElementById("avatar").textContent =
+            savedAvatar;
+
+        window.changeAvatar = function(avatar) {
+
+            localStorage.setItem("playerAvatar", avatar);
+
+            document.getElementById("avatar").textContent =
+                avatar;
+
+        };
+
+        // UPDATE NAME
+
+        window.saveName = function() {
+
+            const newName =
+                document.getElementById("newName").value.trim();
+
+            if (!newName) {
+                alert("Please enter a name!");
+                return;
+            }
+
+            localStorage.setItem("playerName", newName);
+
+            document.getElementById("playerName").textContent =
+                newName;
+
+            alert("Player name updated!");
+
+        };
+
+        // STATISTICS
+
+        const analytics =
+            JSON.parse(localStorage.getItem("quizAnalytics")) || {};
+
+        document.getElementById("totalQuizzes").textContent =
+            analytics.totalQuizzes || 0;
+
+        document.getElementById("correctAnswers").textContent =
+            analytics.correctAnswers || 0;
+
+        document.getElementById("highestScore").textContent =
+            analytics.highestScore || 0;
+
+        document.getElementById("coinsEarned").textContent =
+            analytics.totalCoinsEarned || 0;
+
+        // ACHIEVEMENTS
+
+        const badges =
+            JSON.parse(localStorage.getItem("unlockedBadges")) || [];
+
+        const badgeDisplay =
+            document.getElementById("badges");
+
+        if (badges.length === 0) {
+
+            badgeDisplay.textContent =
+                "Complete quizzes to unlock achievements!";
+
+        } else {
+
+            badges.forEach(badge => {
+
+                const item = document.createElement("span");
+
+                item.className = "badge";
+                item.textContent = "🏅 " + badge;
+
+                badgeDisplay.appendChild(item);
+
+            });
+
         }
+
+        // GLOBAL RANKING
+
+        import {
+            ref,
+            get
+        } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
+
+        const snapshot = await get(
+            ref(window.firebaseDB, "globalLeaderboard")
+        );
+
+        if (snapshot.exists()) {
+
+            const players = {};
+
+            Object.values(snapshot.val()).forEach(record => {
+
+                if (!record.playerId) return;
+
+                const existing = players[record.playerId];
+
+                if (
+                    !existing ||
+                    record.percentage > existing.percentage
+                ) {
+                    players[record.playerId] = record;
+                }
+
+            });
+
+            const sorted = Object.values(players).sort(
+                (a, b) => b.percentage - a.percentage
+            );
+
+            const myRank = sorted.findIndex(
+                player => player.playerId === user.uid
+            );
+
+            document.getElementById("globalRank").textContent =
+                myRank === -1 ? "Not ranked yet" : "#" + (myRank + 1);
+
+        }
+
+        // THEME
+
+        const theme =
+            localStorage.getItem("selectedTheme") || "purple";
+
+        document.body.setAttribute("data-theme", theme);
+
     </script>
-<script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
-document.body.setAttribute("data-theme", savedTheme);
-</script>
+
 </body>
-    
 </html>
