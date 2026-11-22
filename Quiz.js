@@ -617,6 +617,36 @@ function goToNextQuestion() {
             JSON.stringify(weeklyProgress)
         );
 
+        // QUIZMASTER ANALYTICS TRACKER
+
+let analytics = JSON.parse(
+    localStorage.getItem("quizAnalytics")
+) || {
+    totalQuizzes: 0,
+    correctAnswers: 0,
+    highestScore: 0,
+    totalCoinsEarned: 0
+};
+
+// Update quiz statistics
+
+analytics.totalQuizzes++;
+
+analytics.correctAnswers += score;
+
+analytics.highestScore = Math.max(
+    analytics.highestScore,
+    score
+);
+
+analytics.totalCoinsEarned += earnedCoins + weeklyCoins;
+
+// Save analytics
+
+localStorage.setItem(
+    "quizAnalytics",
+    JSON.stringify(analytics)
+);
 
         // SAVE NOTIFICATIONS
 
