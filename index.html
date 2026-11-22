@@ -405,6 +405,31 @@ const savedTheme =
 document.body.setAttribute("data-theme", savedTheme);
 
 </script>
+<script>
+function updateNotificationCount() {
 
+    const notifications = JSON.parse(
+        localStorage.getItem("notifications") || "[]"
+    );
+
+    const unreadCount = notifications.filter(
+        notification => !notification.read
+    ).length;
+
+    const badge = document.getElementById("notificationCount");
+
+    if (badge) {
+        badge.textContent =
+            unreadCount > 9 ? "9+" : unreadCount;
+
+        badge.style.display =
+            unreadCount > 0 ? "inline-flex" : "none";
+    }
+}
+
+updateNotificationCount();
+
+window.addEventListener("storage", updateNotificationCount);
+</script>
 </body>
 </html>
