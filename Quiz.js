@@ -418,7 +418,8 @@ function goToNextQuestion() {
         quizFinished = true;
         clearInterval(timerInterval);
 
-        // COINS
+
+        // QUIZ COINS
 
         let earnedCoins = 10;
 
@@ -433,6 +434,7 @@ function goToNextQuestion() {
 
         localStorage.setItem("dailyBonus", totalCoins);
 
+
         // PLAYER NAME
 
         let playerName = prompt("Enter your name:");
@@ -444,6 +446,7 @@ function goToNextQuestion() {
         playerName = playerName.trim();
 
         localStorage.setItem("playerName", playerName);
+
 
         // LEADERBOARD
 
@@ -461,50 +464,169 @@ function goToNextQuestion() {
             "leaderboard",
             JSON.stringify(leaderboard)
         );
+
+
         // QUIZ COMPLETION NOTIFICATIONS
 
-let notifications = JSON.parse(
-    localStorage.getItem("quizNotifications")
-) || [];
+        let notifications = JSON.parse(
+            localStorage.getItem("quizNotifications")
+        ) || [];
 
-notifications.unshift({
-    icon: "🎉",
-    title: "Quiz Completed!",
-    message: `You completed the ${selectedCategory} quiz and scored ${score}/${questions.length}.`,
-    time: new Date().toLocaleString(),
-    read: false
-});
+        notifications.unshift({
+            icon: "🎉",
+            title: "Quiz Completed!",
+            message: `You completed the ${selectedCategory} quiz and scored ${score}/${questions.length}.`,
+            time: new Date().toLocaleString(),
+            read: false
+        });
 
-// PERFECT SCORE NOTIFICATION
 
-if (score === questions.length) {
+        // PERFECT SCORE NOTIFICATION
 
-    notifications.unshift({
-        icon: "🏆",
-        title: "Perfect Score!",
-        message: "Amazing! You answered every question correctly!",
-        time: new Date().toLocaleString(),
-        read: false
-    });
+        if (score === questions.length) {
 
-}
+            notifications.unshift({
+                icon: "🏆",
+                title: "Perfect Score!",
+                message: "Amazing! You answered every question correctly!",
+                time: new Date().toLocaleString(),
+                read: false
+            });
 
-// COIN REWARD NOTIFICATION
+        }
 
-notifications.unshift({
-    icon: "🪙",
-    title: "Coins Earned!",
-    message: `You earned ${earnedCoins} coins from your quiz!`,
-    time: new Date().toLocaleString(),
-    read: false
-});
 
-localStorage.setItem(
-    "quizNotifications",
-    JSON.stringify(notifications)
-);
+        // COIN REWARD NOTIFICATION
 
-                // RESULT PAGE
+        notifications.unshift({
+            icon: "🪙",
+            title: "Coins Earned!",
+            message: `You earned ${earnedCoins} coins from your quiz!`,
+            time: new Date().toLocaleString(),
+            read: false
+        });
+
+
+        // WEEKLY CHALLENGE ACTIVITY TRACKING
+
+        let weeklyProgress =
+            JSON.parse(localStorage.getItem("weeklyProgress")) || {
+                questions: 0,
+                correct: 0,
+                quizzes: 0,
+                completed: []
+            };
+
+
+        // COUNT QUIZ ACTIVITY
+
+        weeklyProgress.questions += questions.length;
+
+        weeklyProgress.correct += score;
+
+        weeklyProgress.quizzes += 1;
+
+
+        // WEEKLY CHALLENGE REWARDS
+
+        let weeklyRewards = {
+            1: 20,
+            2: 30,
+            3: 50
+        };
+
+        let newRewards = [];
+
+
+        // CHALLENGE 1: ANSWER 10 QUESTIONS
+
+        if (
+            weeklyProgress.questions >= 10 &&
+            !weeklyProgress.completed.includes(1)
+        ) {
+
+            weeklyProgress.completed.push(1);
+            newRewards.push(1);
+
+        }
+
+
+        // CHALLENGE 2: GET 5 CORRECT ANSWERS
+
+        if (
+            weeklyProgress.correct >= 5 &&
+            !weeklyProgress.completed.includes(2)
+        ) {
+
+            weeklyProgress.completed.push(2);
+            newRewards.push(2);
+
+        }
+
+
+        // CHALLENGE 3: COMPLETE 3 QUIZZES
+
+        if (
+            weeklyProgress.quizzes >= 3 &&
+            !weeklyProgress.completed.includes(3)
+        ) {
+
+            weeklyProgress.completed.push(3);
+            newRewards.push(3);
+
+        }
+
+
+        // CALCULATE WEEKLY COINS
+
+        let weeklyCoins = 0;
+
+        newRewards.forEach(id => {
+
+            weeklyCoins += weeklyRewards[id];
+
+            notifications.unshift({
+                icon: "🏆",
+                title: "Weekly Challenge Completed!",
+                message: `You completed Challenge ${id} and earned ${weeklyRewards[id]} coins!`,
+                time: new Date().toLocaleString(),
+                read: false
+            });
+
+        });
+
+
+        // ADD WEEKLY COINS
+
+        if (weeklyCoins > 0) {
+
+            totalCoins += weeklyCoins;
+
+            localStorage.setItem(
+                "dailyBonus",
+                totalCoins
+            );
+
+        }
+
+
+        // SAVE WEEKLY PROGRESS
+
+        localStorage.setItem(
+            "weeklyProgress",
+            JSON.stringify(weeklyProgress)
+        );
+
+
+        // SAVE NOTIFICATIONS
+
+        localStorage.setItem(
+            "quizNotifications",
+            JSON.stringify(notifications)
+        );
+
+
+        // RESULT PAGE
 
         document.body.innerHTML = `
 
@@ -536,9 +658,14 @@ localStorage.setItem(
 
                     <h2>Your Score: ${score}/${questions.length}</h2>
 
-                    <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
+                    <h2>🪙 You Earned ${earnedCoins + weeklyCoins} Coins!</h2>
 
                     <h3>💰 Total Coins: ${totalCoins}</h3>
+
+                    ${newRewards.length > 0 ? `
+                        <h2>🏆 Weekly Challenges Completed!</h2>
+                        <p>You completed ${newRewards.length} weekly challenge(s)!</p>
+                    ` : ""}
 
                     <h2>🏆 Leaderboard</h2>
 
@@ -550,6 +677,10 @@ localStorage.setItem(
 
                     <button onclick="location.href='Quiz.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
                         Play Again
+                    </button>
+
+                    <button onclick="location.href='WeeklyChallenge.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
+                        🏆 Weekly Challenges
                     </button>
 
                     <button onclick="location.href='Rewards.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
