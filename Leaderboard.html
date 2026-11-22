@@ -1,36 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>QuizMaster - Leaderboard</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizMaster - Global Leaderboard</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .leaderboard-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .player-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .player-info {
+            text-align: left;
+        }
+
+        .player-info h3 {
+            margin: 0 0 6px;
+        }
+
+        .player-info p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .player-score {
+            font-weight: bold;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        .rank {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        #status {
+            margin: 20px;
+        }
+    </style>
 </head>
+
 <body data-theme="purple">
 
-    <h1>🏆 QuizMaster Leaderboard</h1>
+    <h1>🌍 Global Leaderboard</h1>
+    <p>Compete with QuizMaster players around the world!</p>
 
-    <div id="leaderboard"></div>
+    <div class="leaderboard-container">
+        <h2>🏆 Top 10 Players</h2>
 
-    <button onclick="location.href='index.html'">Home</button>
+        <p id="status">Loading global leaderboard...</p>
+
+        <div id="leaderboard"></div>
+    </div>
+
+    <button onclick="location.href='index.html'">🏠 Home</button>
 
     <script>
-        let leaderboard =
-            JSON.parse(localStorage.getItem("leaderboard")) || [];
+        const savedTheme =
+            localStorage.getItem("selectedTheme") || "purple";
 
-        let display = document.getElementById("leaderboard");
-
-        if (leaderboard.length === 0) {
-            display.innerHTML = "<h2>No scores yet!</h2>";
-        } else {
-            display.innerHTML = leaderboard.slice(0, 10).map((player, index) => `
-                <h3>${index + 1}. ${player.name} - ${player.score}</h3>
-            `).join("");
-        }
+        document.body.setAttribute("data-theme", savedTheme);
     </script>
-<script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
-document.body.setAttribute("data-theme", savedTheme);
-</script> 
+
+    <script type="module">
+
+        import {
+            ref,
+            onValue
+        } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js";
+
+        await window.firebaseReady;
+
+        const database = window.firebaseDB;
+
+        const leaderboardRef = ref(database, "globalLeaderboard");
+
+        const display = document.getElementById("leaderboard");
+        const status = document.getElementById("status");
+
+        onValue(leaderboardRef, (snapshot) => {
+
+            display.innerHTML = "";
+
+            if (!snapshot.exists()) {
+                status.textContent = "No global scores yet. Be the first!";
+                return;
+            }
+
+            const data = snapshot.val();
+
+            // Keep each player's best percentage
+            const players = {};
+
+            Object.values(data).forEach(record => {
+
+                if (!record.playerId) return;
+
+                const existing = players[record.playerId];
+
+                if (
+                    !existing ||
+                    record.percentage > existing.percentage ||
+                    (
+                        record.percentage === existing.percentage &&
+                        record.timestamp < existing.timestamp
+                    )
+                ) {
+                    players[record.playerId] = record;
+                }
+
+            });
+
+            const sortedPlayers = Object.values(players)
+                .sort((a, b) =>
+                    b.percentage - a.percentage ||
+                    b.score - a.score ||
+                    a.timestamp - b.timestamp
+                )
+                .slice(0, 10);
+
+            if (sortedPlayers.length === 0) {
+                status.textContent = "No global scores yet.";
+                return;
+            }
+
+            status.textContent = "Live global rankings 🌍";
+
+            sortedPlayers.forEach((player, index) => {
+
+                const card = document.createElement("div");
+                card.className = "player-card";
+
+                const info = document.createElement("div");
+                info.className = "player-info";
+
+                const name = document.createElement("h3");
+                name.textContent =
+                    `${index + 1}. ${player.playerName || "Player"}`;
+
+                const category = document.createElement("p");
+                category.textContent =
+                    `📚 ${player.category || "Quiz"}`;
+
+                const score = document.createElement("div");
+                score.className = "player-score";
+                score.textContent =
+                    `${player.percentage}% (${player.score}/${player.total})`;
+
+                info.appendChild(name);
+                info.appendChild(category);
+
+                card.appendChild(info);
+                card.appendChild(score);
+
+                display.appendChild(card);
+
+            });
+
+        }, (error) => {
+
+            status.textContent = "Unable to load leaderboard.";
+            console.error("Leaderboard error:", error);
+
+        });
+
+    </script>
+
 </body>
-   
 </html>
