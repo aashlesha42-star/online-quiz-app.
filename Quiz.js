@@ -461,6 +461,48 @@ function goToNextQuestion() {
             "leaderboard",
             JSON.stringify(leaderboard)
         );
+        // QUIZ COMPLETION NOTIFICATIONS
+
+let notifications = JSON.parse(
+    localStorage.getItem("quizNotifications")
+) || [];
+
+notifications.unshift({
+    icon: "🎉",
+    title: "Quiz Completed!",
+    message: `You completed the ${selectedCategory} quiz and scored ${score}/${questions.length}.`,
+    time: new Date().toLocaleString(),
+    read: false
+});
+
+// PERFECT SCORE NOTIFICATION
+
+if (score === questions.length) {
+
+    notifications.unshift({
+        icon: "🏆",
+        title: "Perfect Score!",
+        message: "Amazing! You answered every question correctly!",
+        time: new Date().toLocaleString(),
+        read: false
+    });
+
+}
+
+// COIN REWARD NOTIFICATION
+
+notifications.unshift({
+    icon: "🪙",
+    title: "Coins Earned!",
+    message: `You earned ${earnedCoins} coins from your quiz!`,
+    time: new Date().toLocaleString(),
+    read: false
+});
+
+localStorage.setItem(
+    "quizNotifications",
+    JSON.stringify(notifications)
+);
 
                 // RESULT PAGE
 
