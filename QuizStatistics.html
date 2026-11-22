@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizMaster - Quiz Statistics</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 25px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+    color: white;
+}
+
+h1 {
+    color: #ffd166;
+    margin-top: 30px;
+}
+
+.subtitle {
+    margin-bottom: 30px;
+}
+
+.stats-container {
+    max-width: 950px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.stat-card {
+    background: #ffffff25;
+    border: 1px solid #ffffff50;
+    padding: 25px 15px;
+    border-radius: 18px;
+}
+
+.stat-card h2 {
+    font-size: 32px;
+    color: #ffd166;
+    margin: 10px;
+}
+
+.stat-card p {
+    font-size: 15px;
+}
+
+.chart-container {
+    max-width: 750px;
+    margin: 35px auto;
+    padding: 25px;
+    background: #ffffff25;
+    border-radius: 18px;
+}
+
+.chart-container h2 {
+    color: #ffd166;
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+    margin: 18px 0;
+    gap: 12px;
+}
+
+.bar-label {
+    width: 100px;
+    text-align: right;
+}
+
+.bar-track {
+    flex: 1;
+    height: 22px;
+    background: #ffffff30;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0;
+    background: #ffd166;
+    border-radius: 20px;
+    transition: width 0.7s;
+}
+
+.bar-value {
+    width: 35px;
+    text-align: left;
+}
+
+button {
+    background: #ffd166;
+    color: #32104f;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 20px;
+    font-weight: bold;
+}
+
+.empty-message {
+    margin: 25px;
+    color: #ffd166;
+}
+
+@media(max-width: 480px) {
+    .bar-label {
+        width: 75px;
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body data-theme="purple">
+
+<h1>📊 Quiz Statistics</h1>
+
+<p class="subtitle">
+    Track your progress and improve your performance!
+</p>
+
+<div class="stats-container">
+
+    <div class="stat-card">
+        <h2 id="totalQuizzes">0</h2>
+        <p>🧠 Total Quizzes</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="highestScore">0</h2>
+        <p>🏆 Highest Score</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="averageScore">0</h2>
+        <p>📈 Average Score</p>
+    </div>
+
+    <div class="stat-card">
+        <h2 id="totalPoints">0</h2>
+        <p>⭐ Total Points</p>
+    </div>
+
+</div>
+
+<div class="chart-container">
+
+    <h2>📊 Quiz Performance</h2>
+
+    <div id="chart"></div>
+
+    <p class="empty-message" id="emptyMessage">
+        Complete quizzes to see your performance!
+    </p>
+
+</div>
+
+<button onclick="location.href='index.html'">
+    🏠 Back to Home
+</button>
+
+<script>
+
+const leaderboard =
+    JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+const totalQuizzes = leaderboard.length;
+
+const scores = leaderboard.map(
+    player => Number(player.score) || 0
+);
+
+const highestScore = scores.length
+    ? Math.max(...scores)
+    : 0;
+
+const totalPoints = scores.reduce(
+    (sum, score) => sum + score, 0
+);
+
+const averageScore = totalQuizzes
+    ? (totalPoints / totalQuizzes).toFixed(1)
+    : 0;
+
+document.getElementById("totalQuizzes").textContent =
+    totalQuizzes;
+
+document.getElementById("highestScore").textContent =
+    highestScore;
+
+document.getElementById("averageScore").textContent =
+    averageScore;
+
+document.getElementById("totalPoints").textContent =
+    totalPoints;
+
+// PERFORMANCE CHART
+
+const chart = document.getElementById("chart");
+
+const emptyMessage = document.getElementById("emptyMessage");
+
+if (totalQuizzes > 0) {
+
+    emptyMessage.style.display = "none";
+
+    const recentScores = scores.slice(-5);
+
+    const maxScore = Math.max(...recentScores, 1);
+
+    recentScores.forEach((score, index) => {
+
+        const percentage = (score / maxScore) * 100;
+
+        const row = document.createElement("div");
+
+        row.className = "bar";
+
+        row.innerHTML = `
+            <div class="bar-label">
+                Quiz ${scores.length - recentScores.length + index + 1}
+            </div>
+
+            <div class="bar-track">
+                <div class="bar-fill"
+                     style="width: ${percentage}%">
+                </div>
+            </div>
+
+            <div class="bar-value">${score}</div>
+        `;
+
+        chart.appendChild(row);
+
+    });
+
+}
+
+// THEME
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.body.setAttribute("data-theme", savedTheme);
+
+</script>
+
+</body>
+</html>
