@@ -2,106 +2,164 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>QuizMaster - Multiplayer</title>
+<title>QuizMaster - Multiplayer</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        .multiplayer-container {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 25px;
-            text-align: center;
-            background: white;
-            color: #32104f;
-            border-radius: 20px;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .multiplayer-container input {
-            width: 90%;
-            padding: 13px;
-            margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-        }
+body {
+    font-family: Arial, sans-serif;
+}
 
-        .multiplayer-container button {
-            padding: 12px 22px;
-            margin: 10px;
-            border: none;
-            border-radius: 10px;
-            background: #7027b8;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.multiplayer-container {
+    max-width: 550px;
+    margin: 40px auto;
+    padding: 25px;
+    text-align: center;
+    background: white;
+    color: #32104f;
+    border-radius: 20px;
+}
 
-        .multiplayer-container button:hover {
-            background: #481080;
-        }
+input {
+    width: 90%;
+    padding: 13px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+}
 
-        .room-code {
-            font-size: 32px;
-            font-weight: bold;
-            letter-spacing: 6px;
-            color: #7027b8;
-        }
+button {
+    padding: 12px 22px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #7027b8;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        #roomSection {
-            display: none;
-            margin-top: 25px;
-            padding: 15px;
-            background: #f3e8ff;
-            border-radius: 15px;
-        }
+button:hover {
+    background: #481080;
+}
 
-        #playerList {
-            list-style: none;
-            padding: 0;
-        }
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
-        #playerList li {
-            background: white;
-            padding: 10px;
-            margin: 8px;
-            border-radius: 8px;
-        }
+.room-code {
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: #7027b8;
+}
 
-        #message {
-            margin-top: 15px;
-            font-weight: bold;
-        }
+#roomSection,
+#quizSection,
+#resultSection {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #f3e8ff;
+    border-radius: 15px;
+}
 
-        .back-button {
-            background: #555 !important;
-        }
+#playerList {
+    list-style: none;
+    padding: 0;
+}
 
-        @media(max-width: 500px) {
-            .multiplayer-container {
-                margin: 20px 12px;
-            }
-        }
-    </style>
+#playerList li {
+    background: white;
+    padding: 12px;
+    margin: 8px;
+    border-radius: 8px;
+}
+
+#message {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+#question {
+    font-size: 21px;
+    margin: 20px 0;
+}
+
+#answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#answers button {
+    width: 100%;
+    margin: 0;
+    background: white;
+    color: #32104f;
+    border: 2px solid #7027b8;
+}
+
+#answers button:disabled {
+    opacity: 0.8;
+}
+
+#timer {
+    font-size: 28px;
+    font-weight: bold;
+    color: #7027b8;
+}
+
+#scoreboard {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 15px;
+}
+
+#scoreboard p {
+    margin: 8px;
+}
+
+.back-button {
+    background: #555;
+}
+
+@media(max-width: 500px) {
+    .multiplayer-container {
+        margin: 20px 12px;
+        padding: 18px;
+    }
+}
+
+</style>
 
 </head>
 
 <body data-theme="purple">
 
-    <div class="multiplayer-container">
+<div class="multiplayer-container">
 
-        <h1>🎮 Multiplayer Quiz</h1>
+    <h1>🎮 Multiplayer Quiz</h1>
 
-        <p>Play and compete with your friends!</p>
+    <p>Play and compete with your friends!</p>
 
-        <hr>
+    <hr>
+
+    <!-- ROOM ENTRY -->
+
+    <div id="entrySection">
 
         <h3>Enter Your Name</h3>
 
@@ -136,62 +194,116 @@
             🚀 Join Room
         </button>
 
+    </div>
 
-        <!-- ROOM SECTION -->
 
-        <div id="roomSection">
+    <!-- ROOM LOBBY -->
 
-            <h2>Room Created! 🎉</h2>
+    <div id="roomSection">
 
-            <p>Share this code with your friends:</p>
+        <h2>Room Created! 🎉</h2>
 
-            <p id="roomCode" class="room-code"></p>
+        <p>Share this code with your friends:</p>
 
-            <h3>👥 Players in Room</h3>
+        <p id="roomCode" class="room-code"></p>
 
-            <ul id="playerList"></ul>
+        <h3>👥 Players in Room</h3>
 
-            <button id="startButton" style="display:none;">
-                ▶ Start Quiz
-            </button>
+        <ul id="playerList"></ul>
+
+        <button id="startButton" style="display:none;">
+            ▶ Start Quiz
+        </button>
+
+        <p id="waitingMessage">
+            Waiting for the host to start...
+        </p>
+
+    </div>
+
+
+    <!-- MULTIPLAYER QUIZ -->
+
+    <div id="quizSection">
+
+        <h2>🏆 Multiplayer Challenge</h2>
+
+        <p id="categoryName">General Knowledge</p>
+
+        <h3 id="questionNumber">Question 1</h3>
+
+        <div id="timer">15</div>
+
+        <h2 id="question">Waiting for question...</h2>
+
+        <div id="answers"></div>
+
+        <p id="answerMessage"></p>
+
+        <div id="scoreboard">
+
+            <h3>🏆 Live Scoreboard</h3>
+
+            <div id="liveScores"></div>
 
         </div>
 
+    </div>
 
-        <p id="message"></p>
 
-        <br>
+    <!-- FINAL RESULTS -->
 
-        <button
-            class="back-button"
-            onclick="window.location.href='index.html'">
+    <div id="resultSection">
 
-            ⬅ Back to Home
+        <h1>🎉 Quiz Completed!</h1>
 
+        <h2>🏆 Final Results</h2>
+
+        <div id="finalScores"></div>
+
+        <h2 id="winner"></h2>
+
+        <button onclick="location.href='index.html'">
+            🏠 Home
         </button>
 
     </div>
 
 
-    <!-- FIREBASE -->
+    <p id="message"></p>
 
-    <script type="module" src="firebase.js"></script>
+    <br>
 
-    <!-- MULTIPLAYER JAVASCRIPT -->
+    <button
+        class="back-button"
+        onclick="window.location.href='index.html'">
 
-    <script type="module" src="Multiplayer.js"></script>
+        ⬅ Back to Home
+
+    </button>
+
+</div>
 
 
-    <!-- THEME -->
+<!-- FIREBASE -->
 
-    <script>
-        const savedTheme =
-            localStorage.getItem("selectedTheme") || "purple";
+<script type="module" src="firebase.js"></script>
 
-        document.body.setAttribute("data-theme", savedTheme);
-    </script>
+<!-- MULTIPLAYER JAVASCRIPT -->
+
+<script type="module" src="Multiplayer.js"></script>
+
+
+<!-- THEME -->
+
+<script>
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
+document.body.setAttribute("data-theme", savedTheme);
+
+</script>
 
 </body>
-
 </html>
-```
