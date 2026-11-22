@@ -409,7 +409,7 @@ document.body.setAttribute("data-theme", savedTheme);
 function updateNotificationCount() {
 
     const notifications = JSON.parse(
-        localStorage.getItem("notifications") || "[]"
+        localStorage.getItem("quizNotifications") || "[]"
     );
 
     const unreadCount = notifications.filter(
