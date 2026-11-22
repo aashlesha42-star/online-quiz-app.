@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +11,20 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            text-align: center;
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 20px 0;
+        }
+
         .category-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -44,6 +59,12 @@
 
         #quizScreen {
             display: none;
+            max-width: 650px;
+            margin: 25px auto;
+            padding: 20px;
+            background: white;
+            color: #32104f;
+            border-radius: 20px;
         }
 
         #answers button {
@@ -53,21 +74,33 @@
             padding: 14px;
             margin: 12px auto;
             border-radius: 12px;
+            border: 2px solid #ddd;
+            background: #f3e8ff;
+            color: #32104f;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        #answers button:hover {
+            background: #e9d5ff;
         }
 
         #nextButton {
             padding: 12px 30px;
             margin: 20px;
             border-radius: 25px;
+            border: none;
+            background: #7027b8;
+            color: white;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .progress-container {
             max-width: 500px;
             margin: 20px auto;
             height: 12px;
-            background: #ffffff80;
+            background: #ddd;
             border-radius: 20px;
         }
 
@@ -89,30 +122,26 @@
             color: white !important;
         }
 
-        .multiplayer-section {
-            max-width: 650px;
-            margin: 35px auto;
-            padding: 25px 15px;
-            background: white;
-            color: #32104f;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .multiplayer-button {
-            padding: 15px 30px;
+        .back-home {
+            display: inline-block;
+            margin: 20px;
+            padding: 12px 25px;
             background: #ffd166;
             color: #32104f;
-            border: none;
-            border-radius: 15px;
-            font-size: 17px;
+            text-decoration: none;
+            border-radius: 12px;
             font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
         }
 
-        .multiplayer-button:hover {
-            transform: scale(1.05);
+        @media(max-width: 500px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .category-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
         }
     </style>
 </head>
@@ -120,6 +149,9 @@
 <body data-theme="purple">
 
     <h1>QuizMaster 💜</h1>
+
+    <p>Challenge Your Brain!</p>
+
 
     <!-- CATEGORY SCREEN -->
 
@@ -163,26 +195,7 @@
 
         </div>
 
-    </div>
-
-
-    <!-- MULTIPLAYER SECTION -->
-
-    <div class="multiplayer-section">
-
-        <h2>👥 Play With Friends</h2>
-
-        <p>Challenge your friends in a multiplayer quiz!</p>
-
-        <br>
-
-        <button
-            class="multiplayer-button"
-            onclick="window.location.href='Multiplayer.html'">
-
-            🎮 Multiplayer Quiz
-
-        </button>
+        <a href="index.html" class="back-home">⬅ Back to Home</a>
 
     </div>
 
@@ -202,7 +215,8 @@
         <h2 id="question">Question appears here</h2>
 
         <h3>
-            Time Left: <span id="timer">15</span> seconds
+            ⏳ Time Left:
+            <span id="timer">15</span> seconds
         </h3>
 
         <div id="answers"></div>
@@ -210,7 +224,7 @@
         <p id="score"></p>
 
         <button id="nextButton" onclick="nextQuestion()">
-            Next Question
+            Next Question ➡
         </button>
 
     </div>
@@ -219,11 +233,8 @@
     <!-- FIREBASE CONNECTION -->
 
     <script type="module">
-        console.log("TEST MODULE WORKING!");
-
         import "./firebase.js";
-
-        console.log("FIREBASE IMPORT COMPLETED!");
+        console.log("QuizMaster Firebase connected!");
     </script>
 
 
@@ -242,5 +253,6 @@
     </script>
 
 </body>
+
 </html>
 ```
