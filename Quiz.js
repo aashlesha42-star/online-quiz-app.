@@ -617,6 +617,33 @@ function goToNextQuestion() {
             JSON.stringify(weeklyProgress)
         );
 
+        // QUIZ PERFORMANCE HISTORY
+
+let quizHistory = JSON.parse(
+    localStorage.getItem("quizHistory") || "[]"
+);
+
+quizHistory.push({
+    category: selectedCategory,
+    score: score,
+    total: questions.length,
+    percentage: Math.round(
+        (score / questions.length) * 100
+    ),
+    date: new Date().toLocaleDateString(),
+    timestamp: Date.now()
+});
+
+// Keep the latest 20 quiz results
+
+if (quizHistory.length > 20) {
+    quizHistory = quizHistory.slice(-20);
+}
+
+localStorage.setItem(
+    "quizHistory",
+    JSON.stringify(quizHistory)
+);
         // QUIZMASTER ANALYTICS TRACKER
 
 let analytics = JSON.parse(
