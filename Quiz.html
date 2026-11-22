@@ -1,5 +1,7 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,6 +89,32 @@
             background: #ef4444 !important;
             color: white !important;
         }
+
+        .multiplayer-section {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 25px 15px;
+            background: white;
+            color: #32104f;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .multiplayer-button {
+            padding: 15px 30px;
+            background: #ffd166;
+            color: #32104f;
+            border: none;
+            border-radius: 15px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .multiplayer-button:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -139,6 +167,27 @@
     </div>
 
 
+    <!-- MULTIPLAYER SECTION -->
+
+    <div class="multiplayer-section">
+
+        <h2>👥 Play With Friends</h2>
+
+        <p>Challenge your friends in a multiplayer quiz!</p>
+
+        <br>
+
+        <button
+            class="multiplayer-button"
+            onclick="window.location.href='Multiplayer.html'">
+
+            🎮 Multiplayer Quiz
+
+        </button>
+
+    </div>
+
+
     <!-- QUIZ SCREEN -->
 
     <div id="quizScreen">
@@ -167,12 +216,24 @@
 
     </div>
 
-<script type="module">
-console.log("TEST MODULE WORKING!");
-import "./firebase.js";
-console.log("FIREBASE IMPORT COMPLETED!");
-</script>
+
+    <!-- FIREBASE CONNECTION -->
+
+    <script type="module">
+        console.log("TEST MODULE WORKING!");
+
+        import "./firebase.js";
+
+        console.log("FIREBASE IMPORT COMPLETED!");
+    </script>
+
+
+    <!-- QUIZ JAVASCRIPT -->
+
     <script src="Quiz.js"></script>
+
+
+    <!-- THEME SYSTEM -->
 
     <script>
         const savedTheme =
@@ -183,3 +244,4 @@ console.log("FIREBASE IMPORT COMPLETED!");
 
 </body>
 </html>
+```
