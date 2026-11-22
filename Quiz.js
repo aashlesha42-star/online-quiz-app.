@@ -140,6 +140,46 @@ let quizFinished = false;
 let selectedCategory = "";
 let audioContext;
 
+// SAVE SCORE TO GLOBAL FIREBASE LEADERBOARD
+
+async function saveGlobalScore(playerName, score, category, total) {
+
+    try {
+
+        await window.firebaseReady;
+
+        const user = window.firebaseAuth.currentUser;
+        const database = window.firebaseDB;
+
+        const { ref, push } = await import(
+            "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js"
+        );
+
+        const percentage = Math.round(
+            (score / total) * 100
+        );
+
+        await push(ref(database, "globalLeaderboard"), {
+
+            playerName: playerName,
+            playerId: user.uid,
+            category: category,
+            score: score,
+            total: total,
+            percentage: percentage,
+            timestamp: Date.now()
+
+        });
+
+        console.log("Global score uploaded successfully!");
+
+    } catch (error) {
+
+        console.error("Global leaderboard error:", error);
+
+    }
+
+}
 
 // SOUND SYSTEM
 
