@@ -110,6 +110,48 @@
         const display = document.getElementById("leaderboard");
         const status = document.getElementById("status");
 let allPlayers = [];
+        function displayPlayers(playerList) {
+
+    display.innerHTML = "";
+
+    const topPlayers = playerList.slice(0, 10);
+
+    if (topPlayers.length === 0) {
+        display.innerHTML = "<h3>No players found!</h3>";
+        return;
+    }
+
+    topPlayers.forEach((player, index) => {
+
+        const card = document.createElement("div");
+        card.className = "player-card";
+
+        const info = document.createElement("div");
+        info.className = "player-info";
+
+        const name = document.createElement("h3");
+        name.textContent =
+            `${index + 1}. ${player.playerName || "Player"}`;
+
+        const category = document.createElement("p");
+        category.textContent =
+            `📚 ${player.category || "Quiz"}`;
+
+        const score = document.createElement("div");
+        score.className = "player-score";
+        score.textContent =
+            `${player.percentage}% (${player.score}/${player.total})`;
+
+        info.appendChild(name);
+        info.appendChild(category);
+
+        card.appendChild(info);
+        card.appendChild(score);
+
+        display.appendChild(card);
+
+    });
+}
         onValue(leaderboardRef, (snapshot) => {
 
             display.innerHTML = "";
