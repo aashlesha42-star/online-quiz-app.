@@ -1,4 +1,3 @@
-```javascript
 import {
     ref,
     set,
