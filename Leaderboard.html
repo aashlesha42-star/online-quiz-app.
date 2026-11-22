@@ -142,8 +142,12 @@ let allPlayers = [];
                 }
 
             });
+allPlayers = Object.values(players);
 
-            const sortedPlayers = Object.values(players)
+document.getElementById("totalPlayers").textContent =
+    "🌍 Total Players: " + allPlayers.length;
+            
+          const sortedPlayers = allPlayers
                 .sort((a, b) =>
                     b.percentage - a.percentage ||
                     b.score - a.score ||
