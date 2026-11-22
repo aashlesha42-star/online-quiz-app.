@@ -462,40 +462,65 @@ function goToNextQuestion() {
             JSON.stringify(leaderboard)
         );
 
-        // RESULT PAGE
+                // RESULT PAGE
 
         document.body.innerHTML = `
 
-            <h1>Quiz Completed! 🎉</h1>
+            <div style="
+                min-height:100vh;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                padding:25px;
+                box-sizing:border-box;
+                background:linear-gradient(135deg, #18052e, #481080, #7b2cbf);
+                font-family:Arial, sans-serif;
+                color:white;
+                text-align:center;
+            ">
 
-            <h2>${selectedCategory.toUpperCase()} QUIZ</h2>
+                <div style="
+                    background:rgba(255,255,255,0.12);
+                    padding:35px;
+                    border-radius:25px;
+                    width:100%;
+                    max-width:550px;
+                    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+                ">
 
-            <h2>Your Score: ${score}/${questions.length}</h2>
+                    <h1>Quiz Completed! 🎉</h1>
 
-            <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
+                    <h2>${selectedCategory.toUpperCase()} QUIZ</h2>
 
-            <h3>💰 Total Coins: ${totalCoins}</h3>
+                    <h2>Your Score: ${score}/${questions.length}</h2>
 
-            <h2>🏆 Leaderboard</h2>
+                    <h2>🪙 You Earned ${earnedCoins} Coins!</h2>
 
-            ${leaderboard.slice(0, 5).map((player, index) => `
-                <p>${index + 1}. ${player.name} - ${player.score}</p>
-            `).join("")}
+                    <h3>💰 Total Coins: ${totalCoins}</h3>
 
-            <br>
+                    <h2>🏆 Leaderboard</h2>
 
-            <button onclick="location.href='Quiz.html'">
-                Play Again
-            </button>
+                    ${leaderboard.slice(0, 5).map((player, index) => `
+                        <p>${index + 1}. ${player.name} - ${player.score}</p>
+                    `).join("")}
 
-            <button onclick="location.href='Rewards.html'">
-                🎁 Rewards Store
-            </button>
+                    <br>
 
-            <button onclick="location.href='index.html'">
-                Home
-            </button>
+                    <button onclick="location.href='Quiz.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
+                        Play Again
+                    </button>
+
+                    <button onclick="location.href='Rewards.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
+                        🎁 Rewards Store
+                    </button>
+
+                    <button onclick="location.href='index.html'" style="padding:12px 20px;margin:6px;border:0;border-radius:10px;cursor:pointer;">
+                        Home
+                    </button>
+
+                </div>
+            </div>
 
         `;
     }
-                                       }
+}
