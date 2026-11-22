@@ -1,3 +1,4 @@
+```javascript
 import {
     ref,
     set,
@@ -61,9 +62,7 @@ let scheduledQuestionKey = "";
 // FIREBASE INITIALIZATION
 
 async function initializeMultiplayer() {
-
     try {
-
         currentUser = await window.firebaseReady;
         database = window.firebaseDB;
 
@@ -71,12 +70,10 @@ async function initializeMultiplayer() {
             "Firebase connected successfully! 💜";
 
     } catch (error) {
-
         console.error(error);
 
         document.getElementById("message").textContent =
             "Firebase connection failed. Please refresh.";
-
     }
 }
 
@@ -86,11 +83,9 @@ initializeMultiplayer();
 // ROOM CODE
 
 function generateRoomCode() {
-
     return Math.floor(
         100000 + Math.random() * 900000
     ).toString();
-
 }
 
 
@@ -119,26 +114,19 @@ window.createRoom = async function () {
         const roomData = {
 
             hostUid: currentUser.uid,
-
             status: "waiting",
-
             createdAt: Date.now(),
-
             questionIndex: 0,
-
             questionStartedAt: 0,
 
             players: {
-
                 [currentUser.uid]: {
                     name: name,
                     score: 0
                 }
-
             },
 
             answers: {}
-
         };
 
         await set(
@@ -156,11 +144,9 @@ window.createRoom = async function () {
     } catch (error) {
 
         console.error(error);
-
         alert("Could not create room. Please try again.");
 
     }
-
 };
 
 
@@ -192,7 +178,6 @@ window.joinRoom = async function () {
     try {
 
         const roomRef = ref(database, "rooms/" + code);
-
         const snapshot = await get(roomRef);
 
         if (!snapshot.exists()) {
@@ -204,6 +189,20 @@ window.joinRoom = async function () {
 
         if (room.status !== "waiting") {
             alert("This game has already started!");
+            return;
+        }
+
+        // MAXIMUM TWO PLAYERS
+
+        const players = room.players || {};
+
+        if (players[currentUser.uid]) {
+            alert("You have already joined this room!");
+            return;
+        }
+
+        if (Object.keys(players).length >= 2) {
+            alert("This room is full! Maximum 2 players allowed.");
             return;
         }
 
@@ -231,7 +230,6 @@ window.joinRoom = async function () {
     } catch (error) {
 
         console.error(error);
-
         alert("Could not join room. Please try again.");
 
     }
@@ -274,8 +272,10 @@ function listenToRoom() {
     stopRoomListener = onValue(roomRef, (snapshot) => {
 
         if (!snapshot.exists()) {
+
             document.getElementById("message").textContent =
                 "Room no longer exists.";
+
             return;
         }
 
@@ -311,9 +311,7 @@ function listenToRoom() {
                 "none";
 
             displayQuestion(room);
-
             displayScores(room.players || {});
-
             scheduleNextQuestion(room);
 
         }
@@ -351,8 +349,7 @@ function displayPlayers(players) {
 
         const li = document.createElement("li");
 
-        li.textContent =
-            "👤 " + player.name;
+        li.textContent = "👤 " + player.name;
 
         playerList.appendChild(li);
 
@@ -378,23 +375,30 @@ document.getElementById("startButton").addEventListener(
 
             const snapshot = await get(roomRef);
 
+            if (!snapshot.exists()) return;
+
             const room = snapshot.val();
 
-            if (Object.keys(room.players || {}).length < 2) {
-
-                alert("At least 2 players are needed!");
+            if (room.hostUid !== currentUser.uid) {
+                alert("Only the host can start the quiz!");
                 return;
+            }
 
+            if (room.status !== "waiting") {
+                alert("This quiz has already started!");
+                return;
+            }
+
+            if (Object.keys(room.players || {}).length !== 2) {
+                alert("Exactly 2 players are needed!");
+                return;
             }
 
             await update(roomRef, {
 
                 status: "playing",
-
                 questionIndex: 0,
-
                 questionStartedAt: Date.now(),
-
                 answers: {}
 
             });
@@ -402,7 +406,6 @@ document.getElementById("startButton").addEventListener(
         } catch (error) {
 
             console.error(error);
-
             alert("Could not start the quiz.");
 
         }
@@ -453,13 +456,10 @@ function displayQuestion(room) {
         const button = document.createElement("button");
 
         button.textContent = answer;
-
         button.disabled = Boolean(alreadyAnswered);
 
         button.onclick = function () {
-
             submitAnswer(answer, questionData, room);
-
         };
 
         answersBox.appendChild(button);
@@ -475,32 +475,32 @@ function displayQuestion(room) {
 
 async function submitAnswer(answer, questionData, room) {
 
+    if (room.status !== "playing") return;
+
     const answerRef = ref(
         database,
         "rooms/" + currentRoom +
         "/answers/" + currentUser.uid
     );
 
-    const existingAnswer = await get(answerRef);
-
-    if (existingAnswer.exists()) return;
-
-    const remaining =
-        15000 - (Date.now() - room.questionStartedAt);
-
-    if (remaining <= 0) return;
-
-    const isCorrect =
-        answer === questionData.correct;
-
     try {
+
+        const existingAnswer = await get(answerRef);
+
+        if (existingAnswer.exists()) return;
+
+        const remaining =
+            15000 - (Date.now() - room.questionStartedAt);
+
+        if (remaining <= 0) return;
+
+        const isCorrect =
+            answer === questionData.correct;
 
         await set(answerRef, {
 
             answer: answer,
-
             correct: isCorrect,
-
             answeredAt: Date.now()
 
         });
@@ -515,7 +515,8 @@ async function submitAnswer(answer, questionData, room) {
 
             const scoreSnapshot = await get(playerScoreRef);
 
-            const oldScore = Number(scoreSnapshot.val()) || 0;
+            const oldScore =
+                Number(scoreSnapshot.val()) || 0;
 
             await set(playerScoreRef, oldScore + 1);
 
@@ -533,7 +534,6 @@ async function submitAnswer(answer, questionData, room) {
     } catch (error) {
 
         console.error(error);
-
         alert("Could not submit your answer.");
 
     }
@@ -635,44 +635,51 @@ function scheduleNextQuestion(room) {
 
     hostAdvanceTimeout = setTimeout(async () => {
 
-        const roomRef = ref(
-            database,
-            "rooms/" + currentRoom
-        );
+        try {
 
-        const snapshot = await get(roomRef);
+            const roomRef = ref(
+                database,
+                "rooms/" + currentRoom
+            );
 
-        if (!snapshot.exists()) return;
+            const snapshot = await get(roomRef);
 
-        const latestRoom = snapshot.val();
+            if (!snapshot.exists()) return;
 
-        if (
-            latestRoom.status !== "playing" ||
-            latestRoom.questionIndex !== room.questionIndex
-        ) {
-            return;
-        }
+            const latestRoom = snapshot.val();
 
-        const nextIndex =
-            latestRoom.questionIndex + 1;
+            if (
+                latestRoom.status !== "playing" ||
+                latestRoom.questionIndex !== room.questionIndex ||
+                latestRoom.questionStartedAt !== room.questionStartedAt
+            ) {
+                return;
+            }
 
-        if (nextIndex >= multiplayerQuestions.length) {
+            const nextIndex =
+                latestRoom.questionIndex + 1;
 
-            await update(roomRef, {
-                status: "completed"
-            });
+            if (nextIndex >= multiplayerQuestions.length) {
 
-        } else {
+                await update(roomRef, {
+                    status: "completed"
+                });
 
-            await update(roomRef, {
+            } else {
 
-                questionIndex: nextIndex,
+                await update(roomRef, {
 
-                questionStartedAt: Date.now(),
+                    questionIndex: nextIndex,
+                    questionStartedAt: Date.now(),
+                    answers: {}
 
-                answers: {}
+                });
 
-            });
+            }
+
+        } catch (error) {
+
+            console.error("Could not advance question:", error);
 
         }
 
@@ -725,3 +732,4 @@ function showFinalResults(players) {
             : "🏆 Winner: " + winners[0].name + "!";
 
 }
+```
