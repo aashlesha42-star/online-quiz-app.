@@ -31,10 +31,10 @@ h1 {
 }
 
 .stats-container {
-    max-width: 950px;
+    max-width: 1000px;
     margin: 30px auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 18px;
 }
 
@@ -46,7 +46,7 @@ h1 {
 }
 
 .stat-card h2 {
-    font-size: 32px;
+    font-size: 30px;
     color: #ffd166;
     margin: 10px;
 }
@@ -55,33 +55,42 @@ h1 {
     font-size: 15px;
 }
 
-.chart-container {
-    max-width: 750px;
+.chart-container,
+.history-container {
+    max-width: 850px;
     margin: 35px auto;
     padding: 25px;
     background: #ffffff25;
+    border: 1px solid #ffffff35;
     border-radius: 18px;
 }
 
-.chart-container h2 {
+.chart-container h2,
+.history-container h2 {
     color: #ffd166;
+}
+
+.chart-note {
+    color: #eee;
+    font-size: 13px;
 }
 
 .bar {
     display: flex;
     align-items: center;
-    margin: 18px 0;
+    margin: 20px 0;
     gap: 12px;
 }
 
 .bar-label {
     width: 100px;
     text-align: right;
+    font-size: 13px;
 }
 
 .bar-track {
     flex: 1;
-    height: 22px;
+    height: 24px;
     background: #ffffff30;
     border-radius: 20px;
     overflow: hidden;
@@ -92,12 +101,50 @@ h1 {
     width: 0;
     background: #ffd166;
     border-radius: 20px;
-    transition: width 0.7s;
+    transition: width 0.8s;
 }
 
 .bar-value {
-    width: 35px;
+    width: 55px;
     text-align: left;
+    font-size: 13px;
+}
+
+.improvement {
+    color: #ffd166;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.history-table th,
+.history-table td {
+    padding: 13px 8px;
+    border-bottom: 1px solid #ffffff35;
+    font-size: 14px;
+}
+
+.history-table th {
+    color: #ffd166;
+}
+
+.history-table tr:hover {
+    background: #ffffff15;
+}
+
+.empty-message {
+    margin: 25px;
+    color: #ffd166;
+}
+
+.table-wrapper {
+    overflow-x: auto;
 }
 
 button {
@@ -112,15 +159,39 @@ button {
     font-weight: bold;
 }
 
-.empty-message {
-    margin: 25px;
-    color: #ffd166;
-}
+@media(max-width: 600px) {
+    body {
+        padding: 15px 10px;
+    }
 
-@media(max-width: 480px) {
+    h1 {
+        font-size: 25px;
+    }
+
+    .chart-container,
+    .history-container {
+        padding: 15px 10px;
+    }
+
     .bar-label {
-        width: 75px;
-        font-size: 13px;
+        width: 65px;
+        font-size: 11px;
+    }
+
+    .bar-value {
+        width: 45px;
+        font-size: 11px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+
+    button {
+        width: 90%;
+        max-width: 300px;
     }
 }
 </style>
@@ -142,30 +213,75 @@ button {
     </div>
 
     <div class="stat-card">
-        <h2 id="highestScore">0</h2>
-        <p>🏆 Highest Score</p>
+        <h2 id="highestScore">0%</h2>
+        <p>🏆 Best Performance</p>
     </div>
 
     <div class="stat-card">
-        <h2 id="averageScore">0</h2>
-        <p>📈 Average Score</p>
+        <h2 id="averageScore">0%</h2>
+        <p>📈 Average Performance</p>
     </div>
 
     <div class="stat-card">
-        <h2 id="totalPoints">0</h2>
-        <p>⭐ Total Points</p>
+        <h2 id="totalCorrect">0</h2>
+        <p>✅ Correct Answers</p>
     </div>
 
 </div>
 
+<!-- PERFORMANCE CHART -->
+
 <div class="chart-container">
 
-    <h2>📊 Quiz Performance</h2>
+    <h2>📊 Quiz Performance Chart</h2>
+
+    <p class="chart-note">
+        Your latest 10 quiz results
+    </p>
 
     <div id="chart"></div>
 
     <p class="empty-message" id="emptyMessage">
-        Complete quizzes to see your performance!
+        Complete a quiz to see your performance chart!
+    </p>
+
+    <div class="improvement" id="improvement">
+        Keep playing to track your improvement!
+    </div>
+
+</div>
+
+<!-- QUIZ HISTORY -->
+
+<div class="history-container">
+
+    <h2>📚 Quiz History</h2>
+
+    <p class="chart-note">
+        Your recent quiz attempts
+    </p>
+
+    <div class="table-wrapper">
+
+        <table class="history-table">
+
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Score</th>
+                    <th>Performance</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody id="historyBody"></tbody>
+
+        </table>
+
+    </div>
+
+    <p class="empty-message" id="historyEmpty">
+        Your quiz history will appear here!
     </p>
 
 </div>
@@ -176,56 +292,70 @@ button {
 
 <script>
 
-const leaderboard =
-    JSON.parse(localStorage.getItem("leaderboard")) || [];
+// GET QUIZ HISTORY
 
-const totalQuizzes = leaderboard.length;
-
-const scores = leaderboard.map(
-    player => Number(player.score) || 0
+const quizHistory = JSON.parse(
+    localStorage.getItem("quizHistory") || "[]"
 );
 
-const highestScore = scores.length
-    ? Math.max(...scores)
-    : 0;
+// SORT QUIZZES BY TIME
 
-const totalPoints = scores.reduce(
-    (sum, score) => sum + score, 0
+quizHistory.sort((a, b) => a.timestamp - b.timestamp);
+
+// CALCULATE STATISTICS
+
+const totalQuizzes = quizHistory.length;
+
+const totalCorrect = quizHistory.reduce(
+    (sum, quiz) => sum + (Number(quiz.score) || 0),
+    0
 );
 
-const averageScore = totalQuizzes
-    ? (totalPoints / totalQuizzes).toFixed(1)
+const totalQuestions = quizHistory.reduce(
+    (sum, quiz) => sum + (Number(quiz.total) || 0),
+    0
+);
+
+const highestScore = quizHistory.length
+    ? Math.max(...quizHistory.map(quiz => Number(quiz.percentage) || 0))
     : 0;
+
+const averageScore = totalQuestions
+    ? Math.round((totalCorrect / totalQuestions) * 100)
+    : 0;
+
+// DISPLAY STATISTICS
 
 document.getElementById("totalQuizzes").textContent =
     totalQuizzes;
 
 document.getElementById("highestScore").textContent =
-    highestScore;
+    highestScore + "%";
 
 document.getElementById("averageScore").textContent =
-    averageScore;
+    averageScore + "%";
 
-document.getElementById("totalPoints").textContent =
-    totalPoints;
+document.getElementById("totalCorrect").textContent =
+    totalCorrect;
+
 
 // PERFORMANCE CHART
 
 const chart = document.getElementById("chart");
-
 const emptyMessage = document.getElementById("emptyMessage");
 
 if (totalQuizzes > 0) {
 
     emptyMessage.style.display = "none";
 
-    const recentScores = scores.slice(-5);
+    const recentQuizzes = quizHistory.slice(-10);
 
-    const maxScore = Math.max(...recentScores, 1);
+    recentQuizzes.forEach((quiz, index) => {
 
-    recentScores.forEach((score, index) => {
-
-        const percentage = (score / maxScore) * 100;
+        const percentage = Math.max(
+            0,
+            Math.min(100, Number(quiz.percentage) || 0)
+        );
 
         const row = document.createElement("div");
 
@@ -233,7 +363,7 @@ if (totalQuizzes > 0) {
 
         row.innerHTML = `
             <div class="bar-label">
-                Quiz ${scores.length - recentScores.length + index + 1}
+                ${quiz.category || "Quiz"}
             </div>
 
             <div class="bar-track">
@@ -242,7 +372,9 @@ if (totalQuizzes > 0) {
                 </div>
             </div>
 
-            <div class="bar-value">${score}</div>
+            <div class="bar-value">
+                ${percentage}%
+            </div>
         `;
 
         chart.appendChild(row);
@@ -251,7 +383,95 @@ if (totalQuizzes > 0) {
 
 }
 
-// THEME
+
+// PERFORMANCE IMPROVEMENT
+
+const improvementElement =
+    document.getElementById("improvement");
+
+if (totalQuizzes >= 2) {
+
+    const previousQuiz = quizHistory[totalQuizzes - 2];
+    const latestQuiz = quizHistory[totalQuizzes - 1];
+
+    const difference =
+        Number(latestQuiz.percentage) -
+        Number(previousQuiz.percentage);
+
+    if (difference > 0) {
+
+        improvementElement.textContent =
+            "🎉 Your performance improved by " +
+            difference + "% compared with your previous quiz!";
+
+    } else if (difference < 0) {
+
+        improvementElement.textContent =
+            "💪 Your score changed by " +
+            difference + "% compared with your previous quiz. Keep practising!";
+
+    } else {
+
+        improvementElement.textContent =
+            "⭐ Your performance stayed the same as your previous quiz!";
+
+    }
+
+} else if (totalQuizzes === 1) {
+
+    improvementElement.textContent =
+        "Complete another quiz to compare your performance!";
+
+}
+
+
+// QUIZ HISTORY TABLE
+
+const historyBody =
+    document.getElementById("historyBody");
+
+const historyEmpty =
+    document.getElementById("historyEmpty");
+
+if (totalQuizzes > 0) {
+
+    historyEmpty.style.display = "none";
+
+    const recentHistory = [...quizHistory]
+        .reverse()
+        .slice(0, 20);
+
+    recentHistory.forEach(quiz => {
+
+        const row = document.createElement("tr");
+
+        const category = document.createElement("td");
+        category.textContent = quiz.category || "Quiz";
+
+        const score = document.createElement("td");
+        score.textContent =
+            `${quiz.score}/${quiz.total}`;
+
+        const performance = document.createElement("td");
+        performance.textContent =
+            `${quiz.percentage}%`;
+
+        const date = document.createElement("td");
+        date.textContent = quiz.date || "Unknown";
+
+        row.appendChild(category);
+        row.appendChild(score);
+        row.appendChild(performance);
+        row.appendChild(date);
+
+        historyBody.appendChild(row);
+
+    });
+
+}
+
+
+// APPLY SAVED THEME
 
 const savedTheme =
     localStorage.getItem("selectedTheme") || "purple";
