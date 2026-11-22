@@ -68,21 +68,32 @@ h1 span {
     margin-bottom: 30px;
 }
 
-.start-btn {
-    background: #ffd166;
-    color: #32104f;
+.start-btn,
+.multiplayer-btn {
     border: none;
-    padding: 17px 45px;
+    padding: 17px 35px;
     border-radius: 35px;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
+    margin: 8px;
 }
 
-.start-btn:hover {
+.start-btn {
+    background: #ffd166;
+    color: #32104f;
+}
+
+.multiplayer-btn {
+    background: #32104f;
+    color: white !important;
+    border: 2px solid #ffd166;
+}
+
+.start-btn:hover,
+.multiplayer-btn:hover {
     transform: scale(1.08);
-    background: white;
 }
 
 .login-reward {
@@ -103,7 +114,6 @@ h1 span {
 .login-reward p {
     margin: 10px 0;
     line-height: 1.5;
-    color: #24113b;
 }
 
 .login-reward h3 {
@@ -118,6 +128,7 @@ h1 span {
     border-radius: 25px;
     font-weight: bold;
     margin-top: 12px;
+    cursor: pointer;
 }
 
 .features {
@@ -177,7 +188,6 @@ h1 span {
 
 .navigation button:hover {
     background: #ffd166;
-    color: #32104f;
 }
 
 footer {
@@ -196,7 +206,6 @@ footer {
         max-width: 320px;
     }
 }
-    /* FORCE DARK TEXT ON HOMEPAGE */
 
 body h1,
 body h2,
@@ -205,10 +214,6 @@ body p,
 body .logo,
 body .subtitle,
 body .card,
-body .card p,
-body .card h3,
-body .login-reward,
-body .login-reward p,
 body footer {
     color: #24113b !important;
 }
@@ -220,6 +225,10 @@ body .logo span {
 
 body button {
     color: #32104f !important;
+}
+
+body .multiplayer-btn {
+    color: white !important;
 }
 </style>
 </head>
@@ -249,6 +258,13 @@ body button {
     <button class="start-btn"
         onclick="location.href='Quiz.html'">
         🚀 Start Quiz
+    </button>
+
+    <br>
+
+    <button class="multiplayer-btn"
+        onclick="location.href='Multiplayer.html'">
+        🎮 Multiplayer Quiz
     </button>
 
 </section>
@@ -294,97 +310,4 @@ body button {
 
 <div class="navigation">
 
-    <button onclick="location.href='Leaderboard.html'">🏆 Leaderboard</button>
-    <button onclick="location.href='Profile.html'">👤 My Profile</button>
-    <button onclick="location.href='DailyChallenge.html'">🌟 Daily Challenge</button>
-    <button onclick="location.href='Achievements.html'">🎖️ Achievements</button>
-    <button onclick="location.href='Rewards.html'">🎁 Rewards Store</button>
-    <button onclick="location.href='Themes.html'">🎨 Customize Theme</button>
-
-</div>
-
-<footer>
-    Made with 💜 for curious minds | QuizMaster
-</footer>
-
-<script>
-
-// DAILY LOGIN REWARDS
-
-let today = new Date().toLocaleDateString("en-CA");
-
-let lastLogin = localStorage.getItem("lastLoginDate");
-
-let streak = Number(localStorage.getItem("loginStreak")) || 0;
-
-let rewardMessage = document.getElementById("rewardMessage");
-
-let claimButton = document.getElementById("claimButton");
-
-function claimReward() {
-
-    if (localStorage.getItem("lastLoginDate") === today) {
-        rewardMessage.textContent =
-            "✅ You have already collected today's reward!";
-        return;
-    }
-
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    let yesterdayDate = yesterday.toLocaleDateString("en-CA");
-
-    if (lastLogin === yesterdayDate) {
-        streak++;
-    } else {
-        streak = 1;
-    }
-
-    let earnedCoins = 5;
-    let bonusMessage = "";
-
-    if (streak % 7 === 0) {
-        earnedCoins += 25;
-        bonusMessage = " 🏆 7-day streak bonus: +25 coins!";
-    }
-
-    let totalCoins =
-        Number(localStorage.getItem("dailyBonus")) || 0;
-
-    totalCoins += earnedCoins;
-
-    localStorage.setItem("dailyBonus", totalCoins);
-    localStorage.setItem("lastLoginDate", today);
-    localStorage.setItem("loginStreak", streak);
-
-    document.getElementById("streak").textContent = streak;
-
-    rewardMessage.textContent =
-        "🎉 You earned " + earnedCoins +
-        " coins!" + bonusMessage;
-
-    claimButton.textContent = "✅ Reward Collected";
-    claimButton.disabled = true;
-}
-
-document.getElementById("streak").textContent = streak;
-
-if (lastLogin === today) {
-    rewardMessage.textContent =
-        "🎉 Today's reward has already been collected!";
-
-    claimButton.textContent = "✅ Reward Collected";
-    claimButton.disabled = true;
-}
-
-// THEME SYSTEM
-
-const savedTheme =
-    localStorage.getItem("selectedTheme") || "purple";
-
-document.body.setAttribute("data-theme", savedTheme);
-
-</script>
-
-</body>
-</html>
+    <button onclick="location.href='Leaderboard
