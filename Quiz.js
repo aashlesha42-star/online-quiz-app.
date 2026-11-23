@@ -155,13 +155,17 @@ async function saveGlobalScore(playerName, score, category, total) {
             "https://www.gstatic.com/firebasejs/13.4.0/firebase-database.js"
         );
 
+        // GET LATEST PROFILE NAME
+        const savedName =
+            localStorage.getItem("playerName") || playerName;
+
         const percentage = Math.round(
             (score / total) * 100
         );
 
         await push(ref(database, "globalLeaderboard"), {
 
-            playerName: playerName,
+            playerName: savedName,
             playerId: user.uid,
             category: category,
             score: score,
