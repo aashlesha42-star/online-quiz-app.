@@ -94,6 +94,36 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* LEVEL & XP SYSTEM */
+
+.level-card {
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #481080, #7b2cbf);
+}
+
+.level-card h2 {
+    color: #ffd166;
+}
+
+.xp-progress-container {
+    width: 100%;
+    height: 15px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+#xpProgress {
+    width: 0%;
+    height: 100%;
+    background: #ffd166;
+    border-radius: 20px;
+    transition: width 0.5s;
+}
     </style>
 </head>
 
@@ -116,6 +146,25 @@
 
             <p id="playerId">Player ID: Loading...</p>
 
+            <!-- PLAYER LEVEL & XP -->
+
+<div class="level-card">
+
+    <h2>⭐ Player Level</h2>
+
+    <h1>Level <span id="playerLevel">1</span></h1>
+
+    <h3>
+        <span id="playerXP">0</span> XP
+    </h3>
+
+    <div class="xp-progress-container">
+        <div id="xpProgress"></div>
+    </div>
+
+    <p id="xpRemaining">100 XP to next level</p>
+
+</div>
            <div class="avatar-options">
 
     <button onclick="changeAvatar('QuizGirl')">
