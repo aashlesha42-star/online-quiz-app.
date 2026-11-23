@@ -163,6 +163,10 @@
     </div>
 
     <p id="xpRemaining">100 XP to next level</p>
+    <div class="player-rank">
+    <h3>🏆 Player Rank</h3>
+    <h2 id="playerTitle">Beginner</h2>
+</div>
 
 </div>
            <div class="avatar-options">
@@ -344,7 +348,25 @@ document.getElementById("xpProgress").style.width =
 
 document.getElementById("xpRemaining").textContent =
     xpForNextLevel + " XP to next level";
-        
+
+        // PLAYER RANK SYSTEM
+
+let playerTitle = "Beginner";
+
+if (playerXP >= 1000) {
+    playerTitle = "Quiz Legend";
+} else if (playerXP >= 700) {
+    playerTitle = "Brain Master";
+} else if (playerXP >= 400) {
+    playerTitle = "Quiz Champion";
+} else if (playerXP >= 200) {
+    playerTitle = "Quiz Explorer";
+} else if (playerXP >= 100) {
+    playerTitle = "Quick Learner";
+}
+
+document.getElementById("playerTitle").textContent =
+    playerTitle;
         // STATISTICS
 
         const analytics =
