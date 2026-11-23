@@ -220,17 +220,16 @@
 
         const user = window.firebaseAuth.currentUser;
 
-        // PLAYER INFORMATION
+       // PLAYER INFORMATION
 
-        document.getElementById("playerId").textContent =
-            "Player ID: " + user.uid;
+const playerId = document.getElementById("playerId");
+const playerNameElement = document.getElementById("playerName");
 
-        let playerName =
-            localStorage.getItem("playerName") || "Quiz Player";
+playerId.textContent = "Player ID: " + user.uid;
 
-        document.getElementById("playerName").textContent =
-            playerName;
+let playerName = localStorage.getItem("playerName") || "Quiz Player";
 
+playerNameElement.textContent = playerName;
         // AVATAR
 
        // CARTOON AVATAR SYSTEM
