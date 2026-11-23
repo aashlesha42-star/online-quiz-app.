@@ -182,8 +182,15 @@
 
                 const name = document.createElement("h3");
 
-                name.textContent =
-                    `${player.playerName || "Player"}`;
+               const currentUser =
+    window.firebaseAuth.currentUser;
+
+const latestName =
+    player.playerId === currentUser.uid
+        ? localStorage.getItem("playerName")
+        : player.playerName;
+
+name.textContent = latestName || "Player";
 
                 const category = document.createElement("p");
 
