@@ -325,6 +325,26 @@ window.saveName = function() {
 
 };
 
+// PLAYER LEVEL & XP
+
+let playerXP = Number(localStorage.getItem("playerXP")) || 0;
+
+let playerLevel = Math.floor(playerXP / 100) + 1;
+
+let xpForNextLevel = 100 - (playerXP % 100);
+
+document.getElementById("playerLevel").textContent =
+    playerLevel;
+
+document.getElementById("playerXP").textContent =
+    playerXP;
+
+document.getElementById("xpProgress").style.width =
+    (playerXP % 100) + "%";
+
+document.getElementById("xpRemaining").textContent =
+    xpForNextLevel + " XP to next level";
+        
         // STATISTICS
 
         const analytics =
