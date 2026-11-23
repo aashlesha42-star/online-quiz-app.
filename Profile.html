@@ -93,30 +93,30 @@
 
             <p id="playerId">Player ID: Loading...</p>
 
-            <div class="avatar-options">
+           <div class="avatar-options">
 
     <button onclick="changeAvatar('QuizGirl')">
-        👧
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=QuizGirl">
     </button>
 
     <button onclick="changeAvatar('QuizBoy')">
-        👦
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=QuizBoy">
     </button>
 
     <button onclick="changeAvatar('PinkGirl')">
-        💗
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=PinkGirl">
     </button>
 
     <button onclick="changeAvatar('CoolBoy')">
-        😎
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=CoolBoy">
     </button>
 
     <button onclick="changeAvatar('CuteGirl')">
-        🌸
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=CuteGirl">
     </button>
 
     <button onclick="changeAvatar('SmartBoy')">
-        🤓
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=SmartBoy">
     </button>
 
 </div>
@@ -210,20 +210,26 @@
 
         // AVATAR
 
-        let savedAvatar =
-            localStorage.getItem("playerAvatar") || "😀";
+       // CARTOON AVATAR SYSTEM
 
-        document.getElementById("avatar").textContent =
-            savedAvatar;
+let savedAvatar =
+    localStorage.getItem("playerAvatar") || "QuizGirl";
 
-        window.changeAvatar = function(avatar) {
+const avatarImage = document.getElementById("avatar");
 
-            localStorage.setItem("playerAvatar", avatar);
+function updateAvatar(seed) {
 
-            document.getElementById("avatar").textContent =
-                avatar;
+    avatarImage.src =
+        `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(seed)}`;
 
-        };
+    localStorage.setItem("playerAvatar", seed);
+}
+
+window.changeAvatar = function(seed) {
+    updateAvatar(seed);
+};
+
+updateAvatar(savedAvatar);
 
         // UPDATE NAME
 
