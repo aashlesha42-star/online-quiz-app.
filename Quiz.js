@@ -694,6 +694,33 @@ localStorage.setItem(
     "quizHistory",
     JSON.stringify(quizHistory)
 );
+
+        // PLAYER XP REWARD SYSTEM
+
+let earnedXP = 20;
+
+// Perfect score bonus
+if (score === questions.length) {
+    earnedXP += 10;
+}
+
+// Get existing XP
+let currentXP = Number(
+    localStorage.getItem("playerXP")
+) || 0;
+
+// Add earned XP
+currentXP += earnedXP;
+
+// Save XP
+localStorage.setItem(
+    "playerXP",
+    currentXP
+);
+
+console.log("XP Earned:", earnedXP);
+console.log("Total XP:", currentXP);
+        
         // QUIZMASTER ANALYTICS TRACKER
 
 let analytics = JSON.parse(
