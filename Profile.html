@@ -253,26 +253,28 @@ window.changeAvatar = function(seed) {
 
 updateAvatar(savedAvatar);
 
-        // UPDATE NAME
+       // UPDATE NAME
 
-        window.saveName = function() {
+window.saveName = function() {
 
-            const newName =
-                document.getElementById("newName").value.trim();
+    const newName =
+        document.getElementById("newName").value.trim();
 
-            if (!newName) {
-                alert("Please enter a name!");
-                return;
-            }
+    if (!newName) {
+        alert("Please enter a name!");
+        return;
+    }
 
-            localStorage.setItem("playerName", newName);
+    localStorage.setItem("playerName", newName);
 
-            document.getElementById("playerName").textContent =
-                newName;
+    document.getElementById("playerName").textContent =
+        newName;
 
-            alert("Player name updated!");
+    document.getElementById("newName").value = "";
 
-        };
+    alert("Player name updated!");
+
+};
 
         // STATISTICS
 
