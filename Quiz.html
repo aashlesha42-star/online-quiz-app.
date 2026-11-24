@@ -152,53 +152,56 @@
     <p>Challenge Your Brain!</p>
 
 
-    <!-- CATEGORY SCREEN -->
+  <!-- LEVEL SELECTION SCREEN -->
 
-    <div id="categoryScreen">
+<div id="categoryScreen">
 
-        <h2>Choose Your Quiz Category 🎯</h2>
+    <h2>Choose Your Challenge 🎯</h2>
 
-        <p>Select a category and test your knowledge!</p>
+    <p>Each level has 5 mixed questions. Can you complete all 5 levels?</p>
 
-        <div class="category-container">
+    <div class="category-container">
 
-            <div class="category-card" onclick="startQuiz('computer')">
-                <div class="icon">💻</div>
-                <h3>Computer</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('science')">
-                <div class="icon">🔬</div>
-                <h3>Science</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('gk')">
-                <div class="icon">🌍</div>
-                <h3>General Knowledge</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('maths')">
-                <div class="icon">➗</div>
-                <h3>Mathematics</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('english')">
-                <div class="icon">📚</div>
-                <h3>English</h3>
-            </div>
-
-            <div class="category-card" onclick="startQuiz('history')">
-                <div class="icon">🏛️</div>
-                <h3>History</h3>
-            </div>
-
+        <div class="category-card" onclick="startQuiz('level1')">
+            <div class="icon">🌱</div>
+            <h3>Level 1</h3>
+            <p>Easy</p>
+            <p>5 Questions</p>
         </div>
 
-        <a href="index.html" class="back-home">⬅ Back to Home</a>
+        <div class="category-card" onclick="startQuiz('level2')">
+            <div class="icon">🧩</div>
+            <h3>Level 2</h3>
+            <p>Easy + Tricky</p>
+            <p>5 Questions</p>
+        </div>
+
+        <div class="category-card" onclick="startQuiz('level3')">
+            <div class="icon">🔥</div>
+            <h3>Level 3</h3>
+            <p>Medium</p>
+            <p>5 Questions</p>
+        </div>
+
+        <div class="category-card" onclick="startQuiz('level4')">
+            <div class="icon">🧠</div>
+            <h3>Level 4</h3>
+            <p>Hard</p>
+            <p>5 Questions</p>
+        </div>
+
+        <div class="category-card" onclick="startQuiz('level5')">
+            <div class="icon">👑</div>
+            <h3>Level 5</h3>
+            <p>Expert</p>
+            <p>5 Questions</p>
+        </div>
 
     </div>
 
+    <a href="index.html" class="back-home">⬅ Back to Home</a>
 
+</div>
     <!-- QUIZ SCREEN -->
 
     <div id="quizScreen">
