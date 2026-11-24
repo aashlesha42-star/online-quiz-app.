@@ -66,9 +66,16 @@ button {
 }
 
 #feedback {
-    min-height: 25px;
+    min-height: 60px;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: bold;
+    border-radius: 12px;
+    overflow-wrap: break-word;
 }
-
 </style>
 </head>
 
@@ -93,6 +100,10 @@ Complete today's five questions and earn bonus points!
 
 <div id="questionArea">
     <h3 id="questionNumber"></h3>
+
+<div class="progress-container">
+    <div id="dailyProgress"></div>
+</div>
     <h2 id="question"></h2>
     <div id="answers"></div>
     <p id="feedback"></p>
