@@ -404,11 +404,40 @@ function getDailyQuestions() {
     let seed = [...dateKey].reduce(
         (total, character) => total + character.charCodeAt(0),
         0
-        // CURRENT DAILY QUESTIONS
-
-let questions = [];
     );
 
+    function random() {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+    }
+
+    let selectedBank = questionBank;
+
+    if (selectedDifficulty === "medium") {
+        selectedBank = mediumQuestionBank;
+    }
+
+    if (selectedDifficulty === "hard") {
+        selectedBank = hardQuestionBank;
+    }
+
+    const shuffled = [...selectedBank];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+
+        const j = Math.floor(random() * (i + 1));
+
+        [shuffled[i], shuffled[j]] =
+            [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled.slice(0, 5);
+}
+
+// CURRENT DAILY QUESTIONS
+
+let questions = [];
+    
     function random() {
         seed = (seed * 1664525 + 1013904223) % 4294967296;
         return seed / 4294967296;
