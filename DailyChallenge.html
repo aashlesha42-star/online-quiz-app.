@@ -1,11 +1,14 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QuizMaster - Daily Challenge</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -49,6 +52,10 @@ button {
     cursor: pointer;
 }
 
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
 .answer {
     display: block;
     width: 100%;
@@ -59,11 +66,15 @@ button {
 
 .answer:disabled {
     opacity: 1;
+    cursor: default;
 }
 
-#questionArea, #result {
+#questionArea,
+#result {
     display: none;
 }
+
+/* FEEDBACK */
 
 #feedback {
     min-height: 60px;
@@ -75,8 +86,11 @@ button {
     font-weight: bold;
     border-radius: 12px;
     overflow-wrap: break-word;
+}
 
-    .progress-container {
+/* PROGRESS BAR */
+
+.progress-container {
     width: 100%;
     height: 12px;
     background: #ddd;
@@ -92,9 +106,10 @@ button {
     border-radius: 20px;
     transition: width 0.4s ease;
 }
-}
 
-    .difficulty-options {
+/* DIFFICULTY BUTTONS */
+
+.difficulty-options {
     display: flex;
     justify-content: center;
     gap: 12px;
@@ -119,7 +134,29 @@ button {
 .difficulty-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 480px) {
+
+    .container {
+        padding: 18px;
+        margin: 15px auto;
+    }
+
+    .difficulty-btn {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+}
+
 </style>
 </head>
 
@@ -127,73 +164,117 @@ button {
 
 <div class="container">
 
-<h1>🌟 Daily Challenge</h1>
+    <h1>🌟 Daily Challenge</h1>
 
-<p class="info">
-Complete today's five questions and earn bonus points!
-</p>
+    <p class="info">
+        Complete today's five questions and earn bonus points!
+    </p>
 
-<h3>🔥 Daily Streak: <span id="streak">0</span> days</h3>
+    <h3>
+        🔥 Daily Streak:
+        <span id="streak">0</span> days
+    </h3>
 
-<h3>🏆 Bonus Points: <span id="bonus">0</span></h3>
+    <h3>
+        🏆 Bonus Points:
+        <span id="bonus">0</span>
+    </h3>
 
-<div id="startArea">
 
-    <h2>🎯 Choose Your Difficulty</h2>
+    <!-- START AREA -->
 
-    <p>Select a level and test your brain!</p>
+    <div id="startArea">
 
-   <div class="difficulty-options">
+        <h2>🎯 Choose Your Difficulty</h2>
 
-    <button type="button" class="difficulty-btn selected"
-        onclick="selectDifficulty('easy', this)">
-        🌱 EASY
+        <p>Select a level and test your brain!</p>
+
+        <div class="difficulty-options">
+
+            <button
+                type="button"
+                class="difficulty-btn selected"
+                onclick="selectDifficulty('easy', this)">
+
+                🌱 EASY
+
+            </button>
+
+            <button
+                type="button"
+                class="difficulty-btn"
+                id="mediumLevel"
+                onclick="selectDifficulty('medium', this)">
+
+                ⭐ MEDIUM 🔒
+
+            </button>
+
+            <button
+                type="button"
+                class="difficulty-btn"
+                id="hardLevel"
+                onclick="selectDifficulty('hard', this)">
+
+                🔥 HARD 🔒
+
+            </button>
+
+        </div>
+
+        <button onclick="startChallenge()">
+            🚀 Start Challenge
+        </button>
+
+    </div>
+
+
+    <!-- QUESTION AREA -->
+
+    <div id="questionArea">
+
+        <h3 id="questionNumber"></h3>
+
+        <div class="progress-container">
+
+            <div id="dailyProgress"></div>
+
+        </div>
+
+        <h2 id="question"></h2>
+
+        <div id="answers"></div>
+
+        <p id="feedback"></p>
+
+    </div>
+
+
+    <!-- RESULT AREA -->
+
+    <div id="result">
+
+        <h2>🎉 Challenge Completed!</h2>
+
+        <h2 id="finalScore"></h2>
+
+        <h3 id="badge"></h3>
+
+    </div>
+
+
+    <button onclick="location.href='index.html'">
+        🏠 Home
     </button>
 
-    <button type="button" class="difficulty-btn"
-        id="mediumLevel"
-        onclick="selectDifficulty('medium', this)">
-        ⭐ MEDIUM 🔒
-    </button>
-
-    <button type="button" class="difficulty-btn"
-        id="hardLevel"
-        onclick="selectDifficulty('hard', this)">
-        🔥 HARD 🔒
-    </button>
-
 </div>
 
-    <button onclick="startChallenge()">
-        🚀 Start Challenge
-    </button>
-
-</div>
-
-<div id="questionArea">
-    <h3 id="questionNumber"></h3>
-
-<div class="progress-container">
-    <div id="dailyProgress"></div>
-</div>
-    <h2 id="question"></h2>
-    <div id="answers"></div>
-    <p id="feedback"></p>
-</div>
-
-<div id="result">
-    <h2>🎉 Challenge Completed!</h2>
-    <h2 id="finalScore"></h2>
-    <h3 id="badge"></h3>
-</div>
-
-<button onclick="location.href='index.html'">🏠 Home</button>
-
-</div>
 
 <script>
 
+// ======================================
 // DAILY CHALLENGE QUESTION BANK
+// ======================================
 
 const questionBank = [
 
@@ -202,104 +283,127 @@ const questionBank = [
         a: ["Shark", "Octopus", "Penguin", "Dolphin"],
         c: "Octopus"
     },
+
     {
         q: "Which planet has a day longer than its year?",
         a: ["Mars", "Jupiter", "Venus", "Mercury"],
         c: "Venus"
     },
+
     {
         q: "Which animal tastes using its feet?",
         a: ["Butterfly", "Elephant", "Rabbit", "Tiger"],
         c: "Butterfly"
     },
+
     {
         q: "What is the collective name for a group of flamingos?",
         a: ["A parade", "A flamboyance", "A galaxy", "A crowd"],
         c: "A flamboyance"
     },
+
     {
         q: "What do camels actually store in their humps?",
         a: ["Water", "Air", "Fat", "Food"],
         c: "Fat"
     },
+
     {
         q: "Which part of an owl cannot move like human eyes?",
         a: ["Eyelids", "Eyeballs", "Pupils", "Ears"],
         c: "Eyeballs"
     },
+
     {
         q: "Which fruit is botanically classified as a berry?",
         a: ["Strawberry", "Banana", "Apple", "Pear"],
         c: "Banana"
     },
+
     {
         q: "Which is hotter: a lightning bolt or the surface of the Sun?",
         a: ["Sun's surface", "Lightning bolt", "Both are equal", "Neither"],
         c: "Lightning bolt"
     },
+
     {
         q: "What makes popcorn pop?",
         a: ["Sugar inside it", "Water turning into steam", "Sunlight", "Air bubbles"],
         c: "Water turning into steam"
     },
+
     {
         q: "What gives flamingos their pink colour?",
         a: ["Their genes alone", "Sunlight", "Pigments in their food", "Pink feathers at birth"],
         c: "Pigments in their food"
     },
+
     {
         q: "What happens to water when it freezes?",
         a: ["It expands", "It disappears", "It becomes lighter in colour", "It shrinks"],
         c: "It expands"
     },
+
     {
         q: "Which animal has fingerprints surprisingly similar to humans?",
         a: ["Koala", "Giraffe", "Panda", "Kangaroo"],
         c: "Koala"
     },
+
     {
         q: "What is the smallest prime number?",
         a: ["1", "2", "3", "0"],
         c: "2"
     },
+
     {
         q: "You overtake the person in second place in a race. What position are you now?",
         a: ["First", "Second", "Third", "Last"],
         c: "Second"
     },
+
     {
         q: "Find the missing number: 2, 6, 12, 20, 30, __",
         a: ["36", "40", "42", "44"],
         c: "42"
     },
+
     {
         q: "Which ocean is the largest on Earth?",
         a: ["Atlantic", "Indian", "Arctic", "Pacific"],
         c: "Pacific"
     },
+
     {
         q: "Which gas do plants absorb during photosynthesis?",
         a: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
         c: "Carbon dioxide"
     },
+
     {
         q: "What is the name of the fear of spiders?",
         a: ["Acrophobia", "Arachnophobia", "Claustrophobia", "Hydrophobia"],
         c: "Arachnophobia"
     },
+
     {
         q: "Which instrument has keys but cannot open a door?",
         a: ["Piano", "Compass", "Telescope", "Thermometer"],
         c: "Piano"
     },
+
     {
         q: "How many months have at least 28 days?",
         a: ["1", "2", "11", "12"],
         c: "12"
     }
+
 ];
 
-    // MEDIUM DIFFICULTY QUESTIONS
+
+// ======================================
+// MEDIUM DIFFICULTY QUESTIONS
+// ======================================
 
 const mediumQuestionBank = [
 
@@ -308,45 +412,55 @@ const mediumQuestionBank = [
         a: ["5 minutes", "20 minutes", "100 minutes", "1 minute"],
         c: "5 minutes"
     },
+
     {
         q: "Which number comes next: 1, 4, 9, 16, 25, __?",
-        a: ["30", "36", " Forty", "49"],
+        a: ["30", "36", "40", "49"],
         c: "36"
     },
+
     {
         q: "What has cities but no houses, forests but no trees, and rivers but no water?",
         a: ["A painting", "A map", "A book", "A dream"],
         c: "A map"
     },
+
     {
         q: "Which planet has the most moons currently confirmed?",
         a: ["Earth", "Mars", "Saturn", "Venus"],
         c: "Saturn"
     },
+
     {
         q: "What is the only mammal capable of true flight?",
         a: ["Flying squirrel", "Bat", "Sugar glider", "Penguin"],
         c: "Bat"
     },
+
     {
         q: "How many sides does a dodecagon have?",
         a: ["10", "11", "12", "14"],
         c: "12"
     },
+
     {
         q: "Which element has the chemical symbol Au?",
         a: ["Silver", "Gold", "Aluminium", "Argon"],
         c: "Gold"
     },
+
     {
         q: "What is the largest internal organ in the human body?",
         a: ["Heart", "Liver", "Lungs", "Kidney"],
         c: "Liver"
     }
+
 ];
 
 
+// ======================================
 // HARD DIFFICULTY QUESTIONS
+// ======================================
 
 const hardQuestionBank = [
 
@@ -355,47 +469,118 @@ const hardQuestionBank = [
         a: ["0 degrees", "7.5 degrees", "15 degrees", "30 degrees"],
         c: "7.5 degrees"
     },
+
     {
         q: "Which number is both a square and a cube?",
         a: ["16", "36", "64", "81"],
         c: "64"
     },
+
     {
         q: "What is the smallest number divisible by every number from 1 to 5?",
         a: ["30", "40", "60", "120"],
         c: "60"
     },
+
     {
         q: "Which part of the atom determines its chemical identity?",
         a: ["Neutrons", "Electrons", "Protons", "Nucleus size"],
         c: "Protons"
     },
+
     {
         q: "What is the next prime number after 29?",
         a: ["30", "31", "33", "35"],
         c: "31"
     },
+
     {
         q: "Which phenomenon makes a straw look bent in water?",
         a: ["Reflection", "Refraction", "Diffraction", "Dispersion"],
         c: "Refraction"
     },
+
     {
         q: "How many degrees are there in the interior angles of a hexagon combined?",
         a: ["540", "600", "720", "900"],
         c: "720"
     },
+
     {
         q: "Which layer of Earth is liquid?",
         a: ["Inner core", "Outer core", "Crust", "Upper mantle"],
         c: "Outer core"
     }
+
 ];
 
 
-// SELECT 5 DIFFERENT QUESTIONS FOR EACH DAY
+// ======================================
+// CURRENT DAILY QUESTIONS
+// ======================================
 
-// DAILY QUESTIONS BASED ON DIFFICULTY
+let questions = [];
+
+
+// ======================================
+// DIFFICULTY SYSTEM
+// ======================================
+
+let selectedDifficulty = "easy";
+
+let completedChallenges =
+    Number(localStorage.getItem("completedDailyChallenges")) || 0;
+
+
+function updateDifficultyLocks() {
+
+    const mediumButton =
+        document.getElementById("mediumLevel");
+
+    const hardButton =
+        document.getElementById("hardLevel");
+
+    mediumButton.disabled = completedChallenges < 3;
+
+    hardButton.disabled = completedChallenges < 7;
+
+    mediumButton.textContent =
+        completedChallenges >= 3
+        ? "⭐ MEDIUM"
+        : "⭐ MEDIUM 🔒";
+
+    hardButton.textContent =
+        completedChallenges >= 7
+        ? "🔥 HARD"
+        : "🔥 HARD 🔒";
+
+}
+
+
+function selectDifficulty(level, button) {
+
+    if (button.disabled) {
+        return;
+    }
+
+    selectedDifficulty = level;
+
+    document.querySelectorAll(".difficulty-btn").forEach(btn => {
+
+        btn.classList.remove("selected");
+
+    });
+
+    button.classList.add("selected");
+
+    console.log("Selected difficulty:", selectedDifficulty);
+
+}
+
+
+// ======================================
+// SELECT DAILY QUESTIONS
+// ======================================
 
 function getDailyQuestions() {
 
@@ -407,18 +592,25 @@ function getDailyQuestions() {
     );
 
     function random() {
+
         seed = (seed * 1664525 + 1013904223) % 4294967296;
+
         return seed / 4294967296;
+
     }
 
     let selectedBank = questionBank;
 
     if (selectedDifficulty === "medium") {
+
         selectedBank = mediumQuestionBank;
+
     }
 
     if (selectedDifficulty === "hard") {
+
         selectedBank = hardQuestionBank;
+
     }
 
     const shuffled = [...selectedBank];
@@ -429,63 +621,17 @@ function getDailyQuestions() {
 
         [shuffled[i], shuffled[j]] =
             [shuffled[j], shuffled[i]];
+
     }
 
     return shuffled.slice(0, 5);
+
 }
 
-// CURRENT DAILY QUESTIONS
 
-let questions = [];
-// CURRENT DAILY QUESTIONS
-
-let questions = [];
-
-
-// DIFFICULTY SYSTEM
-
-let selectedDifficulty = "easy";
-
-let completedChallenges =
-    Number(localStorage.getItem("completedDailyChallenges")) || 0;
-// DIFFICULTY SYSTEM
-
-let selectedDifficulty = "easy";
-
-let completedChallenges =
-    Number(localStorage.getItem("completedDailyChallenges")) || 0;
-
-function updateDifficultyLocks() {
-
-    const mediumButton = document.getElementById("mediumLevel");
-    const hardButton = document.getElementById("hardLevel");
-
-    mediumButton.disabled = completedChallenges < 3;
-    hardButton.disabled = completedChallenges < 7;
-
-    mediumButton.textContent =
-        completedChallenges >= 3 ? "⭐ MEDIUM" : "⭐ MEDIUM 🔒";
-
-    hardButton.textContent =
-        completedChallenges >= 7 ? "🔥 HARD" : "🔥 HARD 🔒";
-}
-
-function selectDifficulty(level, button) {
-
-    if (button.disabled) return;
-
-    selectedDifficulty = level;
-
-    document.querySelectorAll(".difficulty-btn").forEach(btn => {
-        btn.classList.remove("selected");
-    });
-
-    button.classList.add("selected");
-
-    console.log("Selected difficulty:", selectedDifficulty);
-}
-updateDifficultyLocks();
-    // FUN FACT EXPLANATIONS
+// ======================================
+// FUN FACT EXPLANATIONS
+// ======================================
 
 const funFacts = {
 
@@ -604,38 +750,88 @@ const funFacts = {
 
     "Which layer of Earth is liquid?":
         "Earth's outer core is mainly liquid iron and nickel!"
+
 };
+
+
+// ======================================
+// QUIZ VARIABLES
+// ======================================
+
 let current = 0;
+
 let score = 0;
+
 let answered = false;
+
+
+// ======================================
+// DAILY DATE AND STREAK
+// ======================================
 
 const today = new Date().toLocaleDateString("en-CA");
 
-let streak = Number(localStorage.getItem("dailyStreak")) || 0;
-let lastDate = localStorage.getItem("lastChallengeDate");
+let streak =
+    Number(localStorage.getItem("dailyStreak")) || 0;
+
+let lastDate =
+    localStorage.getItem("lastChallengeDate");
+
+
+// DISPLAY SAVED STREAK AND BONUS
 
 document.getElementById("streak").textContent = streak;
+
 document.getElementById("bonus").textContent =
     Number(localStorage.getItem("dailyBonus")) || 0;
 
+
+// ======================================
+// START PAGE INITIALIZATION
+// ======================================
+
+updateDifficultyLocks();
+
 if (lastDate === today) {
+
     document.getElementById("startArea").innerHTML =
         "<h3>✅ Today's challenge is already completed!</h3>";
+
 }
+
+
+// ======================================
+// START CHALLENGE
+// ======================================
 
 function startChallenge() {
 
     if (lastDate === today) {
+
         return;
+
     }
 
+    current = 0;
+
+    score = 0;
+
+    answered = false;
+
     document.getElementById("startArea").style.display = "none";
+
     document.getElementById("questionArea").style.display = "block";
 
     questions = getDailyQuestions();
 
     showQuestion();
+
 }
+
+
+// ======================================
+// SHOW QUESTION
+// ======================================
 
 function showQuestion() {
 
@@ -644,18 +840,28 @@ function showQuestion() {
     document.getElementById("questionNumber").textContent =
         "Question " + (current + 1) + " of " + questions.length;
 
-    // UPDATE DAILY PROGRESS BAR
-    const progress = (current / questions.length) * 100;
+
+    // UPDATE PROGRESS BAR
+
+    const progress =
+        (current / questions.length) * 100;
 
     document.getElementById("dailyProgress").style.width =
         progress + "%";
+
+
+    // DISPLAY QUESTION
 
     document.getElementById("question").textContent =
         questions[current].q;
 
     document.getElementById("feedback").textContent = "";
 
+
+    // DISPLAY ANSWERS
+
     const answers = document.getElementById("answers");
+
     answers.innerHTML = "";
 
     questions[current].a.forEach(option => {
@@ -663,6 +869,7 @@ function showQuestion() {
         const button = document.createElement("button");
 
         button.textContent = option;
+
         button.className = "answer";
 
         button.onclick = () => checkAnswer(button, option);
@@ -670,113 +877,215 @@ function showQuestion() {
         answers.appendChild(button);
 
     });
+
 }
+
+
+// ======================================
+// CHECK ANSWER
+// ======================================
+
 function checkAnswer(button, selected) {
 
-    if (answered) return;
+    if (answered) {
+
+        return;
+
+    }
 
     answered = true;
 
     const correct = questions[current].c;
 
-   const explanation = funFacts[questions[current].q] || "";
+    const explanation =
+        funFacts[questions[current].q] || "";
 
-if (selected === correct) {
-    score++;
-    button.style.background = "#20c997";
-    document.getElementById("feedback").textContent =
-        "✅ Correct! " + explanation;
-} else {
-    button.style.background = "#ff6b6b";
-    document.getElementById("feedback").textContent =
-        "❌ Correct answer: " + correct + ". " + explanation;
-}
+
+    if (selected === correct) {
+
+        score++;
+
+        button.style.background = "#20c997";
+
+        document.getElementById("feedback").textContent =
+            "✅ Correct! " + explanation;
+
+    } else {
+
+        button.style.background = "#ff6b6b";
+
+        document.getElementById("feedback").textContent =
+            "❌ Correct answer: " + correct + ". " + explanation;
+
+    }
+
+
+    // DISABLE ANSWER BUTTONS
 
     document.querySelectorAll(".answer").forEach(btn => {
+
         btn.disabled = true;
 
         if (btn.textContent === correct) {
+
             btn.style.background = "#20c997";
+
         }
+
     });
+
+
+    // NEXT QUESTION BUTTON
 
     const next = document.createElement("button");
 
-    next.textContent = current === questions.length - 1
+    next.textContent =
+        current === questions.length - 1
         ? "Finish Challenge"
         : "Next Question";
 
     next.onclick = nextQuestion;
 
     document.getElementById("answers").appendChild(next);
+
 }
+
+
+// ======================================
+// NEXT QUESTION
+// ======================================
 
 function nextQuestion() {
 
     current++;
 
     if (current < questions.length) {
+
         showQuestion();
+
     } else {
+
         finishChallenge();
+
     }
+
 }
+
+
+// ======================================
+// FINISH CHALLENGE
+// ======================================
 
 function finishChallenge() {
 
     // COMPLETE PROGRESS BAR
+
     document.getElementById("dailyProgress").style.width = "100%";
 
+
+    // SHOW RESULT
+
     document.getElementById("questionArea").style.display = "none";
+
     document.getElementById("result").style.display = "block";
 
+
+    // CALCULATE STREAK
+
     let yesterday = new Date();
+
     yesterday.setDate(yesterday.getDate() - 1);
 
-    const yesterdayString = yesterday.toLocaleDateString("en-CA");
+    const yesterdayString =
+        yesterday.toLocaleDateString("en-CA");
+
 
     if (lastDate === yesterdayString) {
+
         streak++;
+
     } else {
+
         streak = 1;
+
     }
+
+
+    // CALCULATE BONUS
 
     let bonus = score * 10;
 
+
+    // SAVE DATA
+
     localStorage.setItem("dailyStreak", streak);
-    localStorage.setItem("dailyBonus",
-        (Number(localStorage.getItem("dailyBonus")) || 0) + bonus);
+
+    localStorage.setItem(
+        "dailyBonus",
+        (Number(localStorage.getItem("dailyBonus")) || 0) + bonus
+    );
 
     localStorage.setItem("lastChallengeDate", today);
-completedChallenges++;
 
-localStorage.setItem(
-    "completedDailyChallenges",
-    completedChallenges
-);
-     updateDifficultyLocks();
-    
+
+    // UPDATE COMPLETED CHALLENGES
+
+    completedChallenges++;
+
+    localStorage.setItem(
+        "completedDailyChallenges",
+        completedChallenges
+    );
+
+
+    // UPDATE DIFFICULTY LOCKS
+
+    updateDifficultyLocks();
+
+
+    // DISPLAY SCORE
+
     document.getElementById("finalScore").textContent =
-        "Your Score: " + score + "/5";
+        "Your Score: " + score + "/" + questions.length;
+
 
     document.getElementById("streak").textContent = streak;
 
     document.getElementById("bonus").textContent =
         Number(localStorage.getItem("dailyBonus"));
 
+
+    // AWARD BADGE
+
     let badge = "🌱 Beginner";
 
-    if (score === 5) {
+    if (score === questions.length) {
+
         badge = "🏆 Perfect Score Champion!";
+
     } else if (score >= 3) {
+
         badge = "⭐ Smart Player!";
+
     }
 
     document.getElementById("badge").textContent = badge;
+
 }
-<script>
-const savedTheme = localStorage.getItem("selectedTheme") || "purple";
+
+
+// ======================================
+// APPLY SAVED THEME
+// ======================================
+
+const savedTheme =
+    localStorage.getItem("selectedTheme") || "purple";
+
 document.body.setAttribute("data-theme", savedTheme);
+
+
 </script>
+
 </body>
 </html>
+```
