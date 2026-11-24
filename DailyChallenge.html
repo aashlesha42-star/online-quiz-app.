@@ -299,8 +299,103 @@ const questionBank = [
     }
 ];
 
+    // MEDIUM DIFFICULTY QUESTIONS
+
+const mediumQuestionBank = [
+
+    {
+        q: "If 5 machines make 5 toys in 5 minutes, how long do 100 machines take to make 100 toys?",
+        a: ["5 minutes", "20 minutes", "100 minutes", "1 minute"],
+        c: "5 minutes"
+    },
+    {
+        q: "Which number comes next: 1, 4, 9, 16, 25, __?",
+        a: ["30", "36", " Forty", "49"],
+        c: "36"
+    },
+    {
+        q: "What has cities but no houses, forests but no trees, and rivers but no water?",
+        a: ["A painting", "A map", "A book", "A dream"],
+        c: "A map"
+    },
+    {
+        q: "Which planet has the most moons currently confirmed?",
+        a: ["Earth", "Mars", "Saturn", "Venus"],
+        c: "Saturn"
+    },
+    {
+        q: "What is the only mammal capable of true flight?",
+        a: ["Flying squirrel", "Bat", "Sugar glider", "Penguin"],
+        c: "Bat"
+    },
+    {
+        q: "How many sides does a dodecagon have?",
+        a: ["10", "11", "12", "14"],
+        c: "12"
+    },
+    {
+        q: "Which element has the chemical symbol Au?",
+        a: ["Silver", "Gold", "Aluminium", "Argon"],
+        c: "Gold"
+    },
+    {
+        q: "What is the largest internal organ in the human body?",
+        a: ["Heart", "Liver", "Lungs", "Kidney"],
+        c: "Liver"
+    }
+];
+
+
+// HARD DIFFICULTY QUESTIONS
+
+const hardQuestionBank = [
+
+    {
+        q: "A clock shows 3:15. What is the angle between its hands?",
+        a: ["0 degrees", "7.5 degrees", "15 degrees", "30 degrees"],
+        c: "7.5 degrees"
+    },
+    {
+        q: "Which number is both a square and a cube?",
+        a: ["16", "36", "64", "81"],
+        c: "64"
+    },
+    {
+        q: "What is the smallest number divisible by every number from 1 to 5?",
+        a: ["30", "40", "60", "120"],
+        c: "60"
+    },
+    {
+        q: "Which part of the atom determines its chemical identity?",
+        a: ["Neutrons", "Electrons", "Protons", "Nucleus size"],
+        c: "Protons"
+    },
+    {
+        q: "What is the next prime number after 29?",
+        a: ["30", "31", "33", "35"],
+        c: "31"
+    },
+    {
+        q: "Which phenomenon makes a straw look bent in water?",
+        a: ["Reflection", "Refraction", "Diffraction", "Dispersion"],
+        c: "Refraction"
+    },
+    {
+        q: "How many degrees are there in the interior angles of a hexagon combined?",
+        a: ["540", "600", "720", "900"],
+        c: "720"
+    },
+    {
+        q: "Which layer of Earth is liquid?",
+        a: ["Inner core", "Outer core", "Crust", "Upper mantle"],
+        c: "Outer core"
+    }
+];
+
 
 // SELECT 5 DIFFERENT QUESTIONS FOR EACH DAY
+
+// DAILY QUESTIONS BASED ON DIFFICULTY
 
 function getDailyQuestions() {
 
@@ -309,6 +404,9 @@ function getDailyQuestions() {
     let seed = [...dateKey].reduce(
         (total, character) => total + character.charCodeAt(0),
         0
+        // CURRENT DAILY QUESTIONS
+
+let questions = [];
     );
 
     function random() {
@@ -316,7 +414,17 @@ function getDailyQuestions() {
         return seed / 4294967296;
     }
 
-    const shuffled = [...questionBank];
+    let selectedBank = questionBank;
+
+    if (selectedDifficulty === "medium") {
+        selectedBank = mediumQuestionBank;
+    }
+
+    if (selectedDifficulty === "hard") {
+        selectedBank = hardQuestionBank;
+    }
+
+    const shuffled = [...selectedBank];
 
     for (let i = shuffled.length - 1; i > 0; i--) {
 
@@ -328,9 +436,6 @@ function getDailyQuestions() {
 
     return shuffled.slice(0, 5);
 }
-
-const questions = getDailyQuestions();
-
 // DIFFICULTY SYSTEM
 
 let selectedDifficulty = "easy";
@@ -370,6 +475,9 @@ updateDifficultyLocks();
     // FUN FACT EXPLANATIONS
 
 const funFacts = {
+
+    // EASY EXPLANATIONS
+
     "Which animal has THREE hearts?":
         "An octopus has three hearts! Two pump blood to the gills, and one pumps it to the rest of the body.",
 
@@ -416,7 +524,7 @@ const funFacts = {
         "The differences are 4, 6, 8, 10 and then 12. So the next number is 42!",
 
     "Which ocean is the largest on Earth?":
-        "The Pacific Ocean is the largest ocean on Earth. It covers more area than all the continents combined!",
+        "The Pacific Ocean is the largest ocean on Earth!",
 
     "Which gas do plants absorb during photosynthesis?":
         "Plants absorb carbon dioxide and use light energy to help make their food!",
@@ -428,9 +536,62 @@ const funFacts = {
         "A piano can have 88 keys, but not a single one opens a door!",
 
     "How many months have at least 28 days?":
-        "All 12 months have at least 28 days. A classic trick question!"
-};
+        "All 12 months have at least 28 days. A classic trick question!",
 
+
+    // MEDIUM EXPLANATIONS
+
+    "If 5 machines make 5 toys in 5 minutes, how long do 100 machines take to make 100 toys?":
+        "Each machine makes one toy in 5 minutes. So 100 machines can make 100 toys in 5 minutes!",
+
+    "Which number comes next: 1, 4, 9, 16, 25, __?":
+        "These are square numbers: 1², 2², 3², 4², 5². The next is 6² = 36!",
+
+    "What has cities but no houses, forests but no trees, and rivers but no water?":
+        "A map! It shows places and natural features without containing the actual things.",
+
+    "Which planet has the most moons currently confirmed?":
+        "Saturn currently holds the record for the most confirmed moons!",
+
+    "What is the only mammal capable of true flight?":
+        "Bats are the only mammals capable of powered flight. Flying squirrels only glide!",
+
+    "How many sides does a dodecagon have?":
+        "A dodecagon is a polygon with 12 sides!",
+
+    "Which element has the chemical symbol Au?":
+        "Au comes from the Latin word 'Aurum', meaning gold!",
+
+    "What is the largest internal organ in the human body?":
+        "The liver is the largest internal organ in the human body!",
+
+
+    // HARD EXPLANATIONS
+
+    "A clock shows 3:15. What is the angle between its hands?":
+        "At 3:15, the minute hand is at 90 degrees and the hour hand is at 97.5 degrees. The difference is 7.5 degrees!",
+
+    "Which number is both a square and a cube?":
+        "64 is both 8² and 4³. That's what makes it special!",
+
+    "What is the smallest number divisible by every number from 1 to 5?":
+        "60 is the smallest number divisible by 1, 2, 3, 4 and 5!",
+
+    "Which part of the atom determines its chemical identity?":
+        "The number of protons determines which chemical element an atom is!",
+
+    "What is the next prime number after 29?":
+        "31 is prime because its only positive factors are 1 and 31!",
+
+    "Which phenomenon makes a straw look bent in water?":
+        "Refraction! Light changes direction when it moves between water and air.",
+
+    "How many degrees are there in the interior angles of a hexagon combined?":
+        "The interior angles of a hexagon add up to (6 - 2) × 180 = 720 degrees!",
+
+    "Which layer of Earth is liquid?":
+        "Earth's outer core is mainly liquid iron and nickel!"
+};
 let current = 0;
 let score = 0;
 let answered = false;
@@ -457,6 +618,8 @@ function startChallenge() {
 
     document.getElementById("startArea").style.display = "none";
     document.getElementById("questionArea").style.display = "block";
+
+    questions = getDailyQuestions();
 
     showQuestion();
 }
@@ -572,7 +735,14 @@ function finishChallenge() {
         (Number(localStorage.getItem("dailyBonus")) || 0) + bonus);
 
     localStorage.setItem("lastChallengeDate", today);
+completedChallenges++;
 
+localStorage.setItem(
+    "completedDailyChallenges",
+    completedChallenges
+);
+     updateDifficultyLocks();
+    
     document.getElementById("finalScore").textContent =
         "Your Score: " + score + "/5";
 
