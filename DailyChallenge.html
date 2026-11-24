@@ -110,38 +110,206 @@ Complete today's five questions and earn bonus points!
 
 <script>
 
-const questions = [
+// DAILY CHALLENGE QUESTION BANK
+
+const questionBank = [
+
     {
-        q: "What is the brain of a computer?",
-        a: ["Monitor", "CPU", "Mouse", "Keyboard"],
-        c: "CPU"
+        q: "Which animal has THREE hearts?",
+        a: ["Shark", "Octopus", "Penguin", "Dolphin"],
+        c: "Octopus"
     },
     {
-        q: "Which language is used to structure web pages?",
-        a: ["HTML", "Python", "C", "Java"],
-        c: "HTML"
+        q: "Which planet has a day longer than its year?",
+        a: ["Mars", "Jupiter", "Venus", "Mercury"],
+        c: "Venus"
     },
     {
-        q: "How many days are there in a leap year?",
-        a: ["365", "366", "364", "360"],
-        c: "366"
+        q: "Which animal tastes using its feet?",
+        a: ["Butterfly", "Elephant", "Rabbit", "Tiger"],
+        c: "Butterfly"
     },
     {
-        q: "Which planet is known as the Red Planet?",
-        a: ["Earth", "Venus", "Mars", "Jupiter"],
-        c: "Mars"
+        q: "What is the collective name for a group of flamingos?",
+        a: ["A parade", "A flamboyance", "A galaxy", "A crowd"],
+        c: "A flamboyance"
     },
     {
-        q: "What does RAM stand for?",
-        a: [
-            "Random Access Memory",
-            "Read Access Machine",
-            "Run All Memory",
-            "Rapid Action Memory"
-        ],
-        c: "Random Access Memory"
+        q: "What do camels actually store in their humps?",
+        a: ["Water", "Air", "Fat", "Food"],
+        c: "Fat"
+    },
+    {
+        q: "Which part of an owl cannot move like human eyes?",
+        a: ["Eyelids", "Eyeballs", "Pupils", "Ears"],
+        c: "Eyeballs"
+    },
+    {
+        q: "Which fruit is botanically classified as a berry?",
+        a: ["Strawberry", "Banana", "Apple", "Pear"],
+        c: "Banana"
+    },
+    {
+        q: "Which is hotter: a lightning bolt or the surface of the Sun?",
+        a: ["Sun's surface", "Lightning bolt", "Both are equal", "Neither"],
+        c: "Lightning bolt"
+    },
+    {
+        q: "What makes popcorn pop?",
+        a: ["Sugar inside it", "Water turning into steam", "Sunlight", "Air bubbles"],
+        c: "Water turning into steam"
+    },
+    {
+        q: "What gives flamingos their pink colour?",
+        a: ["Their genes alone", "Sunlight", "Pigments in their food", "Pink feathers at birth"],
+        c: "Pigments in their food"
+    },
+    {
+        q: "What happens to water when it freezes?",
+        a: ["It expands", "It disappears", "It becomes lighter in colour", "It shrinks"],
+        c: "It expands"
+    },
+    {
+        q: "Which animal has fingerprints surprisingly similar to humans?",
+        a: ["Koala", "Giraffe", "Panda", "Kangaroo"],
+        c: "Koala"
+    },
+    {
+        q: "What is the smallest prime number?",
+        a: ["1", "2", "3", "0"],
+        c: "2"
+    },
+    {
+        q: "You overtake the person in second place in a race. What position are you now?",
+        a: ["First", "Second", "Third", "Last"],
+        c: "Second"
+    },
+    {
+        q: "Find the missing number: 2, 6, 12, 20, 30, __",
+        a: ["36", "40", "42", "44"],
+        c: "42"
+    },
+    {
+        q: "Which ocean is the largest on Earth?",
+        a: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        c: "Pacific"
+    },
+    {
+        q: "Which gas do plants absorb during photosynthesis?",
+        a: ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+        c: "Carbon dioxide"
+    },
+    {
+        q: "What is the name of the fear of spiders?",
+        a: ["Acrophobia", "Arachnophobia", "Claustrophobia", "Hydrophobia"],
+        c: "Arachnophobia"
+    },
+    {
+        q: "Which instrument has keys but cannot open a door?",
+        a: ["Piano", "Compass", "Telescope", "Thermometer"],
+        c: "Piano"
+    },
+    {
+        q: "How many months have at least 28 days?",
+        a: ["1", "2", "11", "12"],
+        c: "12"
     }
 ];
+
+
+// SELECT 5 DIFFERENT QUESTIONS FOR EACH DAY
+
+function getDailyQuestions() {
+
+    const dateKey = new Date().toLocaleDateString("en-CA");
+
+    let seed = [...dateKey].reduce(
+        (total, character) => total + character.charCodeAt(0),
+        0
+    );
+
+    function random() {
+        seed = (seed * 1664525 + 1013904223) % 4294967296;
+        return seed / 4294967296;
+    }
+
+    const shuffled = [...questionBank];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+
+        const j = Math.floor(random() * (i + 1));
+
+        [shuffled[i], shuffled[j]] =
+            [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled.slice(0, 5);
+}
+
+const questions = getDailyQuestions();
+    // FUN FACT EXPLANATIONS
+
+const funFacts = {
+    "Which animal has THREE hearts?":
+        "An octopus has three hearts! Two pump blood to the gills, and one pumps it to the rest of the body.",
+
+    "Which planet has a day longer than its year?":
+        "Venus rotates so slowly that one rotation takes longer than its trip around the Sun!",
+
+    "Which animal tastes using its feet?":
+        "Butterflies have taste sensors on their feet. They can taste a plant simply by landing on it!",
+
+    "What is the collective name for a group of flamingos?":
+        "A group of flamingos is called a flamboyance. What a fabulous name!",
+
+    "What do camels actually store in their humps?":
+        "Camel humps store fat, not water. The fat provides energy when food is scarce!",
+
+    "Which part of an owl cannot move like human eyes?":
+        "Owl eyeballs are tube-shaped and fixed in place. That's why owls turn their heads to look around!",
+
+    "Which fruit is botanically classified as a berry?":
+        "Surprise! Bananas are botanical berries, but strawberries are not true berries!",
+
+    "Which is hotter: a lightning bolt or the surface of the Sun?":
+        "A lightning bolt can reach around 30,000 Kelvin, much hotter than the Sun's visible surface!",
+
+    "What makes popcorn pop?":
+        "Water inside the popcorn kernel turns into steam. Pressure builds until the kernel bursts!",
+
+    "What gives flamingos their pink colour?":
+        "Flamingos get their pink colour from natural pigments called carotenoids in their food!",
+
+    "What happens to water when it freezes?":
+        "Water expands when it freezes. That's why ice floats on liquid water!",
+
+    "Which animal has fingerprints surprisingly similar to humans?":
+        "Koalas have fingerprints that look remarkably similar to human fingerprints!",
+
+    "What is the smallest prime number?":
+        "Two is the only even prime number. Every other even number can be divided by two!",
+
+    "You overtake the person in second place in a race. What position are you now?":
+        "You take their position! Tricky questions make you think twice!",
+
+    "Find the missing number: 2, 6, 12, 20, 30, __":
+        "The differences are 4, 6, 8, 10 and then 12. So the next number is 42!",
+
+    "Which ocean is the largest on Earth?":
+        "The Pacific Ocean is the largest ocean on Earth. It covers more area than all the continents combined!",
+
+    "Which gas do plants absorb during photosynthesis?":
+        "Plants absorb carbon dioxide and use light energy to help make their food!",
+
+    "What is the name of the fear of spiders?":
+        "Arachnophobia is the term for an intense fear of spiders!",
+
+    "Which instrument has keys but cannot open a door?":
+        "A piano can have 88 keys, but not a single one opens a door!",
+
+    "How many months have at least 28 days?":
+        "All 12 months have at least 28 days. A classic trick question!"
+};
 
 let current = 0;
 let score = 0;
@@ -210,15 +378,18 @@ function checkAnswer(button, selected) {
 
     const correct = questions[current].c;
 
-    if (selected === correct) {
-        score++;
-        button.style.background = "#20c997";
-        document.getElementById("feedback").textContent = "✅ Correct!";
-    } else {
-        button.style.background = "#ff6b6b";
-        document.getElementById("feedback").textContent =
-            "❌ Correct answer: " + correct;
-    }
+   const explanation = funFacts[questions[current].q] || "";
+
+if (selected === correct) {
+    score++;
+    button.style.background = "#20c997";
+    document.getElementById("feedback").textContent =
+        "✅ Correct! " + explanation;
+} else {
+    button.style.background = "#ff6b6b";
+    document.getElementById("feedback").textContent =
+        "❌ Correct answer: " + correct + ". " + explanation;
+}
 
     document.querySelectorAll(".answer").forEach(btn => {
         btn.disabled = true;
