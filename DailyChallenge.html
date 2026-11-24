@@ -93,6 +93,33 @@ button {
     transition: width 0.4s ease;
 }
 }
+
+    .difficulty-options {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.difficulty-btn {
+    padding: 14px 22px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.difficulty-btn.selected {
+    border: 3px solid #20c997;
+    transform: scale(1.05);
+}
+
+.difficulty-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 </style>
 </head>
 
@@ -111,8 +138,36 @@ Complete today's five questions and earn bonus points!
 <h3>🏆 Bonus Points: <span id="bonus">0</span></h3>
 
 <div id="startArea">
-    <p>Are you ready for today's challenge?</p>
-    <button onclick="startChallenge()">🚀 Start Challenge</button>
+
+    <h2>🎯 Choose Your Difficulty</h2>
+
+    <p>Select a level and test your brain!</p>
+
+    <div class="difficulty-options">
+
+        <button class="difficulty-btn selected"
+            onclick="selectDifficulty('easy', this)">
+            🌱 EASY
+        </button>
+
+        <button class="difficulty-btn"
+            id="mediumLevel"
+            onclick="selectDifficulty('medium', this)">
+            ⭐ MEDIUM 🔒
+        </button>
+
+        <button class="difficulty-btn"
+            id="hardLevel"
+            onclick="selectDifficulty('hard', this)">
+            🔥 HARD 🔒
+        </button>
+
+    </div>
+
+    <button onclick="startChallenge()">
+        🚀 Start Challenge
+    </button>
+
 </div>
 
 <div id="questionArea">
@@ -275,6 +330,43 @@ function getDailyQuestions() {
 }
 
 const questions = getDailyQuestions();
+
+// DIFFICULTY SYSTEM
+
+let selectedDifficulty = "easy";
+
+let completedChallenges =
+    Number(localStorage.getItem("completedDailyChallenges")) || 0;
+
+function updateDifficultyLocks() {
+
+    const mediumButton = document.getElementById("mediumLevel");
+    const hardButton = document.getElementById("hardLevel");
+
+    mediumButton.disabled = completedChallenges < 3;
+    hardButton.disabled = completedChallenges < 7;
+
+    mediumButton.textContent =
+        completedChallenges >= 3 ? "⭐ MEDIUM" : "⭐ MEDIUM 🔒";
+
+    hardButton.textContent =
+        completedChallenges >= 7 ? "🔥 HARD" : "🔥 HARD 🔒";
+}
+
+function selectDifficulty(level, button) {
+
+    if (button.disabled) return;
+
+    selectedDifficulty = level;
+
+    document.querySelectorAll(".difficulty-btn").forEach(btn => {
+        btn.classList.remove("selected");
+    });
+
+    button.classList.add("selected");
+}
+
+updateDifficultyLocks();
     // FUN FACT EXPLANATIONS
 
 const funFacts = {
@@ -376,6 +468,12 @@ function showQuestion() {
     document.getElementById("questionNumber").textContent =
         "Question " + (current + 1) + " of " + questions.length;
 
+    // UPDATE DAILY PROGRESS BAR
+    const progress = (current / questions.length) * 100;
+
+    document.getElementById("dailyProgress").style.width =
+        progress + "%";
+
     document.getElementById("question").textContent =
         questions[current].q;
 
@@ -397,7 +495,6 @@ function showQuestion() {
 
     });
 }
-
 function checkAnswer(button, selected) {
 
     if (answered) return;
@@ -451,6 +548,9 @@ function nextQuestion() {
 
 function finishChallenge() {
 
+    // COMPLETE PROGRESS BAR
+    document.getElementById("dailyProgress").style.width = "100%";
+
     document.getElementById("questionArea").style.display = "none";
     document.getElementById("result").style.display = "block";
 
@@ -491,8 +591,6 @@ function finishChallenge() {
 
     document.getElementById("badge").textContent = badge;
 }
-
-</script>
 <script>
 const savedTheme = localStorage.getItem("selectedTheme") || "purple";
 document.body.setAttribute("data-theme", savedTheme);
