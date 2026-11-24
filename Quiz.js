@@ -1,132 +1,173 @@
-// ALL QUIZ QUESTIONS
+// ALL QUIZ QUESTIONS - MIXED LEVELS
 
 const allQuestions = {
 
-    computer: [
+    level1: [
         {
-            question: "Which language is used for web development?",
-            answers: ["HTML", "Python", "C", "Java"],
-            correct: "HTML"
+            question: "What has hands but cannot clap?",
+            answers: ["A clock", "A robot", "A statue", "A painting"],
+            correct: "A clock",
+            explanation: "A clock has hands that show time, but they cannot clap!"
         },
         {
-            question: "What does CPU stand for?",
-            answers: [
-                "Central Processing Unit",
-                "Computer Personal Unit",
-                "Central Program Utility",
-                "Control Processing User"
-            ],
-            correct: "Central Processing Unit"
+            question: "If you overtake the person in second place, what position are you in?",
+            answers: ["First", "Second", "Third", "Fourth"],
+            correct: "Second",
+            explanation: "You take their position, so you become second!"
         },
         {
-            question: "Which company developed Android?",
-            answers: ["Apple", "Google", "Microsoft", "IBM"],
-            correct: "Google"
+            question: "Which month has 28 days?",
+            answers: ["February", "April", "All months", "June"],
+            correct: "All months",
+            explanation: "Every month has at least 28 days. Tricky, right?"
+        },
+        {
+            question: "What gets wetter the more it dries?",
+            answers: ["A sponge", "A towel", "A cloud", "A river"],
+            correct: "A towel",
+            explanation: "A towel absorbs water while drying something else."
+        },
+        {
+            question: "How many animals did Moses take into the ark?",
+            answers: ["Two", "Four", "None", "Seven"],
+            correct: "None",
+            explanation: "It was Noah, not Moses, who built the ark!"
         }
     ],
 
-    science: [
+    level2: [
         {
-            question: "Which planet is known as the Red Planet?",
-            answers: ["Earth", "Mars", "Jupiter", "Venus"],
-            correct: "Mars"
+            question: "A farmer has 17 sheep. All but 9 run away. How many remain?",
+            answers: ["8", "9", "17", "0"],
+            correct: "9",
+            explanation: "'All but 9' means 9 sheep remain!"
         },
         {
-            question: "What is the chemical formula of water?",
-            answers: ["CO2", "O2", "H2O", "NaCl"],
-            correct: "H2O"
+            question: "What can travel around the world while staying in one corner?",
+            answers: ["A map", "A stamp", "A compass", "A photograph"],
+            correct: "A stamp",
+            explanation: "A stamp stays in the corner of an envelope while travelling!"
         },
         {
-            question: "Which organ pumps blood?",
-            answers: ["Brain", "Lungs", "Heart", "Kidney"],
-            correct: "Heart"
+            question: "Which is heavier: 1 kg of iron or 1 kg of cotton?",
+            answers: ["Iron", "Cotton", "Both weigh the same", "It depends on size"],
+            correct: "Both weigh the same",
+            explanation: "One kilogram is one kilogram, no matter the material!"
+        },
+        {
+            question: "You have 3 apples and take away 2. How many apples do you have?",
+            answers: ["1", "2", "3", "5"],
+            correct: "2",
+            explanation: "You took 2 apples, so you have those 2!"
+        },
+        {
+            question: "What has a neck but no head?",
+            answers: ["A bottle", "A chair", "A shoe", "A table"],
+            correct: "A bottle",
+            explanation: "A bottle has a neck, but definitely no head!"
         }
     ],
 
-    gk: [
+    level3: [
         {
-            question: "What is the capital of India?",
-            answers: ["Mumbai", "Delhi", "Pune", "Chennai"],
-            correct: "Delhi"
+            question: "A plane crashes on the border of two countries. Where do they bury the survivors?",
+            answers: ["Country A", "Country B", "At the border", "Nowhere"],
+            correct: "Nowhere",
+            explanation: "Survivors are alive, so they aren't buried!"
         },
         {
-            question: "What is the national animal of India?",
-            answers: ["Lion", "Elephant", "Tiger", "Leopard"],
-            correct: "Tiger"
+            question: "What comes once in a minute, twice in a moment, but never in a thousand years?",
+            answers: ["The letter M", "The letter T", "The number 1", "The letter A"],
+            correct: "The letter M",
+            explanation: "Look at the spelling of minute, moment and thousand!"
         },
         {
-            question: "How many days are there in a leap year?",
-            answers: ["364", "365", "366", "367"],
-            correct: "366"
+            question: "If 5 machines make 5 toys in 5 minutes, how long will 100 machines take to make 100 toys?",
+            answers: ["5 minutes", "20 minutes", "100 minutes", "500 minutes"],
+            correct: "5 minutes",
+            explanation: "Each machine makes one toy in 5 minutes. All 100 work together!"
+        },
+        {
+            question: "What has cities but no houses, forests but no trees, and rivers but no water?",
+            answers: ["A painting", "A map", "A dream", "A book"],
+            correct: "A map",
+            explanation: "Maps show all these places without containing the real things!"
+        },
+        {
+            question: "A rooster lays an egg on a roof. Which side does it roll down?",
+            answers: ["Left", "Right", "Both sides", "Neither side"],
+            correct: "Neither side",
+            explanation: "Roosters don't lay eggs!"
         }
     ],
 
-    maths: [
+    level4: [
         {
-            question: "What is 12 × 5?",
-            answers: ["50", "55", "60", "65"],
-            correct: "60"
+            question: "What number comes next: 2, 6, 12, 20, 30, ?",
+            answers: ["36", "40", "42", "44"],
+            correct: "42",
+            explanation: "The differences are 4, 6, 8, 10 and then 12. So 30 + 12 = 42!"
         },
         {
-            question: "What is the square of 9?",
-            answers: ["18", "72", "81", "99"],
-            correct: "81"
+            question: "A person looks at a photo and says, 'I have no brothers or sisters, but that person's father is my father's son.' Who is in the photo?",
+            answers: ["Their father", "Their child", "Their uncle", "Their cousin"],
+            correct: "Their child",
+            explanation: "Since the person has no siblings, 'my father's son' means themselves!"
         },
         {
-            question: "What is 100 divided by 4?",
-            answers: ["20", "25", "30", "40"],
-            correct: "25"
+            question: "Which word becomes shorter when you add two letters to it?",
+            answers: ["Small", "Short", "Tiny", "Little"],
+            correct: "Short",
+            explanation: "Add 'er' to SHORT and it becomes SHORTER!"
+        },
+        {
+            question: "You have 6 eggs. You break 2, cook those 2 and eat those 2. How many eggs remain?",
+            answers: ["2", "4", "6", "0"],
+            correct: "4",
+            explanation: "The same 2 eggs were broken, cooked and eaten. Four remain!"
+        },
+        {
+            question: "If yesterday was tomorrow, today would be Friday. What day is today?",
+            answers: ["Thursday", "Friday", "Saturday", "Sunday"],
+            correct: "Sunday",
+            explanation: "This wording shifts the reference by two days. If today were Sunday, yesterday would be Saturday and tomorrow Monday; the hypothetical swaps them, making the hypothetical today Friday."
         }
     ],
 
-    english: [
+    level5: [
         {
-            question: "What is the opposite of Happy?",
-            answers: ["Joyful", "Sad", "Excited", "Glad"],
-            correct: "Sad"
+            question: "A bat and a ball cost ₹110 together. The bat costs ₹100 more than the ball. How much does the ball cost?",
+            answers: ["₹10", "₹5", "₹15", "₹20"],
+            correct: "₹5",
+            explanation: "The ball costs ₹5 and the bat costs ₹105. Together they cost ₹110!"
         },
         {
-            question: "Which word is a noun?",
-            answers: ["Run", "Beautiful", "School", "Quickly"],
-            correct: "School"
+            question: "You have two coins that total ₹30. One of them is not a ₹10 coin. What are the coins?",
+            answers: ["₹10 and ₹20", "₹5 and ₹25", "₹15 and ₹15", "₹20 and ₹20"],
+            correct: "₹10 and ₹20",
+            explanation: "One coin is not ₹10, but the other one can be ₹10!"
         },
         {
-            question: "Choose the correct spelling.",
-            answers: ["Beautifull", "Beautiful", "Beutiful", "Beautifal"],
-            correct: "Beautiful"
-        }
-    ],
-
-    history: [
-        {
-            question: "Who was the first Prime Minister of India?",
-            answers: [
-                "Mahatma Gandhi",
-                "Jawaharlal Nehru",
-                "Sardar Patel",
-                "Dr. Rajendra Prasad"
-            ],
-            correct: "Jawaharlal Nehru"
+            question: "A clock takes 5 seconds to strike 6 times. How long does it take to strike 12 times?",
+            answers: ["10 seconds", "11 seconds", "12 seconds", "15 seconds"],
+            correct: "11 seconds",
+            explanation: "Six strikes have 5 gaps. Twelve strikes have 11 gaps. At 1 second per gap, that's 11 seconds!"
         },
         {
-            question: "In which year did India gain independence?",
-            answers: ["1945", "1946", "1947", "1950"],
-            correct: "1947"
+            question: "A number is doubled, then increased by 10. The result is 30. What was the original number?",
+            answers: ["5", "10", "15", "20"],
+            correct: "10",
+            explanation: "Double 10 to get 20, then add 10 to get 30!"
         },
         {
-            question: "Who is known as the Father of the Nation in India?",
-            answers: [
-                "Subhas Chandra Bose",
-                "Mahatma Gandhi",
-                "Bhagat Singh",
-                "Jawaharlal Nehru"
-            ],
-            correct: "Mahatma Gandhi"
+            question: "You enter a dark room with one match. There is a candle, a lamp and a fireplace. What do you light first?",
+            answers: ["The candle", "The lamp", "The fireplace", "The match"],
+            correct: "The match",
+            explanation: "You need to light the match before lighting anything else!"
         }
     ]
 
 };
-
 
 // VARIABLES
 
