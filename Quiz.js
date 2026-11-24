@@ -275,7 +275,7 @@ function playSound(type) {
 function startQuiz(category) {
 
     if (!allQuestions[category]) {
-        alert("Category not found!");
+        alert("Level not found!");
         return;
     }
 
@@ -290,12 +290,11 @@ function startQuiz(category) {
     document.getElementById("quizScreen").style.display = "block";
 
     const names = {
-        computer: "💻 Computer Quiz",
-        science: "🔬 Science Quiz",
-        gk: "🌍 General Knowledge Quiz",
-        maths: "➗ Mathematics Quiz",
-        english: "📚 English Quiz",
-        history: "🏛️ History Quiz"
+        level1: "🌱 Mixed Quiz - Level 1",
+        level2: "🧩 Mixed Quiz - Level 2",
+        level3: "🔥 Mixed Quiz - Level 3",
+        level4: "🧠 Mixed Quiz - Level 4",
+        level5: "👑 Mixed Quiz - Level 5"
     };
 
     document.getElementById("categoryName").textContent =
@@ -303,7 +302,6 @@ function startQuiz(category) {
 
     startCountdown();
 }
-
 
 // COUNTDOWN
 
