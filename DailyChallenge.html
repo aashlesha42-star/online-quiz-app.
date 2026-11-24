@@ -437,34 +437,17 @@ function getDailyQuestions() {
 // CURRENT DAILY QUESTIONS
 
 let questions = [];
-    
-    function random() {
-        seed = (seed * 1664525 + 1013904223) % 4294967296;
-        return seed / 4294967296;
-    }
+// CURRENT DAILY QUESTIONS
 
-    let selectedBank = questionBank;
+let questions = [];
 
-    if (selectedDifficulty === "medium") {
-        selectedBank = mediumQuestionBank;
-    }
 
-    if (selectedDifficulty === "hard") {
-        selectedBank = hardQuestionBank;
-    }
+// DIFFICULTY SYSTEM
 
-    const shuffled = [...selectedBank];
+let selectedDifficulty = "easy";
 
-    for (let i = shuffled.length - 1; i > 0; i--) {
-
-        const j = Math.floor(random() * (i + 1));
-
-        [shuffled[i], shuffled[j]] =
-            [shuffled[j], shuffled[i]];
-    }
-
-    return shuffled.slice(0, 5);
-}
+let completedChallenges =
+    Number(localStorage.getItem("completedDailyChallenges")) || 0;
 // DIFFICULTY SYSTEM
 
 let selectedDifficulty = "easy";
