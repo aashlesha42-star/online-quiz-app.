@@ -365,7 +365,11 @@ function showQuestion() {
     document.getElementById("timer").textContent = timeLeft;
 
     document.getElementById("score").textContent = "";
+const explanationBox = document.getElementById("explanation");
 
+explanationBox.style.display = "none";
+explanationBox.textContent = "";
+    
     const box = document.getElementById("answers");
 
     box.innerHTML = "";
