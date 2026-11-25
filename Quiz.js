@@ -447,47 +447,63 @@ startTimer();
 
 function startTimer() {
 
-    clearInterval(timerInterval);
+clearInterval(timerInterval);
 
-    timerInterval = setInterval(() => {
+timerInterval = setInterval(() => {
 
-        timeLeft--;
+    timeLeft--;
 
-        document.getElementById("timer").textContent = timeLeft;
+    document.getElementById("timer").textContent = timeLeft;
 
-        if (timeLeft <= 0) {
+    if (timeLeft <= 0) {
 
-            clearInterval(timerInterval);
+        clearInterval(timerInterval);
 
-            if (!answered) {
+        if (!answered) {
 
-                answered = true;
+            answered = true;
 
-                const buttons =
-                    document.querySelectorAll("#answers button");
+            const q = questions[currentQuestion];
 
-                buttons.forEach(btn => {
+            const buttons =
+                document.querySelectorAll("#answers button");
 
-                    btn.disabled = true;
+            buttons.forEach(btn => {
 
-                    if (
-                        btn.textContent ===
-                        questions[currentQuestion].correct
-                    ) {
-                        btn.classList.add("correct-answer");
-                    }
+                btn.disabled = true;
 
-                });
+                if (btn.textContent === q.correct) {
+                    btn.classList.add("correct-answer");
+                }
 
-                document.getElementById("score").textContent =
-                    "Time's up! ⏰";
+            });
 
-                setTimeout(goToNextQuestion, 1000);
-            }
+            // TIME UP MESSAGE
+            document.getElementById("score").textContent =
+                "Time's up! ⏰";
+
+            // SHOW CORRECT ANSWER
+            document.getElementById("score").textContent +=
+                " Correct answer: " + q.correct;
+
+            // SHOW EXPLANATION
+            const explanationBox =
+                document.getElementById("explanation");
+
+            explanationBox.textContent =
+                "💡 Explanation: " + q.explanation;
+
+            explanationBox.style.display = "block";
+
+            // MOVE TO NEXT QUESTION
+            setTimeout(goToNextQuestion, 3000);
 
         }
 
-    }, 1000);
+    }
+
+}, 1000);
+
 }
 
 
