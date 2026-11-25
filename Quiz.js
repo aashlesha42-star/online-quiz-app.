@@ -349,80 +349,97 @@ function startCountdown() {
 
 function showQuestion() {
 
-    answered = false;
-    timeLeft = 15;
+answered = false;
+timeLeft = 15;
 
-    const q = questions[currentQuestion];
+const q = questions[currentQuestion];
 
-    document.getElementById("questionNumber").textContent =
-        `Question ${currentQuestion + 1} of ${questions.length}`;
+// QUESTION COUNTER
+document.getElementById("questionNumber").textContent =
+    `Question ${currentQuestion + 1} of ${questions.length}`;
 
-    document.getElementById("progressBar").style.width =
-        `${((currentQuestion + 1) / questions.length) * 100}%`;
+// PROGRESS BAR
+document.getElementById("progressBar").style.width =
+    `${((currentQuestion + 1) / questions.length) * 100}%`;
 
-    document.getElementById("question").textContent = q.question;
+// QUESTION
+document.getElementById("question").textContent = q.question;
 
-    document.getElementById("timer").textContent = timeLeft;
+// TIMER
+document.getElementById("timer").textContent = timeLeft;
 
-    document.getElementById("score").textContent = "";
+// RESET SCORE MESSAGE
+document.getElementById("score").textContent = "";
+
+// RESET EXPLANATION
 const explanationBox = document.getElementById("explanation");
 
 explanationBox.style.display = "none";
 explanationBox.textContent = "";
-    
-    const box = document.getElementById("answers");
 
-    box.innerHTML = "";
+// ANSWER BUTTONS
+const box = document.getElementById("answers");
 
-    q.answers.forEach(answer => {
+box.innerHTML = "";
 
-        const button = document.createElement("button");
+q.answers.forEach(answer => {
 
-        button.textContent = answer;
+    const button = document.createElement("button");
 
-        button.onclick = function() {
+    button.textContent = answer;
 
-            if (answered) return;
+    button.onclick = function() {
 
-            answered = true;
-            clearInterval(timerInterval);
+        if (answered) return;
 
-            const buttons = box.querySelectorAll("button");
+        answered = true;
+        clearInterval(timerInterval);
 
-            buttons.forEach(btn => {
+        const buttons = box.querySelectorAll("button");
 
-                btn.disabled = true;
+        buttons.forEach(btn => {
 
-                if (btn.textContent === q.correct) {
-                    btn.classList.add("correct-answer");
-                }
+            btn.disabled = true;
 
-            });
-
-            if (answer === q.correct) {
-
-                score++;
-                playSound("correct");
-
-                document.getElementById("score").textContent =
-                    "Correct answer! 🎉";
-
-            } else {
-
-                button.classList.add("wrong-answer");
-                playSound("wrong");
-
-                document.getElementById("score").textContent =
-                    "Wrong answer! ❌";
+            if (btn.textContent === q.correct) {
+                btn.classList.add("correct-answer");
             }
 
-        };
+        });
 
-        box.appendChild(button);
+        // CHECK ANSWER
+        if (answer === q.correct) {
 
-    });
+            score++;
+            playSound("correct");
 
-    startTimer();
+            document.getElementById("score").textContent =
+                "Correct answer! 🎉";
+
+        } else {
+
+            button.classList.add("wrong-answer");
+            playSound("wrong");
+
+            document.getElementById("score").textContent =
+                "Wrong answer! ❌";
+        }
+
+        // SHOW EXPLANATION
+        explanationBox.textContent =
+            "💡 Explanation: " + q.explanation;
+
+        explanationBox.style.display = "block";
+
+    };
+
+    box.appendChild(button);
+
+});
+
+// START TIMER
+startTimer();
+
 }
 
 
